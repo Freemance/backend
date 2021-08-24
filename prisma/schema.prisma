@@ -19,6 +19,7 @@ enum Role {
 model User {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   email     String   @unique
   password  String
   state     Boolean  @default(false)
@@ -34,7 +35,8 @@ model Profile {
   lastName String
 
   // Relations fields
-  tags      Tag[]
+  tag       Tag?     @relation(fields: [tagId], references: [id])
+  tagId     Int?
   skills    String[]
   rrss      String[]
   jobs      String[]
@@ -42,7 +44,9 @@ model Profile {
 }
 
 model Tag {
-  id       Int       @id @default(autoincrement())
-  name     String
-  profiles Profile[]
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  name      String
+  profiles  Profile[]
 }
