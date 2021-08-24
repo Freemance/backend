@@ -41,7 +41,8 @@ model Profile {
   socialLinks       SocialLink[]
   employmentHistory Job[]
   courses           Course[]
-  portfolioItem       Portfolio[]
+  portfolioItem     Portfolio[]
+  languages         Language[]
 }
 
 model Tag {
@@ -53,12 +54,12 @@ model Tag {
 }
 
 model Skill {
-  id           Int            @id @default(autoincrement())
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  name         String
-  profiles     ProfileSkill[]
-  portfolio   Portfolio?    @relation(fields: [portfolioId], references: [id])
+  id          Int            @id @default(autoincrement())
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  name        String
+  profiles    ProfileSkill[]
+  portfolio   Portfolio?     @relation(fields: [portfolioId], references: [id])
   portfolioId Int?
 }
 
@@ -128,4 +129,17 @@ model Portfolio {
   endDate     String?
   profile     Profile? @relation(fields: [profileId], references: [id])
   profileId   Int?
+}
+
+enum LANLVL {
+  NATIVE
+  C1
+}
+
+model Language {
+  id        Int      @id @default(autoincrement())
+  langage   String?
+  lvl       LANLVL   @default(NATIVE)
+  profile   Profile? @relation(fields: [profileId], references: [id])
+  profileId Int?
 }
