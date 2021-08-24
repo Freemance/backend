@@ -145,9 +145,15 @@ model Portfolio {
 }
 
 enum LANLVL {
-  NATIVE
+  NATIVE_SPEAKER
+  HIGHLY_PROFICIENT
+  VERY_GOOD_COMMAND
+  GOOD_WORKING_KNOWLEDGE
+  WORKING_KNOWLEDGE
   C1
   C2
+  B1
+  B2
   A1
   A2
 }
@@ -155,7 +161,7 @@ enum LANLVL {
 model Language {
   id        Int      @id @default(autoincrement())
   langage   String?
-  lvl       LANLVL   @default(NATIVE)
+  lvl       LANLVL   @default(NATIVE_SPEAKER)
   profile   Profile? @relation(fields: [profileId], references: [id])
   profileId Int?
 }
