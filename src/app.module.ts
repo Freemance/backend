@@ -1,7 +1,8 @@
+import { CoreModule, DataModule } from '@feature/core'
 import { Module } from '@nestjs/common'
 
 @Module({
-  imports: [],
+  imports: [CoreModule, DataModule],
   controllers: [],
   providers: [],
 })
