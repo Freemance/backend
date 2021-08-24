@@ -28,13 +28,26 @@ model User {
 }
 
 model Profile {
-  id       Int    @id @default(autoincrement())
-  user     User   @relation(fields: [userId], references: [id])
-  userId   Int
-  name     String
-  lastName String
+
+  id        Int    @id @default(autoincrement())
+  firstMame String
+  lastName  String
+  slykUser  String
+  // Optional fileds
+
+  jobTitle     String?
+  bio          String?
+  country      String?
+  city         String?
+  address      String?
+  postalCode   String?
+  placeOfBirth String?
+  dateOfBirth  DateTime?
+  phone        String?
 
   // Relations fields
+  user              User           @relation(fields: [userId], references: [id])
+  userId            Int
   tag               Tag?           @relation(fields: [tagId], references: [id])
   tagId             Int?
   skills            ProfileSkill[]
@@ -134,6 +147,9 @@ model Portfolio {
 enum LANLVL {
   NATIVE
   C1
+  C2
+  A1
+  A2
 }
 
 model Language {
