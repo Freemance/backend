@@ -40,7 +40,7 @@ model Profile {
   skills            ProfileSkill[]
   socialLinks       SocialLink[]
   employmentHistory Job[]
-  languages         String[]
+  courses           Course[]
 }
 
 model Tag {
@@ -92,12 +92,22 @@ model SocialLink {
 }
 
 model Job {
-  id          Int       @id @default(autoincrement())
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
   name        String
-  company     String?
+  company     String
   description String?
+  starDate    DateTime
+  endDate     DateTime
+  profile     Profile? @relation(fields: [profileId], references: [id])
+  profileId   Int?
+}
+
+model Course {
+  id          Int       @id @default(autoincrement())
+  course      String?
+  institution String?
   starDate    DateTime?
   endDate     DateTime?
   profile     Profile?  @relation(fields: [profileId], references: [id])
