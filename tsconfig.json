@@ -16,6 +16,32 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@feature/core": [
+        "libs/core/src"
+      ],
+      "@feature/core/*": [
+        "libs/core/src/*"
+      ],
+      "@feature/auth": [
+        "libs/auth/src"
+      ],
+      "@feature/auth/*": [
+        "libs/auth/src/*"
+      ],
+      "@feature/admin": [
+        "libs/admin/src"
+      ],
+      "@feature/admin/*": [
+        "libs/admin/src/*"
+      ],
+      "@feature/client": [
+        "libs/client/src"
+      ],
+      "@feature/client/*": [
+        "libs/client/src/*"
+      ]
+    }
   }
 }
