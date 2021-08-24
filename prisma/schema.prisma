@@ -35,13 +35,12 @@ model Profile {
   lastName String
 
   // Relations fields
-  tag         Tag?           @relation(fields: [tagId], references: [id])
-  tagId       Int?
-  skills      ProfileSkill[]
-  socialLinks SocialLink[]
-  rrss        String[]
-  jobs        String[]
-  languages   String[]
+  tag               Tag?           @relation(fields: [tagId], references: [id])
+  tagId             Int?
+  skills            ProfileSkill[]
+  socialLinks       SocialLink[]
+  employmentHistory Job[]
+  languages         String[]
 }
 
 model Tag {
@@ -80,7 +79,7 @@ model ProfileSkill {
 
   @@id([skillId, profileId])
 }
- 
+
 model SocialLink {
   id        Int     @id @default(autoincrement())
   linkedin  String?
@@ -90,4 +89,17 @@ model SocialLink {
 
   profile   Profile? @relation(fields: [profileId], references: [id])
   profileId Int?
+}
+
+model Job {
+  id          Int       @id @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  name        String
+  company     String?
+  description String?
+  starDate    DateTime?
+  endDate     DateTime?
+  profile     Profile?  @relation(fields: [profileId], references: [id])
+  profileId   Int?
 }
