@@ -1,4 +1,4 @@
-import { Query, Resolver } from '@nestjs/graphql'
+import { Args, Query, Resolver } from '@nestjs/graphql'
 
 import { SkillService } from '../service/skill.service'
 import { Skill } from '../model/skill'
@@ -9,5 +9,10 @@ export class SkillResolver {
   @Query(() => [Skill], { nullable: true })
   getAllSkill() {
     return this.service.getAllSkill()
+  }
+
+  @Query(() => Skill, { nullable: true })
+  getSkillById(@Args('id') id: number) {
+    return this.service.getSkillById(id)
   }
 }

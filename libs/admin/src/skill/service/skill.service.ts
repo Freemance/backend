@@ -1,5 +1,5 @@
 import { DataService } from '@feature/core'
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 
 @Injectable()
 export class SkillService {
@@ -9,5 +9,13 @@ export class SkillService {
 
   public async getAllSkill() {
     return this.data.skill.findMany({ orderBy: { id: 'asc' }, include: this.includes })
+  }
+
+  public async getSkillById(id: number) {
+    const found = await this.data.skill.findUnique({ where: { id }, include: this.includes })
+    if (!found) {
+      throw new NotFoundException(`Skill with id: ${id} not found`)
+    }
+    return found
   }
 }
