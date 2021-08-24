@@ -17,12 +17,13 @@ enum Role {
 }
 
 model User {
-  id       Int      @id @default(autoincrement())
-  email    String
-  password String
-  state    Boolean  @default(false)
-  role     Role     @default(USER)
-  profile  Profile?
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  email     String   @unique
+  password  String
+  state     Boolean  @default(false)
+  role      Role     @default(USER)
+  profile   Profile?
 }
 
 model Profile {
@@ -45,4 +46,3 @@ model Tag {
   name     String
   profiles Profile[]
 }
-
