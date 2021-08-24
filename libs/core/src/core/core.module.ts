@@ -1,8 +1,23 @@
 import { Module } from '@nestjs/common'
-import { CoreService } from './core.service'
+import { ConfigModule } from '@nestjs/config'
+import { GraphQLModule } from '@nestjs/graphql'
+
+import { configuration } from './config/configuration'
+import { validationSchema } from './config/validation'
 
 @Module({
-  providers: [CoreService],
-  exports: [CoreService],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [configuration],
+      validationSchema,
+    }),
+    GraphQLModule.forRoot({
+      autoSchemaFile: true,
+      playground: true,
+    }),
+  ],
+  providers: [],
+  exports: [],
 })
 export class CoreModule {}
