@@ -41,7 +41,7 @@ model Profile {
   socialLinks       SocialLink[]
   employmentHistory Job[]
   courses           Course[]
-  portfolios       Portfolio[]
+  portfolioItem       Portfolio[]
 }
 
 model Tag {
