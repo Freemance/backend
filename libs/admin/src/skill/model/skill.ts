@@ -1,14 +1,14 @@
-import { Field, ObjectType, Int } from '@nestjs/graphql'
+import { Field, ObjectType, Int, GraphQLISODateTime } from '@nestjs/graphql'
 
 @ObjectType()
 export class Skill {
   @Field(() => Int, { description: 'Skill id', nullable: true })
   id?: number
 
-  @Field({ nullable: true })
+  @Field(() => GraphQLISODateTime, { nullable: true })
   createdAt?: Date
 
-  @Field({ nullable: true })
+  @Field(() => GraphQLISODateTime, { nullable: true })
   updatedAt?: Date
 
   @Field({ description: 'Skill name', nullable: true })
