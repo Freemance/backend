@@ -93,7 +93,8 @@
     ],
     "moduleNameMapper": {
       "^@feature/core(|/.*)$": "<rootDir>/libs/core/src/$1",
-      "^@feature/auth(|/.*)$": "<rootDir>/libs/auth/src/$1"
+      "^@feature/auth(|/.*)$": "<rootDir>/libs/auth/src/$1",
+      "^@feature/admin(|/.*)$": "<rootDir>/libs/admin/src/$1"
     }
   }
 }

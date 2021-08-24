@@ -29,6 +29,12 @@
       ],
       "@feature/auth/*": [
         "libs/auth/src/*"
+      ],
+      "@feature/admin": [
+        "libs/admin/src"
+      ],
+      "@feature/admin/*": [
+        "libs/admin/src/*"
       ]
     }
   }
