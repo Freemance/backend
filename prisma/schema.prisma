@@ -35,9 +35,9 @@ model Profile {
   lastName String
 
   // Relations fields
-  tag       Tag?     @relation(fields: [tagId], references: [id])
+  tag       Tag?           @relation(fields: [tagId], references: [id])
   tagId     Int?
-  skills    String[]
+  skills    ProfileSkill[]
   rrss      String[]
   jobs      String[]
   languages String[]
@@ -49,4 +49,33 @@ model Tag {
   updatedAt DateTime  @updatedAt
   name      String
   profiles  Profile[]
+}
+
+model Skill {
+  id        Int            @id @default(autoincrement())
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  name      String
+  profiles  ProfileSkill[]
+}
+
+// relacion implicita vamos ahora
+
+enum LVL {
+  NOVICE
+  BEGINER
+  SKILLFULL
+  EXPERIENCED
+  EXPERT
+}
+
+model ProfileSkill {
+  skill      Skill    @relation(fields: [skillId], references: [id])
+  skillId    Int
+  profile    Profile  @relation(fields: [profileId], references: [id])
+  profileId  Int
+  assignedAt DateTime @default(now())
+  level      LVL      @default(NOVICE)
+
+  @@id([skillId, profileId])
 }
