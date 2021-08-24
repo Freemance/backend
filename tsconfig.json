@@ -23,6 +23,12 @@
       ],
       "@feature/core/*": [
         "libs/core/src/*"
+      ],
+      "@feature/auth": [
+        "libs/auth/src"
+      ],
+      "@feature/auth/*": [
+        "libs/auth/src/*"
       ]
     }
   }
