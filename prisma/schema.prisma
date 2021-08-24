@@ -26,7 +26,16 @@ model User {
 }
 
 model Profile {
-  id     Int  @id @default(autoincrement())
-  user   User @relation(fields: [userId], references: [id])
-  userId Int
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  name      String
+  lastName  String
+  
+  // Relations fields
+  tags      String[]
+  skills    String[]
+  rrss      String[]
+  jobs      String[]
+  languages String[]
 }
