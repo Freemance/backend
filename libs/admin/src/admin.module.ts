@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common'
 import { AdminService } from './admin.service'
-import { SkillModule } from './skill/skill.module';
+import { SkillModule } from './skill/skill.module'
 
 @Module({
   providers: [AdminService],
