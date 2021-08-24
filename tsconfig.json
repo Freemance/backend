@@ -35,6 +35,12 @@
       ],
       "@feature/admin/*": [
         "libs/admin/src/*"
+      ],
+      "@feature/client": [
+        "libs/client/src"
+      ],
+      "@feature/client/*": [
+        "libs/client/src/*"
       ]
     }
   }

@@ -28,6 +28,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/admin/tsconfig.lib.json"
       }
+    },
+    "client": {
+      "type": "library",
+      "root": "libs/client",
+      "entryFile": "index",
+      "sourceRoot": "libs/client/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/client/tsconfig.lib.json"
+      }
     }
   },
   "compilerOptions": {

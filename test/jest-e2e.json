@@ -16,6 +16,8 @@
     "@feature/auth/(.*)": "<rootDir>/../libs/auth/src/$1",
     "@feature/auth": "<rootDir>/../libs/auth/src",
     "@feature/admin/(.*)": "<rootDir>/../libs/admin/src/$1",
-    "@feature/admin": "<rootDir>/../libs/admin/src"
+    "@feature/admin": "<rootDir>/../libs/admin/src",
+    "@feature/client/(.*)": "<rootDir>/../libs/client/src/$1",
+    "@feature/client": "<rootDir>/../libs/client/src"
   }
 }
