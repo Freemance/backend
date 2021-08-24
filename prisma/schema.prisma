@@ -35,12 +35,13 @@ model Profile {
   lastName String
 
   // Relations fields
-  tag       Tag?           @relation(fields: [tagId], references: [id])
-  tagId     Int?
-  skills    ProfileSkill[]
-  rrss      String[]
-  jobs      String[]
-  languages String[]
+  tag         Tag?           @relation(fields: [tagId], references: [id])
+  tagId       Int?
+  skills      ProfileSkill[]
+  socialLinks SocialLink[]
+  rrss        String[]
+  jobs        String[]
+  languages   String[]
 }
 
 model Tag {
@@ -78,4 +79,15 @@ model ProfileSkill {
   level      LVL      @default(NOVICE)
 
   @@id([skillId, profileId])
+}
+ 
+model SocialLink {
+  id        Int     @id @default(autoincrement())
+  linkedin  String?
+  instagram String?
+  facebook  String?
+  telegram  String?
+
+  profile   Profile? @relation(fields: [profileId], references: [id])
+  profileId Int?
 }
