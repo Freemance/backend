@@ -34,6 +34,8 @@
     "@nestjs/platform-express": "^8.0.0",
     "@prisma/client": "^2.29.1",
     "apollo-server-express": "2.x.x",
+    "class-transformer": "^0.4.0",
+    "class-validator": "^0.13.1",
     "graphql": "^15.5.1",
     "joi": "^17.4.2",
     "passport": "^0.4.1",
