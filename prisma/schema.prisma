@@ -16,4 +16,10 @@ enum Role {
   ADMIN
 }
 
-
+model User {
+  id       Int     @id @default(autoincrement())
+  email    String
+  password String
+  state    Boolean @default(false)
+  role     Role    @default(USER)
+}
