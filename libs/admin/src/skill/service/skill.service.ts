@@ -1,6 +1,7 @@
-import { DataService } from '@feature/core'
 import { Injectable, NotFoundException } from '@nestjs/common'
-import { CreateSkillInput } from '..'
+import { DataService } from '@feature/core'
+
+import { CreateSkillInput, UpdateSkillInput } from '..'
 
 @Injectable()
 export class SkillService {
@@ -26,5 +27,11 @@ export class SkillService {
         ...input,
       },
     })
+  }
+
+  public async updateSkill(id: number, input: UpdateSkillInput) {
+    const found = await this.getSkillById(id)
+
+    return this.data.skill.update({ where: { id: found.id }, data: { ...input } })
   }
 }
