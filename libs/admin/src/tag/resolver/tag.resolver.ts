@@ -3,6 +3,7 @@ import { TagService } from '../service/tag.service';
 import { Tag } from '../entities/tag.entity';
 import { CreateTagInput } from '../dto/create-tag.input';
 import { UpdateTagInput } from '../dto/update-tag.input';
+import { ParseIntPipe } from '@nestjs/common';
 
 @Resolver(() => Tag)
 export class TagResolver {
@@ -14,22 +15,22 @@ export class TagResolver {
   }
 
   @Query(() => [Tag], { name: 'tag' })
-  findAll() {
-    return this.tagService.findAll();
+  getAllTag() {
+    return this.tagService.getAllTag();
   }
 
   @Query(() => Tag, { name: 'tag' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.tagService.findOne(id);
+  getTagById(@Args('id', ParseIntPipe) id: number): String {
+    return this.tagService.getTagById(id);
   }
 
   @Mutation(() => Tag)
-  updateTag(@Args('updateTagInput') updateTagInput: UpdateTagInput) {
-    return this.tagService.update(updateTagInput.id, updateTagInput);
+  updateTag(@Args('id', ParseIntPipe) id: number, @Args('input') input: UpdateTagInput) {
+    return this.tagService.update(id, input);
   }
 
   @Mutation(() => Tag)
-  removeTag(@Args('id', { type: () => Int }) id: number) {
-    return this.tagService.remove(id);
+  deleteTag(@Args('id', ParseIntPipe) id: number) {
+    return this.tagService.delete(id);
   }
 }
