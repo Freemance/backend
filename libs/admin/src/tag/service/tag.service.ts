@@ -8,11 +8,11 @@ export class TagService {
     return 'This action adds a new tag';
   }
 
-  findAll() {
+  getAllTag() {
     return `This action returns all tag`;
   }
 
-  findOne(id: number) {
+  getTagById(id: number) {
     return `This action returns a #${id} tag`;
   }
 
@@ -20,7 +20,7 @@ export class TagService {
     return `This action updates a #${id} tag`;
   }
 
-  remove(id: number) {
+  delete(id: number) {
     return `This action removes a #${id} tag`;
   }
 }
