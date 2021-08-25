@@ -1,8 +1,10 @@
-import { Module } from '@nestjs/common';
-import { TagService } from './service/tag.service';
-import { TagResolver } from './resolver/tag.resolver';
+import { Module } from '@nestjs/common'
+import { TagService } from './service/tag.service'
+import { TagResolver } from './resolver/tag.resolver'
+import { DataModule } from '@feature/core'
 
 @Module({
-  providers: [TagResolver, TagService]
+  imports: [DataModule],
+  providers: [TagResolver, TagService],
 })
 export class TagModule {}
