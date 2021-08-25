@@ -5,9 +5,6 @@ import { Skill } from '@feature/admin'
 
 @ObjectType()
 export class Portfolio extends BaseModel {
-  @Field(() => Int, { description: 'Example field (placeholder)' })
-  exampleField: number
-
   @Field({ description: 'Name of the proyect', nullable: true })
   @IsString()
   proyect?: string
