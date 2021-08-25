@@ -1,35 +1,33 @@
+import { ParseIntPipe } from '@nestjs/common'
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql'
-import { PortfolioService } from './portfolio.service'
-import { Portfolio } from './entities/portfolio.entity'
-import { CreatePortfolioInput } from './dto/create-portfolio.input'
-import { UpdatePortfolioInput } from './dto/update-portfolio.input'
+import { CreatePortfolioInput, Portfolio, PortfolioService } from '..'
 
 @Resolver(() => Portfolio)
 export class PortfolioResolver {
-  constructor(private readonly portfolioService: PortfolioService) {}
+  constructor(private readonly service: PortfolioService) {}
 
   @Mutation(() => Portfolio)
-  createPortfolio(@Args('createPortfolioInput') createPortfolioInput: CreatePortfolioInput) {
-    return this.portfolioService.create(createPortfolioInput)
+  createPortfolio(@Args('input') input: CreatePortfolioInput) {
+    return this.service.createPortfolio(input)
   }
 
-  @Query(() => [Portfolio], { name: 'portfolio' })
-  findAll() {
-    return this.portfolioService.findAll()
+  @Query(() => [Portfolio], { name: 'portfolios' })
+  getAllPortfolio() {
+    return this.service.getAllPortfolio()
   }
 
   @Query(() => Portfolio, { name: 'portfolio' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.portfolioService.findOne(id)
+  getPortfolioById(@Args('id', { type: () => Int }) id: number) {
+    return this.service.getPortfolioById(id)
   }
 
   @Mutation(() => Portfolio)
-  updatePortfolio(@Args('updatePortfolioInput') updatePortfolioInput: UpdatePortfolioInput) {
-    return this.portfolioService.update(updatePortfolioInput.id, updatePortfolioInput)
+  updatePortfolio(@Args('id', { type: () => Int }) id: number, @Args('input') input: CreatePortfolioInput) {
+    return this.service.updatePortfolio(id, input)
   }
 
-  @Mutation(() => Portfolio)
-  removePortfolio(@Args('id', { type: () => Int }) id: number) {
-    return this.portfolioService.remove(id)
+  @Mutation(() => Boolean)
+  deletePortfolio(@Args('id', { type: () => Int }) id: number) {
+    return this.service.deletePortfolio(id)
   }
 }

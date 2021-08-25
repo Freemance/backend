@@ -8,7 +8,7 @@ export class PortfolioService {
 
   private readonly includes = {}
 
-  create(input: CreatePortfolioInput) {
+  createPortfolio(input: CreatePortfolioInput) {
     return this.data.portfolio.create({
       data: {
         ...input,
