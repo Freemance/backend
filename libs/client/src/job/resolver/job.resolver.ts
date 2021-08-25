@@ -1,35 +1,32 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
-import { JobService } from '../service/job.service';
-import { Job } from '../entities/job.entity';
-import { CreateJobInput } from '../dto/create-job.input';
-import { UpdateJobInput } from '../dto/update-job.input';
+import { Job, JobService, CreateJobInput, UpdateJobInput } from '..';
 
 @Resolver(() => Job)
 export class JobResolver {
-  constructor(private readonly jobService: JobService) {}
+  constructor(private readonly service: JobService) {}
 
   @Mutation(() => Job)
   createJob(@Args('createJobInput') createJobInput: CreateJobInput) {
-    return this.jobService.create(createJobInput);
+    return this.service.createJob(createJobInput);
   }
 
   @Query(() => [Job], { name: 'job' })
   findAll() {
-    return this.jobService.findAll();
+    return this.service.getAllJob();
   }
 
   @Query(() => Job, { name: 'job' })
   findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.jobService.findOne(id);
+    return this.service.getJobById(id);
   }
 
   @Mutation(() => Job)
-  updateJob(@Args('updateJobInput') updateJobInput: UpdateJobInput) {
-    return this.jobService.update(updateJobInput.id, updateJobInput);
+  updateJob(@Args('id', { type: () => Int }) id: number, @Args('input') input: UpdateJobInput) {
+    return this.service.updateJob(id, input);
   }
 
   @Mutation(() => Job)
-  removeJob(@Args('id', { type: () => Int }) id: number) {
-    return this.jobService.remove(id);
+  deleteJob(@Args('id', { type: () => Int }) id: number) {
+    return this.service.deleteJob(id);
   }
 }
