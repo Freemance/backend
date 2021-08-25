@@ -1,5 +1,6 @@
 import { ParseIntPipe } from '@nestjs/common'
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
+import { boolean } from 'joi'
 
 import { CreateSkillInput, Skill, SkillService, UpdateSkillInput } from '..'
 
@@ -25,5 +26,10 @@ export class SkillResolver {
   @Mutation(() => Skill, { nullable: true })
   updateSkill(@Args('id', ParseIntPipe) id: number, @Args('input') input: UpdateSkillInput) {
     return this.service.updateSkill(id, input)
+  }
+
+  @Mutation(() => boolean, { nullable: true })
+  deleteSkill(@Args('id', ParseIntPipe) id: number) {
+    return this.service.deleteSkill(id)
   }
 }

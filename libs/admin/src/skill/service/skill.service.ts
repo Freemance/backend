@@ -34,4 +34,15 @@ export class SkillService {
 
     return this.data.skill.update({ where: { id: found.id }, data: { ...input } })
   }
+
+  public async deleteSkill(id: number) {
+    // No se si es necesario comprobar que existe
+    const found = await this.getSkillById(id)
+    const deleted = this.data.skill.delete({
+      where: {
+        id: found.id,
+      },
+    })
+    return !!deleted
+  }
 }
