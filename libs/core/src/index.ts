@@ -3,3 +3,5 @@ export * from './core/core.resolver'
 
 export * from './data/data.module'
 export * from './data/data.service'
+
+export * from './data/common'
