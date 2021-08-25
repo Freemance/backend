@@ -1,7 +1,7 @@
-import { Args, Query, Resolver } from '@nestjs/graphql'
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 
-import { SkillService } from '../service/skill.service'
-import { Skill } from '../model/skill'
+import { CreateSkillInput, Skill, SkillService } from '..'
+
 @Resolver()
 export class SkillResolver {
   constructor(private readonly service: SkillService) {}
@@ -14,5 +14,10 @@ export class SkillResolver {
   @Query(() => Skill, { nullable: true })
   getSkillById(@Args('id') id: number) {
     return this.service.getSkillById(id)
+  }
+
+  @Mutation(() => Skill, { nullable: true })
+  createSkill(@Args('input') input: CreateSkillInput) {
+    return this.service.createSkill(input)
   }
 }

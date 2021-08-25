@@ -1,5 +1,6 @@
 import { DataService } from '@feature/core'
 import { Injectable, NotFoundException } from '@nestjs/common'
+import { CreateSkillInput } from '..'
 
 @Injectable()
 export class SkillService {
@@ -17,5 +18,13 @@ export class SkillService {
       throw new NotFoundException(`Skill with id: ${id} not found`)
     }
     return found
+  }
+
+  public createSkill(input: CreateSkillInput) {
+    return this.data.skill.create({
+      data: {
+        ...input,
+      },
+    })
   }
 }
