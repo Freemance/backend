@@ -7,5 +7,5 @@ export class CreateTagInput {
   @IsNotEmpty()
   @IsString()
   @MaxLength(100)
-  name: String;
+  name: string;
 }
