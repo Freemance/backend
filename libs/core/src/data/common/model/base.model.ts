@@ -4,7 +4,7 @@ import { Field, ObjectType, Int, GraphQLISODateTime } from '@nestjs/graphql'
 export abstract class BaseModel {
   @Field(() => Int)
   id: number
-  
+
   @Field(() => GraphQLISODateTime, {
     description: 'Identifies the date and time when the object was created.',
   })

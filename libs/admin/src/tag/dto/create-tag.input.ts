@@ -1,5 +1,5 @@
-import { InputType, Field } from '@nestjs/graphql';
-import { IsNotEmpty,   IsString, MaxLength } from 'class-validator';
+import { InputType, Field } from '@nestjs/graphql'
+import { IsNotEmpty, IsString, MaxLength } from 'class-validator'
 
 @InputType()
 export class CreateTagInput {
@@ -7,5 +7,5 @@ export class CreateTagInput {
   @IsNotEmpty()
   @IsString()
   @MaxLength(100)
-  name: string;
+  name: string
 }

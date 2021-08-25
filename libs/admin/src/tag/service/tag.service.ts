@@ -1,16 +1,14 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateTagInput } from '../dto/create-tag.input';
-import { UpdateTagInput } from '../dto/update-tag.input';
+import { Injectable, NotFoundException } from '@nestjs/common'
+import { CreateTagInput } from '../dto/create-tag.input'
+import { UpdateTagInput } from '../dto/update-tag.input'
 import { DataService } from '@feature/core'
 
 @Injectable()
 export class TagService {
-
   constructor(private readonly data: DataService) {}
   private readonly includes = {}
 
   public createTag(input: CreateTagInput) {
-
     return this.data.tag.create({
       data: {
         ...input,
@@ -37,13 +35,12 @@ export class TagService {
   }
 
   public async delete(id: number) {
-
-     const found = await this.getTagById(id)
-     const deleted = this.data.tag.delete({
-       where: {
-         id: found.id,
-       },
-     })
-     return !!deleted
+    const found = await this.getTagById(id)
+    const deleted = this.data.tag.delete({
+      where: {
+        id: found.id,
+      },
+    })
+    return !!deleted
   }
 }
