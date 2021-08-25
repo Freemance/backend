@@ -1,6 +1,6 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql'
 import { BaseModel } from '@feature/core'
-import { Portfolio } from '@feature/client'
+import { Profile } from '@feature/client'
 
 @ObjectType()
 export class Tag extends BaseModel {
