@@ -7,5 +7,5 @@ export class UpdateTagInput extends PartialType(CreateTagInput) {
   @Field(() => String, { nullable: true })
   @IsString()
   @MaxLength(100)
-  name: String;
+  name: string;
 }
