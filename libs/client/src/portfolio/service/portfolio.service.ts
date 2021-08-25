@@ -1,26 +1,45 @@
-import { Injectable } from '@nestjs/common'
-import { CreatePortfolioInput } from './dto/create-portfolio.input'
-import { UpdatePortfolioInput } from './dto/update-portfolio.input'
+import { Injectable, NotFoundException } from '@nestjs/common'
+import { DataService } from '@feature/core'
+import { CreatePortfolioInput } from '..'
 
 @Injectable()
 export class PortfolioService {
-  create(createPortfolioInput: CreatePortfolioInput) {
-    return 'This action adds a new portfolio'
+  constructor(private readonly data: DataService) {}
+
+  private readonly includes = {}
+
+  create(input: CreatePortfolioInput) {
+    return this.data.portfolio.create({
+      data: {
+        ...input,
+      },
+    })
   }
 
-  findAll() {
-    return `This action returns all portfolio`
+  async getAllPortfolio() {
+    return this.data.portfolio.findMany({ orderBy: { id: 'asc' }, include: this.includes })
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} portfolio`
+  async getPortfolioById(id: number) {
+    const found = await this.data.portfolio.findUnique({ where: { id } })
+    if (!found) {
+      throw new NotFoundException(`Portfolio with id: ${id} not found`)
+    }
+    return found
   }
 
-  update(id: number, updatePortfolioInput: UpdatePortfolioInput) {
-    return `This action updates a #${id} portfolio`
+  async updatePortfolio(id: number, input: CreatePortfolioInput) {
+    const found = await this.getPortfolioById(id)
+    return this.data.portfolio.update({ where: { id: found.id }, data: { ...input } })
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} portfolio`
+  async deletePortfolio(id: number) {
+    const found = await this.getPortfolioById(id)
+    const deleted = this.data.portfolio.delete({
+      where: {
+        id: found.id,
+      },
+    })
+    return !!deleted
   }
 }
