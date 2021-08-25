@@ -1,8 +1,9 @@
+import { DataModule } from '@feature/core'
 import { Module } from '@nestjs/common'
-import { PortfolioService } from './portfolio.service'
-import { PortfolioResolver } from './portfolio.resolver'
+import { PortfolioResolver, PortfolioService } from '.'
 
 @Module({
+  imports: [DataModule],
   providers: [PortfolioResolver, PortfolioService],
 })
 export class PortfolioModule {}
