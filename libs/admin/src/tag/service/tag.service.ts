@@ -34,7 +34,7 @@ export class TagService {
     return this.data.tag.update({ where: { id: found.id }, data: { ...input } })
   }
 
-  public async delete(id: number) {
+  public async deleteTag(id: number) {
     const found = await this.getTagById(id)
     const deleted = this.data.tag.delete({
       where: {

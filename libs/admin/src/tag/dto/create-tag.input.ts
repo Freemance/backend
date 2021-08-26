@@ -3,7 +3,7 @@ import { IsNotEmpty, IsString, MaxLength } from 'class-validator'
 
 @InputType()
 export class CreateTagInput {
-  @Field(() => String, { description: 'Tag (placeholder)' })
+  @Field(() => String, { description: 'Tag' })
   @IsNotEmpty()
   @IsString()
   @MaxLength(100)
