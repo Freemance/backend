@@ -30,11 +30,11 @@ model User {
 }
 
 model Profile {
-
-  id        Int    @id @default(autoincrement())
-  slykUser  String
+  id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  slykUser String
   // Optional fileds
 
   jobTitle     String?
@@ -53,7 +53,7 @@ model Profile {
   tag               Tag?           @relation(fields: [tagId], references: [id])
   tagId             Int?
   skills            ProfileSkill[]
-  socialLinks       SocialLink[]
+  socialLinks       SocialLink?
   employmentHistory Job[]
   courses           Course[]
   portfolioItem     Portfolio[]
@@ -90,13 +90,13 @@ enum LVL {
 
 model ProfileSkill {
   id        Int      @id @default(autoincrement())
-  skill      Skill    @relation(fields: [skillId], references: [id])
-  skillId    Int
-  profile    Profile  @relation(fields: [profileId], references: [id])
-  profileId  Int
+  skill     Skill    @relation(fields: [skillId], references: [id])
+  skillId   Int
+  profile   Profile  @relation(fields: [profileId], references: [id])
+  profileId Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  level      LVL      @default(NOVICE)
+  level     LVL      @default(NOVICE)
 }
 
 model SocialLink {
@@ -129,8 +129,8 @@ model Course {
   id          Int       @id @default(autoincrement())
   course      String?
   institution String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   starDate    DateTime?
   endDate     DateTime?
   profile     Profile?  @relation(fields: [profileId], references: [id])
@@ -170,7 +170,7 @@ model Language {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  language   String?
+  language  String?
   lvl       LANLVL   @default(NATIVE_SPEAKER)
   profile   Profile? @relation(fields: [profileId], references: [id])
   profileId Int?
