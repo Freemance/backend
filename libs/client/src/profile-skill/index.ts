@@ -8,4 +8,3 @@ export * from './resolver/profile-skill.resolver'
 export * from './service/profile-skill.service'
 
 export * from './profile-skill.module'
-

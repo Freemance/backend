@@ -1,5 +1,5 @@
 import { Resolver, Mutation, Args, Parent, ResolveField } from '@nestjs/graphql'
-import {Auth, AuthService, LoginInput, RefreshTokenInput, SignupInput, Token } from '..'
+import { Auth, AuthService, LoginInput, RefreshTokenInput, SignupInput, Token } from '..'
 
 @Resolver(() => Auth)
 export class AuthResolver {
