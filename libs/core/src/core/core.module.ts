@@ -23,7 +23,7 @@ import { GraphqlConfig } from '@feature/core/core/config/config.interface'
             numberScalarMode: 'integer',
           },
           sortSchema: graphqlConfig.sortSchema,
-          autoSchemaFile: graphqlConfig.schemaDestination || './src/schema.graphql',
+          autoSchemaFile: true,
           debug: graphqlConfig.debug,
           playground: graphqlConfig.playgroundEnabled,
           context: ({ req }) => ({ req }),
