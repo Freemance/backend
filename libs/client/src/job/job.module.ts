@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common'
-import { JobService } from './service/job.service'
-import { JobResolver } from './resolver/job.resolver'
 import { DataModule } from '@feature/core'
+import { JobResolver, JobService } from '.'
 
 @Module({
   imports: [DataModule],
