@@ -1,26 +1,44 @@
-import { Injectable } from '@nestjs/common';
-import { CreateCourseInput } from './dto/create-course.input';
-import { UpdateCourseInput } from './dto/update-course.input';
+import { Injectable, NotFoundException } from '@nestjs/common'
+import { DataService } from '@feature/core'
+import { CreateCourseInput, UpdateCourseInput } from '..'
 
 @Injectable()
 export class CourseService {
-  create(createCourseInput: CreateCourseInput) {
-    return 'This action adds a new course';
+  constructor(private readonly data: DataService) {}
+  private readonly includes = {}
+
+  async createCourse(input: CreateCourseInput) {
+    return this.data.course.create({
+      data: {
+        ...input,
+      },
+    })
   }
 
-  findAll() {
-    return `This action returns all course`;
+  async getAllCourse() {
+    return this.data.course.findMany({ orderBy: { id: 'asc' }, include: this.includes })
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} course`;
+  async getCourseById(id: number) {
+    const found = await this.data.course.findUnique({ where: { id } })
+    if (!found) {
+      throw new NotFoundException(`Course with id: ${id} not found`)
+    }
+    return found
   }
 
-  update(id: number, updateCourseInput: UpdateCourseInput) {
-    return `This action updates a #${id} course`;
+  async updateCourse(id: number, input: UpdateCourseInput) {
+    const found = await this.getCourseById(id)
+    return this.data.course.update({ where: { id: found.id }, data: { ...input } })
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} course`;
+  async deleteCourse(id: number) {
+    const found = await this.getCourseById(id)
+    const deleted = this.data.course.delete({
+      where: {
+        id: found.id,
+      },
+    })
+    return !!deleted
   }
 }
