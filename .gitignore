@@ -29,7 +29,6 @@
 /libpeerconnection.log
 npm-debug.log
 yarn-error.log
-yarn.lock
 package-lock.json
 testem.log
 /typings
