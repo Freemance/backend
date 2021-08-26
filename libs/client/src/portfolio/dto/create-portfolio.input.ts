@@ -1,4 +1,4 @@
-import { InputType, Field, GraphQLISODateTime } from '@nestjs/graphql'
+import { InputType, Field } from '@nestjs/graphql'
 import { IsDate, IsString } from 'class-validator'
 
 @InputType()
@@ -15,11 +15,11 @@ export class CreatePortfolioInput {
   @IsString()
   description?: string
 
-  @Field(() => GraphQLISODateTime, { description: 'Start date associated  to the proyect', nullable: true })
+  @Field(() => Date, { description: 'Start date associated  to the proyect', nullable: true })
   @IsDate()
   startDate?: Date
 
-  @Field(() => GraphQLISODateTime, { description: 'End date associated  to the proyect', nullable: true })
+  @Field(() => Date, { description: 'End date associated  to the proyect', nullable: true })
   @IsDate()
   endDate?: Date
 }
