@@ -27,6 +27,6 @@ export class TagResolver {
 
   @Mutation(() => Boolean)
   deleteTag(@Args('id', { type: () => Int }) id: number) {
-    return this.service.delete(id)
+    return this.service.deleteTag(id)
   }
 }

@@ -1,4 +1,4 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql'
+import { ObjectType, Field } from '@nestjs/graphql'
 import { BaseModel } from '@feature/core'
 import { Profile } from '@feature/client'
 
@@ -7,6 +7,6 @@ export class Tag extends BaseModel {
   @Field({ description: 'Tag name' })
   name: string
 
-  @Field(() => [Profile], { description: 'Profiles asociated to Skill', nullable: 'items' })
+  @Field(() => [Profile], { description: 'Profiles asociated to Tags', nullable: 'items' })
   profiles: Profile[]
 }

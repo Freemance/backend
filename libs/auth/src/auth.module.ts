@@ -1,14 +1,10 @@
-import { AuthResolver } from './auth.resolver'
 import { Module } from '@nestjs/common'
 import { JwtModule } from '@nestjs/jwt'
 import { PassportModule } from '@nestjs/passport'
-import { JwtStrategy } from './jwt.strategy'
 import { ConfigService } from '@nestjs/config'
 import { DataModule } from '@feature/core'
 import { SecurityConfig } from '@feature/core/core/config/config.interface'
-import { AuthService } from '@feature/auth/auth.service'
-import { PasswordService } from '@feature/auth/password.service'
-import { GqlAuthGuard } from '@feature/auth/guards/gql-auth.guard'
+import {AuthResolver, AuthService, GqlAuthGuard, JwtStrategy, PasswordService } from '.'
 
 @Module({
   imports: [
