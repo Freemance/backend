@@ -1,4 +1,4 @@
-import { ObjectType, Field, Int, GraphQLISODateTime } from '@nestjs/graphql'
+import { ObjectType, Field, Int } from '@nestjs/graphql'
 import { BaseModel } from '@feature/core'
 import { IsArray, IsDate, IsString } from 'class-validator'
 import { Skill } from '@feature/admin'
@@ -21,11 +21,11 @@ export class Portfolio extends BaseModel {
   @IsArray()
   skills?: [Skill]
 
-  @Field(() => GraphQLISODateTime, { description: 'Start date associated  to the proyect', nullable: true })
+  @Field(() => Date, { description: 'Start date associated  to the proyect', nullable: true })
   @IsDate()
   startDate?: Date
 
-  @Field(() => GraphQLISODateTime, { description: 'End date associated  to the proyect', nullable: true })
+  @Field(() => Date, { description: 'End date associated  to the proyect', nullable: true })
   @IsDate()
   endDate?: Date
 

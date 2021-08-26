@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { DataService } from '@feature/core'
-import { CreatePortfolioInput } from '..'
+import { CreatePortfolioInput, UpdatePortfolioInput } from '..'
 
 @Injectable()
 export class PortfolioService {
@@ -28,7 +28,7 @@ export class PortfolioService {
     return found
   }
 
-  async updatePortfolio(id: number, input: CreatePortfolioInput) {
+  async updatePortfolio(id: number, input: UpdatePortfolioInput) {
     const found = await this.getPortfolioById(id)
     return this.data.portfolio.update({ where: { id: found.id }, data: { ...input } })
   }

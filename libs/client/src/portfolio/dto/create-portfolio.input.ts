@@ -1,26 +1,33 @@
-import { InputType, Int, Field, GraphQLISODateTime } from '@nestjs/graphql'
-import { Portfolio } from '@feature/client/portfolio'
-import { IsDate, IsString } from 'class-validator'
+import { InputType, Field } from '@nestjs/graphql'
+import { IsDate, IsNotEmpty, IsString, MaxLength } from 'class-validator'
 
 @InputType()
 export class CreatePortfolioInput {
-  @Field({ description: 'Name of the proyect', nullable: true })
+  @Field({ description: 'Name of the proyect' })
   @IsString()
-  proyect?: string
+  @IsNotEmpty()
+  @MaxLength(75)
+  proyect: string
 
-  @Field({ description: 'Link associated  to the proyect', nullable: true })
+  @Field({ description: 'Link associated  to the proyect' })
   @IsString()
-  link?: string
+  @IsNotEmpty()
+  @MaxLength(75)
+  link: string
 
-  @Field({ description: 'Description associated  to the proyect', nullable: true })
+  @Field({ description: 'Description associated  to the proyect' })
   @IsString()
-  description?: string
+  @IsNotEmpty()
+  @MaxLength(500)
+  description: string
 
-  @Field(() => GraphQLISODateTime, { description: 'Start date associated  to the proyect', nullable: true })
+  @Field(() => Date, { description: 'Start date associated  to the proyect' })
   @IsDate()
-  startDate?: Date
+  @IsNotEmpty()
+  startDate: Date
 
-  @Field(() => GraphQLISODateTime, { description: 'End date associated  to the proyect', nullable: true })
+  @Field(() => Date, { description: 'End date associated  to the proyect' })
   @IsDate()
-  endDate?: Date
+  @IsNotEmpty()
+  endDate: Date
 }
