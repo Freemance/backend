@@ -10,7 +10,10 @@ import { Prisma, User } from '@prisma/client'
 import { ConfigService } from '@nestjs/config'
 import { DataService } from '@feature/core'
 import { SecurityConfig } from '@feature/core/core/config/config.interface'
-import { PasswordService, Role, SignupInput, Token } from '..'
+import { PasswordService } from './password.service'
+import { Token } from '../entities/token.model'
+import { SignupInput } from '../dto/signup.input'
+import { Role } from '../entities/user.entity'
 
 @Injectable()
 export class AuthService {

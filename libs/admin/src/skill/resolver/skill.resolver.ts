@@ -1,7 +1,9 @@
 import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql'
-import { boolean } from 'joi'
+import { Skill } from '../entities/skill.entity'
+import { SkillService } from '../service/skill.service'
 
-import { CreateSkillInput, Skill, SkillService, UpdateSkillInput } from '..'
+import { CreateSkillInput } from '../dto/create-skill.input'
+import { UpdateSkillInput } from '../dto/update-skill.input'
 
 @Resolver()
 export class SkillResolver {
@@ -27,7 +29,7 @@ export class SkillResolver {
     return this.service.updateSkill(id, input)
   }
 
-  @Mutation(() => boolean, { nullable: true })
+  @Mutation(() => Boolean, { nullable: true })
   deleteSkill(@Args('id', { type: () => Int }) id: number) {
     return this.service.deleteSkill(id)
   }

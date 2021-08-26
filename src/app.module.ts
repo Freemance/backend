@@ -5,7 +5,7 @@ import { ClientModule } from '@feature/client'
 import { CoreModule, DataModule } from '@feature/core'
 
 @Module({
-  imports: [CoreModule, DataModule, AuthModule, ClientModule, AdminModule],
+  imports: [CoreModule, DataModule, AuthModule, AdminModule],
   controllers: [],
   providers: [],
 })

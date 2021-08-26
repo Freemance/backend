@@ -6,7 +6,7 @@ import { Profile } from '@feature/client'
 
 @ObjectType()
 export class ProfileSkill extends BaseModel {
-  @Field(() => LVL, { description: 'skill lvl asociated to profileSkill', defaultValue: LVL.NOVICE })
+  @Field(() => LVL, { description: 'skill lvl asociated to profileSkill', defaultValue: 'NOVICE' })
   level: LVL
 
   @Field(() => Skill, { description: 'Skill asociated to profileSkill' })

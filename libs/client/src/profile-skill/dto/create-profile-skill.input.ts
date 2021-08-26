@@ -3,7 +3,7 @@ import { IsNotEmpty } from 'class-validator'
 import { LVL } from '..'
 @InputType()
 export class CreateProfileSkillInput {
-  @Field(() => LVL, { description: 'Skill lvl asociated to profile', defaultValue: LVL.NOVICE })
+  @Field(() => LVL, { description: 'Skill lvl asociated to profile', defaultValue: 'NOVICE' })
   @IsNotEmpty()
   level: LVL
 }
