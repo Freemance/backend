@@ -1,5 +1,4 @@
-import { InputType, Int, Field, GraphQLISODateTime } from '@nestjs/graphql'
-import { Portfolio } from '@feature/client/portfolio'
+import { InputType, Field, GraphQLISODateTime } from '@nestjs/graphql'
 import { IsDate, IsString } from 'class-validator'
 
 @InputType()
