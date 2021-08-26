@@ -1,26 +1,45 @@
-import { Injectable } from '@nestjs/common';
-import { CreateLanguageInput } from './dto/create-language.input';
-import { UpdateLanguageInput } from './dto/update-language.input';
+import { Injectable, NotFoundException } from '@nestjs/common'
+
+import { DataService } from '@feature/core'
+import { CreateLanguageInput, UpdateLanguageInput } from '..'
 
 @Injectable()
 export class LanguageService {
-  create(createLanguageInput: CreateLanguageInput) {
-    return 'This action adds a new language';
+  constructor(private readonly data: DataService) {}
+  private readonly includes = {}
+
+  async createLanguage(input: CreateLanguageInput) {
+    return this.data.language.create({
+      data: {
+        ...input,
+      },
+    })
   }
 
-  findAll() {
-    return `This action returns all language`;
+  async getAllLanguage() {
+    return this.data.language.findMany({ orderBy: { id: 'asc' }, include: this.includes })
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} language`;
+  async getLanguageById(id: number) {
+    const found = await this.data.language.findUnique({ where: { id } })
+    if (!found) {
+      throw new NotFoundException(`Language with id: ${id} not found`)
+    }
+    return found
   }
 
-  update(id: number, updateLanguageInput: UpdateLanguageInput) {
-    return `This action updates a #${id} language`;
+  async updateLanguage(id: number, input: UpdateLanguageInput) {
+    const found = await this.getLanguageById(id)
+    return this.data.language.update({ where: { id: found.id }, data: { ...input } })
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} language`;
+  async deleteLanguage(id: number) {
+    const found = await this.getLanguageById(id)
+    const deleted = this.data.language.delete({
+      where: {
+        id: found.id,
+      },
+    })
+    return !!deleted
   }
 }
