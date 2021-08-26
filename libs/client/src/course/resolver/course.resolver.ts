@@ -1,35 +1,32 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
-import { CourseService } from './course.service';
-import { Course } from './entities/course.entity';
-import { CreateCourseInput } from './dto/create-course.input';
-import { UpdateCourseInput } from './dto/update-course.input';
+import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql'
+import { Course, CourseService, CreateCourseInput, UpdateCourseInput } from '..'
 
 @Resolver(() => Course)
 export class CourseResolver {
-  constructor(private readonly courseService: CourseService) {}
+  constructor(private readonly service: CourseService) {}
 
   @Mutation(() => Course)
-  createCourse(@Args('createCourseInput') createCourseInput: CreateCourseInput) {
-    return this.courseService.create(createCourseInput);
+  createCourse(@Args('input') input: CreateCourseInput) {
+    return this.service.createCourse(input)
   }
 
-  @Query(() => [Course], { name: 'course' })
-  findAll() {
-    return this.courseService.findAll();
+  @Query(() => [Course], { name: 'courses' })
+  getAllCourse() {
+    return this.service.getAllCourse()
   }
 
   @Query(() => Course, { name: 'course' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.courseService.findOne(id);
+  getCourseById(@Args('id', { type: () => Int }) id: number) {
+    return this.service.getCourseById(id)
   }
 
   @Mutation(() => Course)
-  updateCourse(@Args('updateCourseInput') updateCourseInput: UpdateCourseInput) {
-    return this.courseService.update(updateCourseInput.id, updateCourseInput);
+  updateCourse(@Args('id', { type: () => Int }) id: number, @Args('input') input: UpdateCourseInput) {
+    return this.service.updateCourse(id, input)
   }
 
-  @Mutation(() => Course)
-  removeCourse(@Args('id', { type: () => Int }) id: number) {
-    return this.courseService.remove(id);
+  @Mutation(() => Boolean)
+  deleteCourse(@Args('id', { type: () => Int }) id: number) {
+    return this.service.deleteCourse(id)
   }
 }
