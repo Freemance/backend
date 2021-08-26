@@ -1,6 +1,8 @@
-import { DataService } from '@feature/core'
 import { Injectable, NotFoundException } from '@nestjs/common'
-import { CreateProfileSkillInput, UpdateProfileSkillInput } from '..'
+
+import { DataService } from '@feature/core'
+import { CreateProfileSkillInput } from '../dto/create-profile-skill.input'
+import { UpdateProfileSkillInput } from '../dto/update-profile-skill.input'
 
 @Injectable()
 export class ProfileSkillService {

@@ -1,5 +1,9 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql'
-import { Course, CourseService, CreateCourseInput, UpdateCourseInput } from '..'
+
+import { CreateCourseInput } from './../dto/create-course.input'
+import { Course } from '../entities/course.entity'
+import { CourseService } from '../service/course.service'
+import { UpdateCourseInput } from '../dto/update-course.input'
 
 @Resolver(() => Course)
 export class CourseResolver {

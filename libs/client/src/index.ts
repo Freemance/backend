@@ -1,5 +1,4 @@
 export * from './client.module'
-export * from './client.service'
 
 export * from './course'
 export * from './job'

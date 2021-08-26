@@ -1,5 +1,9 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql'
-import { CreateSocialLinkInput, SocialLink, SocialLinksService, UpdateSocialLinkInput } from '..'
+
+import { CreateSocialLinkInput } from './../dto/create-socialLinks.input'
+import { SocialLink } from '../entities/socialLinks.entity'
+import { SocialLinksService } from '../service/socialLinks.service'
+import { UpdateSocialLinkInput } from '../dto/update-socialLinks.input'
 
 @Resolver(() => SocialLink)
 export class SocialLinksResolver {
