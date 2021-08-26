@@ -1,2 +1,10 @@
 export * from './client.module'
 export * from './client.service'
+
+export * from './course'
+export * from './job'
+export * from './language'
+export * from './profile'
+export * from './profile-skill'
+export * from './socialLinks'
+export * from './portfolio'
