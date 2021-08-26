@@ -1,5 +1,5 @@
 import { InputType, PartialType } from '@nestjs/graphql'
-import { CreateSociallinkInput } from '..'
+import { CreateSocialLinkInput } from '..'
 
 @InputType()
-export class UpdateSociallinkInput extends PartialType(CreateSociallinkInput) {}
+export class UpdateSocialLinkInput extends PartialType(CreateSocialLinkInput) {}
