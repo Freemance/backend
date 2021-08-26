@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { LanguageResolver } from './language.resolver';
-import { LanguageService } from './language.service';
+import { LanguageService } from '../language.service';
 
 describe('LanguageResolver', () => {
   let resolver: LanguageResolver;
