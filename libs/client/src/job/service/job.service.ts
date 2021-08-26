@@ -1,26 +1,46 @@
-import { Injectable } from '@nestjs/common';
-import { CreateJobInput } from '../dto/create-job.input';
-import { UpdateJobInput } from '../dto/update-job.input';
+import { Injectable, NotFoundException } from '@nestjs/common'
+import { CreateJobInput } from '../dto/create-job.input'
+import { UpdateJobInput } from '../dto/update-job.input'
+import { DataService } from '@feature/core'
 
 @Injectable()
 export class JobService {
-  createJob(createJobInput: CreateJobInput) {
-    return 'This action adds a new job';
+  constructor(private readonly data: DataService) {}
+  private readonly includes = {}
+
+  public createJob(input: CreateJobInput) {
+    return this.data.job.create({
+      data:{
+        ...input,
+      }
+    })
   }
 
-  getAllJob() {
-    return `This action returns all job`;
+  public async getAllJob() {
+    return this.data.job.findMany({ orderBy: { id: 'asc' }, include: this.includes })
   }
 
-  findOneById(id: number) {
-    return `This action returns a #${id} job`;
+  public async getJobById(id: number) {
+    const found = await this.data.job.findUnique({ where: { id }, include: this.includes })
+    if (!found) {
+      throw new NotFoundException(`Job with id: ${id} not found`)
+    }
+    return found
   }
 
-  updateJob(id: number, updateJobInput: UpdateJobInput) {
-    return `This action updates a #${id} job`;
+  public async updateJob(id: number, input: UpdateJobInput) {
+    const found = await this.getJobById(id)
+
+    return this.data.job.update({ where: { id: found.id }, data: { ...input } })
   }
 
-  deleteJob(id: number) {
-    return `This action removes a #${id} job`;
+  public async deleteJob(id: number) {
+    const found = await this.getJobById(id)
+    const deleted = this.data.job.delete({
+      where: {
+        id: found.id,
+      },
+    })
+    return !!deleted
   }
 }
