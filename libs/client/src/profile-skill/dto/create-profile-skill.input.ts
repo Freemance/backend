@@ -5,5 +5,5 @@ import { LVL } from '..'
 export class CreateProfileSkillInput {
   @Field(() => LVL, { description: 'Skill lvl asociated to profile', defaultValue: LVL.NOVICE })
   @IsNotEmpty()
-  lvl: LVL
+  level: LVL
 }

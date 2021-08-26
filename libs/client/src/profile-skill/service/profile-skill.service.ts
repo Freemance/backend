@@ -8,19 +8,21 @@ export class ProfileSkillService {
 
   private readonly includes = {}
 
-  create(input: CreateProfileSkillInput) {
+  async createProfileSkill(input: CreateProfileSkillInput, profileId: number, skillId: number) {
     return this.data.profileSkill.create({
       data: {
+        profileId,
+        skillId,
         ...input,
       },
     })
   }
 
-  findAll() {
+  async asyncgetAllProfileSkill() {
     return this.data.profileSkill.findMany({ orderBy: { id: 'asc' }, include: this.includes })
   }
 
-  async findOne(id: number) {
+  async getProfileSkillById(id: number) {
     const found = await this.data.language.findUnique({ where: { id } })
     if (!found) {
       throw new NotFoundException(`Language with id: ${id} not found`)
@@ -28,13 +30,16 @@ export class ProfileSkillService {
     return found
   }
 
-  async update(id: number, input: UpdateProfileSkillInput) {
-    const found = await this.findOne(id)
-    return this.data.language.update({ where: { id: found.id }, data: { ...input } })
+  async updateProfileSkill(id: number, input: UpdateProfileSkillInput, profileId: number, skillId: number) {
+    const found = await this.getProfileSkillById(id)
+    return this.data.profileSkill.update({
+      where: { id: found.id },
+      data: { ...input, profileId, skillId },
+    })
   }
 
   async remove(id: number) {
-    const found = await this.findOne(id)
+    const found = await this.getProfileSkillById(id)
     const deleted = this.data.profileSkill.delete({
       where: {
         id: found.id,
