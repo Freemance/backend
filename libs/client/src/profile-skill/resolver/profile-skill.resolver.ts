@@ -3,30 +3,39 @@ import { CreateProfileSkillInput, ProfileSkill, ProfileSkillService, UpdateProfi
 
 @Resolver(() => ProfileSkill)
 export class ProfileSkillResolver {
-  constructor(private readonly profileSkillService: ProfileSkillService) {}
+  constructor(private readonly service: ProfileSkillService) {}
 
   @Mutation(() => ProfileSkill)
-  createProfileSkill(@Args('input') input: CreateProfileSkillInput) {
-    return this.profileSkillService.create(input)
+  createProfileSkill(
+    @Args('input') input: CreateProfileSkillInput,
+    @Args('profileId', { type: () => Int }) profileId: number,
+    @Args('skillId', { type: () => Int }) skillId: number,
+  ) {
+    return this.service.createProfileSkill(input, profileId, skillId)
   }
 
-  @Query(() => [ProfileSkill], { name: 'profileSkill' })
-  findAll() {
-    return this.profileSkillService.findAll()
+  @Query(() => [ProfileSkill], { name: 'profileSkills' })
+  getAllProfileSkill() {
+    return this.service.getAllProfileSkill()
   }
 
   @Query(() => ProfileSkill, { name: 'profileSkill' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.profileSkillService.findOne(id)
+  getProfileSkillById(@Args('id', { type: () => Int }) id: number) {
+    return this.service.getProfileSkillById(id)
   }
 
   @Mutation(() => ProfileSkill)
-  updateProfileSkill(@Args('id', { type: () => Int }) id: number, @Args('input') input: UpdateProfileSkillInput) {
-    return this.profileSkillService.update(id, input)
+  updateProfileSkill(
+    @Args('id', { type: () => Int }) id: number,
+    @Args('input') input: UpdateProfileSkillInput,
+    @Args('profileId', { type: () => Int }) profileId: number,
+    @Args('skillId', { type: () => Int }) skillId: number,
+  ) {
+    return this.service.updateProfileSkill(id, input, profileId, skillId)
   }
 
-  @Mutation(() => ProfileSkill)
-  removeProfileSkill(@Args('id', { type: () => Int }) id: number) {
-    return this.profileSkillService.remove(id)
+  @Mutation(() => Boolean)
+  deleteProfileSkill(@Args('id', { type: () => Int }) id: number) {
+    return this.service.deleteProfileSkill(id)
   }
 }

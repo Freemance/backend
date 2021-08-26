@@ -18,7 +18,7 @@ export class ProfileSkillService {
     })
   }
 
-  async asyncgetAllProfileSkill() {
+  async getAllProfileSkill() {
     return this.data.profileSkill.findMany({ orderBy: { id: 'asc' }, include: this.includes })
   }
 
@@ -38,7 +38,7 @@ export class ProfileSkillService {
     })
   }
 
-  async remove(id: number) {
+  async deleteProfileSkill(id: number) {
     const found = await this.getProfileSkillById(id)
     const deleted = this.data.profileSkill.delete({
       where: {
