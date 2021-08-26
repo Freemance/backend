@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing'
+import { SocialLinksService } from '..'
 import { SocialLinksResolver } from './socialLinks.resolver'
-import { SocialLinksService } from './sociallinks.service'
 
 describe('SocialLinksResolver', () => {
   let resolver: SocialLinksResolver

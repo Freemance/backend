@@ -1,5 +1,5 @@
-import { InputType, Int, Field } from '@nestjs/graphql'
-import { IsNotEmpty, IsString, MaxLength } from 'class-validator'
+import { InputType, Field } from '@nestjs/graphql'
+import { IsNotEmpty } from 'class-validator'
 import { LVL } from '..'
 @InputType()
 export class CreateProfileSkillInput {
