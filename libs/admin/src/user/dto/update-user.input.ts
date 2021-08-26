@@ -5,10 +5,10 @@ export class UpdateUserInput {
   @Field(() => String, { description: 'User firstname' })
   @IsNotEmpty()
   @IsString()
-  firstname: string
+  firstName: string
 
   @Field(() => String, { description: 'User lastName' })
   @IsNotEmpty()
   @IsString()
-  lastname: string
+  lastName: string
 }
