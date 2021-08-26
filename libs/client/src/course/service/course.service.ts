@@ -1,6 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
+
 import { DataService } from '@feature/core'
-import { CreateCourseInput, UpdateCourseInput } from '..'
+import { CreateCourseInput } from '../dto/create-course.input'
+import { UpdateCourseInput } from '../dto/update-course.input'
 
 @Injectable()
 export class CourseService {

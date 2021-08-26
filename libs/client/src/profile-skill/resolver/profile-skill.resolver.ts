@@ -1,5 +1,9 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql'
-import { CreateProfileSkillInput, ProfileSkill, ProfileSkillService, UpdateProfileSkillInput } from '..'
+
+import { CreateProfileSkillInput } from '../dto/create-profile-skill.input'
+import { UpdateProfileSkillInput } from '../dto/update-profile-skill.input'
+import { ProfileSkill } from '../entities/profile-skill.entity'
+import { ProfileSkillService } from '../service/profile-skill.service'
 
 @Resolver(() => ProfileSkill)
 export class ProfileSkillResolver {

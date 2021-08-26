@@ -1,5 +1,9 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql'
-import { CreateLanguageInput, Language, LanguageService, UpdateLanguageInput } from '..'
+
+import { CreateLanguageInput } from '../dto/create-language.input'
+import { UpdateLanguageInput } from '../dto/update-language.input'
+import { Language } from '../entities/language.entity'
+import { LanguageService } from '../service/language.service'
 
 @Resolver(() => Language)
 export class LanguageResolver {

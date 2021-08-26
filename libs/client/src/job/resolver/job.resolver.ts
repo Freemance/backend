@@ -1,5 +1,9 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql'
-import { Job, JobService, CreateJobInput, UpdateJobInput } from '..'
+
+import { CreateJobInput } from '../dto/create-job.input'
+import { UpdateJobInput } from '../dto/update-job.input'
+import { Job } from '../entities/job.entity'
+import { JobService } from '../service/job.service'
 
 @Resolver(() => Job)
 export class JobResolver {

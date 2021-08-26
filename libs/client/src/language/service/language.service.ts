@@ -1,7 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 
 import { DataService } from '@feature/core'
-import { CreateLanguageInput, UpdateLanguageInput } from '..'
+import { CreateLanguageInput } from '../dto/create-language.input'
+import { UpdateLanguageInput } from '../dto/update-language.input'
 
 @Injectable()
 export class LanguageService {
