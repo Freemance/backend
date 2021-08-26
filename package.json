@@ -74,8 +74,8 @@
     "typescript": "^4.3.5"
   },
   "lint-staged": {
-    "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
-      "yarn format"
+    "*.{js,jsx,ts,tsx,json,css,scss,md}": [
+      "yarn format --uncommitted"
     ]
   },
   "jest": {
