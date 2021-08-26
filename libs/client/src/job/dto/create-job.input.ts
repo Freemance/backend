@@ -13,20 +13,20 @@ export class CreateJobInput {
   @IsString()
   @IsNotEmpty()
   @MaxLength(100)
-  company?: string
+  company: string
 
   @Field({ description: 'Description associated  to the job' })
   @IsString()
   @MaxLength(500)
-  description?: string
+  description: string
 
   @Field(() => Date, { description: 'Start date associated  to the job' })
   @IsDate()
   @IsNotEmpty()
-  startDate?: Date
+  startDate: Date
 
   @Field(() => Date, { description: 'End date associated  to the job' })
   @IsDate()
   @IsNotEmpty()
-  endDate?: Date
+  endDate: Date
 }

@@ -18,7 +18,7 @@ enum Role {
 
 model User {
   id        Int      @id @default(autoincrement())
-  firstMame String
+  firstName String
   lastName  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -119,7 +119,7 @@ model Job {
   name        String
   company     String
   description String?
-  starDate    DateTime
+  startDate   DateTime
   endDate     DateTime
   profile     Profile? @relation(fields: [profileId], references: [id])
   profileId   Int?

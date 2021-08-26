@@ -10,7 +10,7 @@ import { Prisma, User } from '@prisma/client'
 import { ConfigService } from '@nestjs/config'
 import { DataService } from '@feature/core'
 import { SecurityConfig } from '@feature/core/core/config/config.interface'
-import { PasswordService, SignupInput, Token } from '..'
+import { PasswordService, Role, SignupInput, Token } from '..'
 
 @Injectable()
 export class AuthService {
@@ -29,7 +29,7 @@ export class AuthService {
         data: {
           ...payload,
           password: hashedPassword,
-          role: 'USER',
+          role: Role.USER,
         },
       })
 

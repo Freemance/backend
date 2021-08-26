@@ -1,7 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql'
 
 import { BaseModel } from '@feature/core'
-import { Portfolio } from '@feature/client'
+import { Portfolio, Profile } from '@feature/client'
 
 @ObjectType()
 export class Skill extends BaseModel {

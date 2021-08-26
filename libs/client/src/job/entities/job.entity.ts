@@ -19,11 +19,11 @@ export class Job extends BaseModel {
 
   @Field(() => Date, { description: 'Start date associated  to the job', nullable: true })
   @IsDate()
-  startDate?: Date
+  startDate: Date
 
   @Field(() => Date, { description: 'End date associated  to the job', nullable: true })
   @IsDate()
-  endDate?: Date
+  endDate: Date
 
   @Field(() => Profile, { description: 'Profiles asociated to Jobs', nullable: true })
   profile: Profile
