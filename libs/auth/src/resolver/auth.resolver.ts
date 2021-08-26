@@ -36,7 +36,7 @@ export class AuthResolver {
     return this.authService.refreshToken(token)
   }
 
-  @ResolveField('user', () => [User])
+  @ResolveField('user', () => User)
   async user(@Parent() auth: Auth) {
     return await this.authService.getUserFromToken(auth.accessToken)
   }
