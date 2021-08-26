@@ -18,6 +18,8 @@ enum Role {
 
 model User {
   id        Int      @id @default(autoincrement())
+  firstMame String
+  lastName  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   email     String   @unique
@@ -30,8 +32,6 @@ model User {
 model Profile {
 
   id        Int    @id @default(autoincrement())
-  firstMame String
-  lastName  String
   slykUser  String
   // Optional fileds
 
