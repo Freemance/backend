@@ -1,7 +1,5 @@
 import { InputType, Int, Field } from '@nestjs/graphql'
+import { SocialLink } from '..'
 
 @InputType()
-export class CreateSociallinkInput {
-  @Field(() => Int, { description: 'Example field (placeholder)' })
-  exampleField: number
-}
+export class CreateSociallinkInput extends SocialLink {}
