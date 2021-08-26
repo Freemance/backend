@@ -87,11 +87,13 @@ enum LVL {
 }
 
 model ProfileSkill {
+  id        Int      @id @default(autoincrement())
   skill      Skill    @relation(fields: [skillId], references: [id])
   skillId    Int
   profile    Profile  @relation(fields: [profileId], references: [id])
   profileId  Int
-  assignedAt DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   level      LVL      @default(NOVICE)
 
   @@id([skillId, profileId])
