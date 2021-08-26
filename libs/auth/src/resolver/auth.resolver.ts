@@ -1,4 +1,5 @@
 import { Resolver, Mutation, Args, Parent, ResolveField } from '@nestjs/graphql'
+import { User } from '..'
 import { LoginInput } from '../dto/login.input'
 import { RefreshTokenInput } from '../dto/refresh-token.input'
 import { SignupInput } from '../dto/signup.input'
@@ -8,12 +9,12 @@ import { AuthService } from '../service/auth.service'
 
 @Resolver(() => Auth)
 export class AuthResolver {
-  constructor(private readonly auth: AuthService) {}
+  constructor(private readonly authService: AuthService) {}
 
   @Mutation(() => Auth)
   async signup(@Args('data') data: SignupInput) {
     data.email = data.email.toLowerCase()
-    const { accessToken, refreshToken } = await this.auth.createUser(data)
+    const { accessToken, refreshToken } = await this.authService.createUser(data)
     return {
       accessToken,
       refreshToken,
@@ -22,7 +23,7 @@ export class AuthResolver {
 
   @Mutation(() => Auth)
   async login(@Args('data') { email, password }: LoginInput) {
-    const { accessToken, refreshToken } = await this.auth.login(email.toLowerCase(), password)
+    const { accessToken, refreshToken } = await this.authService.login(email.toLowerCase(), password)
 
     return {
       accessToken,
@@ -32,11 +33,11 @@ export class AuthResolver {
 
   @Mutation(() => Token)
   async refreshToken(@Args() { token }: RefreshTokenInput) {
-    return this.auth.refreshToken(token)
+    return this.authService.refreshToken(token)
   }
 
-  @ResolveField('user')
+  @ResolveField('user', () => [User])
   async user(@Parent() auth: Auth) {
-    return await this.auth.getUserFromToken(auth.accessToken)
+    return await this.authService.getUserFromToken(auth.accessToken)
   }
 }

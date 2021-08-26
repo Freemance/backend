@@ -1,3 +1,4 @@
+import { Profile } from '@feature/client'
 import { BaseModel } from '@feature/core/data/common'
 import { ObjectType, registerEnumType, HideField } from '@nestjs/graphql'
 
@@ -14,8 +15,8 @@ registerEnumType(Role, {
 @ObjectType()
 export class User extends BaseModel {
   email: string
-  firstname?: string
-  lastname?: string
+  firstName: string
+  lastName: string
   role: Role
   @HideField()
   password: string
