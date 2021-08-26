@@ -1,6 +1,6 @@
-import { InputType, Int, Field } from '@nestjs/graphql';
+import { InputType, Int, Field } from '@nestjs/graphql'
 import { IsNotEmpty, IsString, MaxLength } from 'class-validator'
-import { LVL } from '..';
+import { LVL } from '..'
 @InputType()
 export class CreateProfileSkillInput {
   @Field(() => LVL, { description: 'Skill lvl asociated to profile', defaultValue: LVL.NOVICE })

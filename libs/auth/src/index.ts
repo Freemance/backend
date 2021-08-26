@@ -15,8 +15,6 @@ export * from './service/auth.service'
 export * from './service/password.service'
 export * from './resolver/auth.resolver'
 
-
 export * from './jwt.strategy'
 
 export * from './auth.module'
-

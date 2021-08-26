@@ -10,9 +10,9 @@ export class JobService {
 
   public createJob(input: CreateJobInput) {
     return this.data.job.create({
-      data:{
+      data: {
         ...input,
-      }
+      },
     })
   }
 

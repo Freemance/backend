@@ -15,7 +15,7 @@ export class Job extends BaseModel {
 
   @Field({ description: 'Description associated  to the job', nullable: true })
   @IsString()
-  description?: string  
+  description?: string
 
   @Field(() => Date, { description: 'Start date associated  to the job', nullable: true })
   @IsDate()

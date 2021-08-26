@@ -1,10 +1,10 @@
-import { InputType, Field } from '@nestjs/graphql';
-import { IsDate, IsNotEmpty, IsString, MaxLength } from 'class-validator';
+import { InputType, Field } from '@nestjs/graphql'
+import { IsDate, IsNotEmpty, IsString, MaxLength } from 'class-validator'
 
 @InputType()
 export class CreateJobInput {
   @Field(() => String, { description: 'Name of the job' })
-  @IsNotEmpty()  
+  @IsNotEmpty()
   @IsString()
   @MaxLength(100)
   name: string
@@ -18,7 +18,7 @@ export class CreateJobInput {
   @Field({ description: 'Description associated  to the job' })
   @IsString()
   @MaxLength(500)
-  description?: string  
+  description?: string
 
   @Field(() => Date, { description: 'Start date associated  to the job' })
   @IsDate()
