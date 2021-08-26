@@ -1,4 +1,4 @@
-export * from './dto/create-user.input'
+export * from './dto/change-password.input'
 export * from './dto/update-user.input'
 
 export * from './resolver/user.resolver'
