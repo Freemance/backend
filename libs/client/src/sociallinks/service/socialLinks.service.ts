@@ -1,25 +1,46 @@
-import { Injectable } from '@nestjs/common'
-import { CreateSociallinkInput, UpdateSociallinkInput } from '..'
+import { Injectable, NotFoundException } from '@nestjs/common'
+
+import { DataService } from '@feature/core'
+import { CreateSocialLinkInput, UpdateSocialLinkInput } from '..'
 
 @Injectable()
 export class SocialLinksService {
-  create(createSociallinkInput: CreateSociallinkInput) {
-    return 'This action adds a new SocialLink'
+  constructor(private readonly data: DataService) {}
+
+  private readonly includes = {}
+
+  async createSocialLink(input: CreateSocialLinkInput) {
+    return this.data.socialLink.create({
+      data: {
+        ...input,
+      },
+    })
   }
 
-  findAll() {
-    return `This action returns all sociallinks`
+  async getAllSocialLink() {
+    return this.data.socialLink.findMany({ orderBy: { id: 'asc' }, include: this.includes })
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} SocialLink`
+  async getSocialLinkById(id: number) {
+    const found = await this.data.socialLink.findUnique({ where: { id } })
+    if (!found) {
+      throw new NotFoundException(`SocialLink with id: ${id} not found`)
+    }
+    return found
   }
 
-  update(id: number, updateSociallinkInput: UpdateSociallinkInput) {
-    return `This action updates a #${id} SocialLink`
+  async updateSocialLink(id: number, input: UpdateSocialLinkInput) {
+    const found = await this.getSocialLinkById(id)
+    return this.data.socialLink.update({ where: { id: found.id }, data: { ...input } })
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} SocialLink`
+  async deleteSocialLink(id: number) {
+    const found = await this.getSocialLinkById(id)
+    const deleted = this.data.socialLink.delete({
+      where: {
+        id: found.id,
+      },
+    })
+    return !!deleted
   }
 }
