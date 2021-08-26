@@ -1,5 +1,5 @@
+import { BaseModel } from '@feature/core/data/common'
 import { ObjectType, registerEnumType, HideField } from '@nestjs/graphql'
-import { BaseModel } from './base.model'
 
 export enum Role {
   ADMIN = 'ADMIN',

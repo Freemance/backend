@@ -6,13 +6,13 @@ import {
   UnauthorizedException,
 } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
-import { PasswordService } from './password.service'
 import { Prisma, User } from '@prisma/client'
 import { ConfigService } from '@nestjs/config'
 import { DataService } from '@feature/core'
-import { SignupInput } from '@feature/auth/dto/signup.input'
-import { Token } from '@feature/auth/models/token.model'
+import { SignupInput } from './dto/signup.input'
+import { PasswordService } from './password.service'
 import { SecurityConfig } from '@feature/core/core/config/config.interface'
+import { Token } from '.'
 
 @Injectable()
 export class AuthService {
