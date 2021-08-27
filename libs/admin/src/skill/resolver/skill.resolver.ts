@@ -9,12 +9,12 @@ import { UpdateSkillInput } from '../dto/update-skill.input'
 export class SkillResolver {
   constructor(private readonly service: SkillService) {}
 
-  @Query(() => [Skill], { nullable: true })
+  @Query(() => [Skill], { name: 'skills', nullable: 'items' })
   getAllSkill() {
     return this.service.getAllSkill()
   }
 
-  @Query(() => Skill, { nullable: true })
+  @Query(() => Skill, { name: 'skill', nullable: true })
   getSkillById(@Args('id', { type: () => Int }) id: number) {
     return this.service.getSkillById(id)
   }

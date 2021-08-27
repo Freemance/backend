@@ -7,7 +7,7 @@ import { CreateSkillInput, UpdateSkillInput } from '..'
 export class SkillService {
   constructor(private readonly data: DataService) {}
   // future includes
-  private readonly includes = {}
+  private readonly includes = { profiles: true }
 
   public async getAllSkill() {
     return this.data.skill.findMany({ orderBy: { id: 'asc' }, include: this.includes })
