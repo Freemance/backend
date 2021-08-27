@@ -7,7 +7,7 @@ import { UpdateCourseInput } from '../dto/update-course.input'
 @Injectable()
 export class CourseService {
   constructor(private readonly data: DataService) {}
-  private readonly includes = {}
+  private readonly includes = { profile: true }
 
   async createCourse(input: CreateCourseInput) {
     return this.data.course.create({
@@ -22,7 +22,7 @@ export class CourseService {
   }
 
   async getCourseById(id: number) {
-    const found = await this.data.course.findUnique({ where: { id } })
+    const found = await this.data.course.findUnique({ where: { id }, include: this.includes })
     if (!found) {
       throw new NotFoundException(`Course with id: ${id} not found`)
     }
