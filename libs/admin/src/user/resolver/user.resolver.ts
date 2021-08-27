@@ -8,7 +8,7 @@ export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
   @Query(() => User, { nullable: true })
-  async profile(@UserEntity() user: User): Promise<User> {
+  async me(@UserEntity() user: User): Promise<User> {
     return user
   }
 
