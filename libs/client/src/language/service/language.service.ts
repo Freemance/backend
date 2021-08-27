@@ -7,7 +7,7 @@ import { UpdateLanguageInput } from '../dto/update-language.input'
 @Injectable()
 export class LanguageService {
   constructor(private readonly data: DataService) {}
-  private readonly includes = {}
+  private readonly includes = { profile: true }
 
   async createLanguage(input: CreateLanguageInput) {
     return this.data.language.create({
@@ -22,7 +22,7 @@ export class LanguageService {
   }
 
   async getLanguageById(id: number) {
-    const found = await this.data.language.findUnique({ where: { id } })
+    const found = await this.data.language.findUnique({ where: { id }, include: this.includes })
     if (!found) {
       throw new NotFoundException(`Language with id: ${id} not found`)
     }

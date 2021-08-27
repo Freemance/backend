@@ -9,27 +9,27 @@ import { LanguageService } from '../service/language.service'
 export class LanguageResolver {
   constructor(private readonly service: LanguageService) {}
 
-  @Mutation(() => Language)
+  @Mutation(() => Language, { nullable: true })
   createLanguage(@Args('input') input: CreateLanguageInput) {
     return this.service.createLanguage(input)
   }
 
-  @Query(() => [Language], { name: 'languages' })
+  @Query(() => [Language], { name: 'languages', nullable: 'items' })
   getAllLanguage() {
     return this.service.getAllLanguage()
   }
 
-  @Query(() => Language, { name: 'language' })
+  @Query(() => Language, { name: 'language', nullable: true })
   getLanguageById(@Args('id', { type: () => Int }) id: number) {
     return this.service.getLanguageById(id)
   }
 
-  @Mutation(() => Language)
+  @Mutation(() => Language, { nullable: true })
   updateLanguage(@Args('id', { type: () => Int }) id: number, @Args('input') input: UpdateLanguageInput) {
     return this.service.updateLanguage(id, input)
   }
 
-  @Mutation(() => Boolean)
+  @Mutation(() => Boolean, { nullable: true })
   deleteLanguage(@Args('id', { type: () => Int }) id: number) {
     return this.service.deleteLanguage(id)
   }
