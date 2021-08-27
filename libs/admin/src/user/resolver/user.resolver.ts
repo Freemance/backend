@@ -6,8 +6,9 @@ import { ChangePasswordInput, UpdateUserInput, UserService } from '..'
 @Resolver(() => User)
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
+
   @Query(() => User)
-  async profile(@UserEntity() user: User): Promise<User> {
+  async me(@UserEntity() user: User): Promise<User> {
     return user
   }
 
