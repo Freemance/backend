@@ -1,13 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 
 import { DataService } from '@feature/core'
-import { CreateSocialLinkInput, UpdateSocialLinkInput } from '..'
+import { CreateSocialLinkInput } from '../dto/create-socialLinks.input'
+import { UpdateSocialLinkInput } from '../dto/update-socialLinks.input'
 
 @Injectable()
 export class SocialLinksService {
   constructor(private readonly data: DataService) {}
 
-  private readonly includes = {}
+  private readonly includes = { profile: true }
 
   async createSocialLink(input: CreateSocialLinkInput) {
     return this.data.socialLink.create({
@@ -22,7 +23,7 @@ export class SocialLinksService {
   }
 
   async getSocialLinkById(id: number) {
-    const found = await this.data.socialLink.findUnique({ where: { id } })
+    const found = await this.data.socialLink.findUnique({ where: { id }, include: this.includes })
     if (!found) {
       throw new NotFoundException(`SocialLink with id: ${id} not found`)
     }
