@@ -6,35 +6,36 @@ import { ChangePasswordInput, UpdateUserInput, UserService } from '..'
 @Resolver(() => User)
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
-  @Query(() => User)
+
+  @Query(() => User, { nullable: true })
   async profile(@UserEntity() user: User): Promise<User> {
     return user
   }
 
   @UseGuards(GqlAuthGuard)
-  @Mutation(() => User)
+  @Mutation(() => User, { nullable: true })
   async updateUser(@UserEntity() user: User, @Args('data') newUserData: UpdateUserInput) {
     return this.userService.updateUser(user.id, newUserData)
   }
 
   @UseGuards(GqlAuthGuard)
-  @Mutation(() => User)
+  @Mutation(() => User, { nullable: true })
   async changePassword(@UserEntity() user: User, @Args('data') changePassword: ChangePasswordInput) {
     return this.userService.changePassword(user.id, user.password, changePassword)
   }
 
-  @Query(() => [User], { name: 'user' })
-  findAll() {
-    return this.userService.findAll()
+  @Query(() => [User], { name: 'users', nullable: 'items' })
+  getAllUser() {
+    return this.userService.getAllUser()
   }
 
-  @Query(() => User, { name: 'user' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.userService.findOne(id)
+  @Query(() => User, { name: 'user', nullable: true })
+  getUserById(@Args('id', { type: () => Int }) id: number) {
+    return this.userService.getUserById(id)
   }
 
-  @Mutation(() => User)
-  removeUser(@Args('id', { type: () => Int }) id: number) {
-    return this.userService.remove(id)
+  @Mutation(() => User, { nullable: true })
+  deleteUser(@Args('id', { type: () => Int }) id: number) {
+    return this.userService.deleteUser(id)
   }
 }

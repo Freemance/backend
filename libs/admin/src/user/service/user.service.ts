@@ -7,7 +7,7 @@ import { ChangePasswordInput, UpdateUserInput } from '..'
 export class UserService {
   constructor(private readonly data: DataService, private passwordService: PasswordService) {}
 
-  private readonly includes = {}
+  private readonly includes = { profile: true }
 
   updateUser(userId: number, newUserData: UpdateUserInput) {
     return this.data.user.update({
@@ -35,21 +35,21 @@ export class UserService {
     })
   }
 
-  async findAll() {
+  async getAllUser() {
     return this.data.user.findMany({ orderBy: { id: 'asc' }, include: this.includes })
   }
 
-  async findOne(id: number) {
-    const found = await this.data.user.findUnique({ where: { id } })
+  async getUserById(id: number) {
+    const found = await this.data.user.findUnique({ where: { id }, include: this.includes })
     if (!found) {
-      throw new NotFoundException(`Language with id: ${id} not found`)
+      throw new NotFoundException(`User with id: ${id} not found`)
     }
     return found
   }
 
-  async remove(id: number) {
-    const found = await this.findOne(id)
-    const deleted = this.data.language.delete({
+  async deleteUser(id: number) {
+    const found = await this.getUserById(id)
+    const deleted = this.data.user.delete({
       where: {
         id: found.id,
       },
