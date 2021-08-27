@@ -1,12 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { DataService } from '@feature/core'
-import { CreatePortfolioInput, UpdatePortfolioInput } from '..'
+import { UpdatePortfolioInput } from '../dto/update-portfolio.input'
+import { CreatePortfolioInput } from '../dto/create-portfolio.input'
 
 @Injectable()
 export class PortfolioService {
   constructor(private readonly data: DataService) {}
 
-  private readonly includes = {}
+  private readonly includes = { profile: true, skills: true }
 
   createPortfolio(input: CreatePortfolioInput) {
     return this.data.portfolio.create({
@@ -21,7 +22,7 @@ export class PortfolioService {
   }
 
   async getPortfolioById(id: number) {
-    const found = await this.data.portfolio.findUnique({ where: { id } })
+    const found = await this.data.portfolio.findUnique({ where: { id }, include: this.includes })
     if (!found) {
       throw new NotFoundException(`Portfolio with id: ${id} not found`)
     }
