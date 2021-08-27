@@ -6,7 +6,7 @@ import { DataService } from '@feature/core'
 @Injectable()
 export class TagService {
   constructor(private readonly data: DataService) {}
-  private readonly includes = {}
+  private readonly includes = { profiles: true }
 
   public createTag(input: CreateTagInput) {
     return this.data.tag.create({
