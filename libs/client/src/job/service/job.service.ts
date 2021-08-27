@@ -6,7 +6,7 @@ import { DataService } from '@feature/core'
 @Injectable()
 export class JobService {
   constructor(private readonly data: DataService) {}
-  private readonly includes = {}
+  private readonly includes = { profile: true }
 
   public createJob(input: CreateJobInput) {
     return this.data.job.create({

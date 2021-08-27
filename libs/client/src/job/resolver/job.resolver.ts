@@ -9,27 +9,27 @@ import { JobService } from '../service/job.service'
 export class JobResolver {
   constructor(private readonly service: JobService) {}
 
-  @Mutation(() => Job)
+  @Mutation(() => Job, { nullable: true })
   createJob(@Args('createJobInput') createJobInput: CreateJobInput) {
     return this.service.createJob(createJobInput)
   }
 
-  @Query(() => [Job], { name: 'job' })
+  @Query(() => [Job], { name: 'job', nullable: 'items' })
   findAll() {
     return this.service.getAllJob()
   }
 
-  @Query(() => Job, { name: 'job' })
+  @Query(() => Job, { name: 'job', nullable: true })
   findOne(@Args('id', { type: () => Int }) id: number) {
     return this.service.getJobById(id)
   }
 
-  @Mutation(() => Job)
+  @Mutation(() => Job, { nullable: true })
   updateJob(@Args('id', { type: () => Int }) id: number, @Args('input') input: UpdateJobInput) {
     return this.service.updateJob(id, input)
   }
 
-  @Mutation(() => Job)
+  @Mutation(() => Job, { nullable: true })
   deleteJob(@Args('id', { type: () => Int }) id: number) {
     return this.service.deleteJob(id)
   }
