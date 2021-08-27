@@ -1,7 +1,8 @@
+import { ObjectType, Field } from '@nestjs/graphql'
+
+import { LVL } from './lvl.enum'
 import { Skill } from '@feature/admin'
 import { BaseModel } from '@feature/core'
-import { ObjectType, Field, Int } from '@nestjs/graphql'
-import { LVL } from '..'
 import { Profile } from '@feature/client'
 
 @ObjectType()

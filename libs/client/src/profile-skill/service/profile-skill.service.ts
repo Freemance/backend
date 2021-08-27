@@ -8,7 +8,7 @@ import { UpdateProfileSkillInput } from '../dto/update-profile-skill.input'
 export class ProfileSkillService {
   constructor(private readonly data: DataService) {}
 
-  private readonly includes = {}
+  private readonly includes = { profile: true, skill: true }
 
   async createProfileSkill(input: CreateProfileSkillInput, profileId: number, skillId: number) {
     return this.data.profileSkill.create({
@@ -25,7 +25,7 @@ export class ProfileSkillService {
   }
 
   async getProfileSkillById(id: number) {
-    const found = await this.data.language.findUnique({ where: { id } })
+    const found = await this.data.language.findUnique({ where: { id }, include: this.includes })
     if (!found) {
       throw new NotFoundException(`Language with id: ${id} not found`)
     }
