@@ -10,7 +10,7 @@ import { ChangePasswordInput } from '../dto/change-password.input'
 @UseGuards(GqlAuthGuard)
 @Resolver(() => User)
 export class UserResolver {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly _userService: UserService) {}
 
   @Query(() => User, { nullable: true })
   async me(@UserEntity() user: User): Promise<User> {
@@ -19,30 +19,30 @@ export class UserResolver {
 
   @Mutation(() => User, { nullable: true })
   async updateUser(@UserEntity() user: User, @Args('data') newUserData: UpdateUserInput) {
-    return this.userService.updateUser(user.id, newUserData)
+    return this._userService.updateUser(user.id, newUserData)
   }
 
   @Mutation(() => User, { nullable: true })
   async changePassword(@UserEntity() user: User, @Args('data') changePassword: ChangePasswordInput) {
-    return this.userService.changePassword(user.id, user.password, changePassword)
+    return this._userService.changePassword(user.id, user.password, changePassword)
   }
   @UseGuards(RolesGuard)
   @Roles(Role.ADMIN)
   @Query(() => [User], { name: 'users', nullable: 'items' })
   getAllUser() {
-    return this.userService.getAllUser()
+    return this._userService.getAllUser()
   }
   @UseGuards(RolesGuard)
   @Roles(Role.ADMIN)
   @Query(() => User, { name: 'user', nullable: true })
   getUserById(@Args('id', { type: () => Int }) id: number) {
-    return this.userService.getUserById(id)
+    return this._userService.getUserById(id)
   }
 
   @UseGuards(RolesGuard)
   @Roles(Role.ADMIN)
   @Mutation(() => User, { nullable: true })
   deleteUser(@Args('id', { type: () => Int }) id: number) {
-    return this.userService.deleteUser(id)
+    return this._userService.deleteUser(id)
   }
 }

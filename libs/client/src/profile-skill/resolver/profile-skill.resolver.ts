@@ -7,7 +7,7 @@ import { ProfileSkillService } from '../service/profile-skill.service'
 
 @Resolver(() => ProfileSkill)
 export class ProfileSkillResolver {
-  constructor(private readonly service: ProfileSkillService) {}
+  constructor(private readonly _service: ProfileSkillService) {}
 
   @Mutation(() => ProfileSkill, { nullable: true })
   createProfileSkill(
@@ -15,17 +15,17 @@ export class ProfileSkillResolver {
     @Args('profileId', { type: () => Int }) profileId: number,
     @Args('skillId', { type: () => Int }) skillId: number,
   ) {
-    return this.service.createProfileSkill(input, profileId, skillId)
+    return this._service.createProfileSkill(input, profileId, skillId)
   }
 
   @Query(() => [ProfileSkill], { name: 'profileSkills', nullable: 'items' })
   getAllProfileSkill() {
-    return this.service.getAllProfileSkill()
+    return this._service.getAllProfileSkill()
   }
 
   @Query(() => ProfileSkill, { name: 'profileSkill', nullable: true })
   getProfileSkillById(@Args('id', { type: () => Int }) id: number) {
-    return this.service.getProfileSkillById(id)
+    return this._service.getProfileSkillById(id)
   }
 
   @Mutation(() => ProfileSkill, { nullable: true })
@@ -35,11 +35,11 @@ export class ProfileSkillResolver {
     @Args('profileId', { type: () => Int }) profileId: number,
     @Args('skillId', { type: () => Int }) skillId: number,
   ) {
-    return this.service.updateProfileSkill(id, input, profileId, skillId)
+    return this._service.updateProfileSkill(id, input, profileId, skillId)
   }
 
   @Mutation(() => Boolean, { nullable: true })
   deleteProfileSkill(@Args('id', { type: () => Int }) id: number) {
-    return this.service.deleteProfileSkill(id)
+    return this._service.deleteProfileSkill(id)
   }
 }

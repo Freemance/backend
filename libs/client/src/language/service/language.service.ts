@@ -6,11 +6,11 @@ import { UpdateLanguageInput } from '../dto/update-language.input'
 
 @Injectable()
 export class LanguageService {
-  constructor(private readonly data: DataService) {}
+  constructor(private readonly _service: DataService) {}
   private readonly includes = { profile: true }
 
   async createLanguage(input: CreateLanguageInput) {
-    return this.data.language.create({
+    return this._service.language.create({
       data: {
         ...input,
       },
@@ -18,11 +18,11 @@ export class LanguageService {
   }
 
   async getAllLanguage() {
-    return this.data.language.findMany({ orderBy: { id: 'asc' }, include: this.includes })
+    return this._service.language.findMany({ orderBy: { id: 'asc' }, include: this.includes })
   }
 
   async getLanguageById(id: number) {
-    const found = await this.data.language.findUnique({ where: { id }, include: this.includes })
+    const found = await this._service.language.findUnique({ where: { id }, include: this.includes })
     if (!found) {
       throw new NotFoundException(`Language with id: ${id} not found`)
     }
@@ -31,12 +31,12 @@ export class LanguageService {
 
   async updateLanguage(id: number, input: UpdateLanguageInput) {
     const found = await this.getLanguageById(id)
-    return this.data.language.update({ where: { id: found.id }, data: { ...input } })
+    return this._service.language.update({ where: { id: found.id }, data: { ...input } })
   }
 
   async deleteLanguage(id: number) {
     const found = await this.getLanguageById(id)
-    const deleted = this.data.language.delete({
+    const deleted = this._service.language.delete({
       where: {
         id: found.id,
       },

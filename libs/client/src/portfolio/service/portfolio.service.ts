@@ -5,12 +5,12 @@ import { CreatePortfolioInput } from '../dto/create-portfolio.input'
 
 @Injectable()
 export class PortfolioService {
-  constructor(private readonly data: DataService) {}
+  constructor(private readonly _service: DataService) {}
 
   private readonly includes = { profile: true, skills: true }
 
   createPortfolio(input: CreatePortfolioInput) {
-    return this.data.portfolio.create({
+    return this._service.portfolio.create({
       data: {
         ...input,
       },
@@ -18,11 +18,11 @@ export class PortfolioService {
   }
 
   async getAllPortfolio() {
-    return this.data.portfolio.findMany({ orderBy: { id: 'asc' }, include: this.includes })
+    return this._service.portfolio.findMany({ orderBy: { id: 'asc' }, include: this.includes })
   }
 
   async getPortfolioById(id: number) {
-    const found = await this.data.portfolio.findUnique({ where: { id }, include: this.includes })
+    const found = await this._service.portfolio.findUnique({ where: { id }, include: this.includes })
     if (!found) {
       throw new NotFoundException(`Portfolio with id: ${id} not found`)
     }
@@ -31,12 +31,12 @@ export class PortfolioService {
 
   async updatePortfolio(id: number, input: UpdatePortfolioInput) {
     const found = await this.getPortfolioById(id)
-    return this.data.portfolio.update({ where: { id: found.id }, data: { ...input } })
+    return this._service.portfolio.update({ where: { id: found.id }, data: { ...input } })
   }
 
   async deletePortfolio(id: number) {
     const found = await this.getPortfolioById(id)
-    const deleted = this.data.portfolio.delete({
+    const deleted = this._service.portfolio.delete({
       where: {
         id: found.id,
       },

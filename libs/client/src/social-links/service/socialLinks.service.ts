@@ -6,12 +6,12 @@ import { UpdateSocialLinkInput } from '../dto/update-socialLinks.input'
 
 @Injectable()
 export class SocialLinksService {
-  constructor(private readonly data: DataService) {}
+  constructor(private readonly _service: DataService) {}
 
   private readonly includes = { profile: true }
 
   async createSocialLink(input: CreateSocialLinkInput) {
-    return this.data.socialLink.create({
+    return this._service.socialLink.create({
       data: {
         ...input,
       },
@@ -19,11 +19,11 @@ export class SocialLinksService {
   }
 
   async getAllSocialLink() {
-    return this.data.socialLink.findMany({ orderBy: { id: 'asc' }, include: this.includes })
+    return this._service.socialLink.findMany({ orderBy: { id: 'asc' }, include: this.includes })
   }
 
   async getSocialLinkById(id: number) {
-    const found = await this.data.socialLink.findUnique({ where: { id }, include: this.includes })
+    const found = await this._service.socialLink.findUnique({ where: { id }, include: this.includes })
     if (!found) {
       throw new NotFoundException(`SocialLink with id: ${id} not found`)
     }
@@ -32,12 +32,12 @@ export class SocialLinksService {
 
   async updateSocialLink(id: number, input: UpdateSocialLinkInput) {
     const found = await this.getSocialLinkById(id)
-    return this.data.socialLink.update({ where: { id: found.id }, data: { ...input } })
+    return this._service.socialLink.update({ where: { id: found.id }, data: { ...input } })
   }
 
   async deleteSocialLink(id: number) {
     const found = await this.getSocialLinkById(id)
-    const deleted = this.data.socialLink.delete({
+    const deleted = this._service.socialLink.delete({
       where: {
         id: found.id,
       },

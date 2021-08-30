@@ -5,11 +5,11 @@ import { DataService } from '@feature/core'
 
 @Injectable()
 export class JobService {
-  constructor(private readonly data: DataService) {}
+  constructor(private readonly _service: DataService) {}
   private readonly includes = { profile: true }
 
   public createJob(input: CreateJobInput) {
-    return this.data.job.create({
+    return this._service.job.create({
       data: {
         ...input,
       },
@@ -17,11 +17,11 @@ export class JobService {
   }
 
   public async getAllJob() {
-    return this.data.job.findMany({ orderBy: { id: 'asc' }, include: this.includes })
+    return this._service.job.findMany({ orderBy: { id: 'asc' }, include: this.includes })
   }
 
   public async getJobById(id: number) {
-    const found = await this.data.job.findUnique({ where: { id }, include: this.includes })
+    const found = await this._service.job.findUnique({ where: { id }, include: this.includes })
     if (!found) {
       throw new NotFoundException(`Job with id: ${id} not found`)
     }
@@ -31,12 +31,12 @@ export class JobService {
   public async updateJob(id: number, input: UpdateJobInput) {
     const found = await this.getJobById(id)
 
-    return this.data.job.update({ where: { id: found.id }, data: { ...input } })
+    return this._service.job.update({ where: { id: found.id }, data: { ...input } })
   }
 
   public async deleteJob(id: number) {
     const found = await this.getJobById(id)
-    const deleted = this.data.job.delete({
+    const deleted = this._service.job.delete({
       where: {
         id: found.id,
       },

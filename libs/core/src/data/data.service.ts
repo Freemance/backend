@@ -4,7 +4,7 @@ import { PrismaClient } from '@prisma/client'
 
 @Injectable()
 export class DataService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
-  constructor(private readonly config: ConfigService) {
+  constructor(private readonly _config: ConfigService) {
     super()
   }
   public async onModuleDestroy() {

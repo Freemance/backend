@@ -7,30 +7,30 @@ import { UpdateSocialLinkInput } from '../dto/update-socialLinks.input'
 
 @Resolver(() => SocialLink)
 export class SocialLinksResolver {
-  constructor(private readonly service: SocialLinksService) {}
+  constructor(private readonly _service: SocialLinksService) {}
 
   @Mutation(() => SocialLink, { nullable: true })
   createSocialLink(@Args('input') input: CreateSocialLinkInput) {
-    return this.service.createSocialLink(input)
+    return this._service.createSocialLink(input)
   }
 
   @Query(() => [SocialLink], { name: 'socialLinks', nullable: 'items' })
   getAllSocialLink() {
-    return this.service.getAllSocialLink()
+    return this._service.getAllSocialLink()
   }
 
   @Query(() => SocialLink, { name: 'socialLink', nullable: true })
   getSocialLinkById(@Args('id', { type: () => Int }) id: number) {
-    return this.service.getSocialLinkById(id)
+    return this._service.getSocialLinkById(id)
   }
 
   @Mutation(() => SocialLink, { nullable: true })
   updateSocialLink(@Args('id', { type: () => Int }) id: number, @Args('input') input: UpdateSocialLinkInput) {
-    return this.service.updateSocialLink(id, input)
+    return this._service.updateSocialLink(id, input)
   }
 
   @Mutation(() => Boolean, { nullable: true })
   deleteSocialLink(@Args('id', { type: () => Int }) id: number) {
-    return this.service.deleteSocialLink(id)
+    return this._service.deleteSocialLink(id)
   }
 }

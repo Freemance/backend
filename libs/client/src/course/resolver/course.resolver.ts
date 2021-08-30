@@ -7,30 +7,30 @@ import { UpdateCourseInput } from '../dto/update-course.input'
 
 @Resolver(() => Course)
 export class CourseResolver {
-  constructor(private readonly service: CourseService) {}
+  constructor(private readonly _service: CourseService) {}
 
   @Mutation(() => Course, { nullable: true })
   createCourse(@Args('input') input: CreateCourseInput) {
-    return this.service.createCourse(input)
+    return this._service.createCourse(input)
   }
 
   @Query(() => [Course], { name: 'courses', nullable: 'items' })
   getAllCourse() {
-    return this.service.getAllCourse()
+    return this._service.getAllCourse()
   }
 
   @Query(() => Course, { name: 'course', nullable: true })
   getCourseById(@Args('id', { type: () => Int }) id: number) {
-    return this.service.getCourseById(id)
+    return this._service.getCourseById(id)
   }
 
   @Mutation(() => Course, { nullable: true })
   updateCourse(@Args('id', { type: () => Int }) id: number, @Args('input') input: UpdateCourseInput) {
-    return this.service.updateCourse(id, input)
+    return this._service.updateCourse(id, input)
   }
 
   @Mutation(() => Boolean, { nullable: true })
   deleteCourse(@Args('id', { type: () => Int }) id: number) {
-    return this.service.deleteCourse(id)
+    return this._service.deleteCourse(id)
   }
 }
