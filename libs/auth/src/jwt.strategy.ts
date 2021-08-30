@@ -1,4 +1,4 @@
-import { JwtDto } from './dto/jwt.dto'
+import { JwtDto } from '.'
 import { Strategy, ExtractJwt } from 'passport-jwt'
 import { PassportStrategy } from '@nestjs/passport'
 import { Injectable, UnauthorizedException } from '@nestjs/common'

@@ -1,4 +1,4 @@
-import { CreateTagInput } from './create-tag.input'
+import { CreateTagInput } from '..'
 import { InputType, Field, PartialType } from '@nestjs/graphql'
 import { IsString, MaxLength } from 'class-validator'
 
