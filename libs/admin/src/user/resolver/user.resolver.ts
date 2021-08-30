@@ -6,6 +6,7 @@ import { Roles } from '@feature/auth/decorators/roles.decorator'
 import { UserService } from '../service/user.service'
 import { UpdateUserInput } from '../dto/update-user.input'
 import { ChangePasswordInput } from '../dto/change-password.input'
+import { UsersStatistics } from '../dto/userStatistics'
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => User)
@@ -17,6 +18,11 @@ export class UserResolver {
     return user
   }
 
+  @Query(() => UsersStatistics, { nullable: true })
+  async getUsersStatistics() {
+    return await this._userService.getStatistics()
+  }
+
   @Mutation(() => User, { nullable: true })
   async updateUser(@UserEntity() user: User, @Args('data') newUserData: UpdateUserInput) {
     return this._userService.updateUser(user.id, newUserData)
@@ -26,6 +32,7 @@ export class UserResolver {
   async changePassword(@UserEntity() user: User, @Args('data') changePassword: ChangePasswordInput) {
     return this._userService.changePassword(user.id, user.password, changePassword)
   }
+
   @UseGuards(RolesGuard)
   @Roles(Role.ADMIN)
   @Query(() => [User], { name: 'users', nullable: 'items' })

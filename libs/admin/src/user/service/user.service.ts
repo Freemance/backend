@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
 import { DataService } from '@feature/core'
-import { PasswordService } from '@feature/auth'
+import { PasswordService, Role } from '@feature/auth'
 import { ChangePasswordInput } from '../dto/change-password.input'
 import { UpdateUserInput } from '../dto/update-user.input'
 
@@ -56,5 +56,12 @@ export class UserService {
       },
     })
     return !!deleted
+  }
+
+  async getStatistics() {
+    const totalUsers = await this._service.user.count({ where: { role: Role.USER } })
+    const usersAproved = await this._service.user.count({ where: { role: Role.USER, state: true } })
+    const usersPending = totalUsers - usersAproved
+    return { totalUsers, usersAproved, usersPending }
   }
 }
