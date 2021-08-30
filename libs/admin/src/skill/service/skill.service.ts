@@ -1,12 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { DataService } from '@feature/core'
 
-import { CreateSkillInput, UpdateSkillInput } from '..'
+import { CreateSkillInput } from '../dto/create-skill.input'
+import { UpdateSkillInput } from '../dto/update-skill.input'
 
 @Injectable()
 export class SkillService {
   constructor(private readonly data: DataService) {}
-  // future includes
   private readonly includes = { profiles: true }
 
   public async getAllSkill() {
@@ -36,7 +36,6 @@ export class SkillService {
   }
 
   public async deleteSkill(id: number) {
-    // No se si es necesario comprobar que existe
     const found = await this.getSkillById(id)
     const deleted = this.data.skill.delete({
       where: {

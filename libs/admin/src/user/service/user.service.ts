@@ -1,7 +1,8 @@
-import { PasswordService } from '@feature/auth'
-import { DataService } from '@feature/core'
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
-import { ChangePasswordInput, UpdateUserInput } from '..'
+import { DataService } from '@feature/core'
+import { PasswordService } from '@feature/auth'
+import { ChangePasswordInput } from '../dto/change-password.input'
+import { UpdateUserInput } from '../dto/update-user.input'
 
 @Injectable()
 export class UserService {

@@ -1,9 +1,12 @@
-import { GqlAuthGuard, Role, User, UserEntity } from '@feature/auth'
-import { UseGuards } from '@nestjs/common/decorators/core'
+import { UseGuards } from '@nestjs/common'
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql'
-import { ChangePasswordInput, UpdateUserInput, UserService } from '..'
-import { Roles } from '@feature/auth/decorators/roles.decorator'
+import { GqlAuthGuard, Role, User, UserEntity } from '@feature/auth'
 import { RolesGuard } from '@feature/auth/guards/roles.guard'
+import { Roles } from '@feature/auth/decorators/roles.decorator'
+import { UserService } from '../service/user.service'
+import { UpdateUserInput } from '../dto/update-user.input'
+import { ChangePasswordInput } from '../dto/change-password.input'
+
 @UseGuards(GqlAuthGuard)
 @Resolver(() => User)
 export class UserResolver {

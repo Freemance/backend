@@ -1,6 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
-import { CreateTagInput, UpdateTagInput } from '..'
+
 import { DataService } from '@feature/core'
+import { CreateTagInput } from '../dto/create-tag.input'
+import { UpdateTagInput } from '../dto/update-tag.input'
 
 @Injectable()
 export class TagService {
