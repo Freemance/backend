@@ -9,6 +9,9 @@ import { UserConnection } from '../entities/user-connection.model'
 import { ChangePasswordInput } from '../dto/change-password.input'
 import { UserOrder } from '../dto/user-order.input'
 import { DataService, PaginationArgs } from '@feature/core'
+import { UsersStatistics } from '../dto/userStatistics'
+import { CreateManagerInput } from '../dto/create-manager.input'
+
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => User)
@@ -18,6 +21,13 @@ export class UserResolver {
   @Query(() => User, { nullable: true })
   async me(@UserEntity() user: User): Promise<User> {
     return user
+  }
+
+  @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
+  @Query(() => UsersStatistics, { nullable: true })
+  async getUsersStatistics() {
+    return await this._userService.getStatistics()
   }
 
   @Mutation(() => User, { nullable: true })
@@ -57,6 +67,13 @@ export class UserResolver {
   @Query(() => User, { name: 'user', nullable: true })
   getUserById(@Args('id', { type: () => Int }) id: number) {
     return this._userService.getUserById(id)
+  }
+
+  @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
+  @Mutation(() => User, { nullable: true })
+  createManager(@Args('input') input: CreateManagerInput) {
+    return this._userService.createManager(input)
   }
 
   @UseGuards(RolesGuard)
