@@ -8,7 +8,6 @@ import { findManyCursorConnection } from '@feature/core/data/common/pagination/c
 import { UserConnection } from '@feature/admin/user/entities/user-connection.model'
 import { CreateManagerInput } from '../dto/create-manager.input'
 
-
 @Injectable()
 export class UserService {
   constructor(private readonly _service: DataService, private _passwordService: PasswordService) {}
@@ -69,7 +68,7 @@ export class UserService {
       { first, last, before, after },
     )
     return a
-  } 
+  }
 
   async createManager(input: CreateManagerInput) {
     const hashedPassword = await this._passwordService.hashPassword(input.password)

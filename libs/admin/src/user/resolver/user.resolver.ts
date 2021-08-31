@@ -8,10 +8,9 @@ import { UpdateUserInput } from '../dto/update-user.input'
 import { UserConnection } from '../entities/user-connection.model'
 import { ChangePasswordInput } from '../dto/change-password.input'
 import { UserOrder } from '../dto/user-order.input'
-import { DataService, PaginationArgs } from '@feature/core'
+import { PaginationArgs } from '@feature/core'
 import { UsersStatistics } from '../dto/userStatistics'
 import { CreateManagerInput } from '../dto/create-manager.input'
-
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => User)
