@@ -18,6 +18,8 @@ export class UserResolver {
     return user
   }
 
+  @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
   @Query(() => UsersStatistics, { nullable: true })
   async getUsersStatistics() {
     return await this._userService.getStatistics()
