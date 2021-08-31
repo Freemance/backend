@@ -4,7 +4,10 @@ import { DataService } from '@feature/core'
 import { PasswordService, Role } from '@feature/auth'
 import { ChangePasswordInput } from '../dto/change-password.input'
 import { UpdateUserInput } from '../dto/update-user.input'
+import { findManyCursorConnection } from '@feature/core/data/common/pagination/cursor-conecction'
+import { UserConnection } from '@feature/admin/user/entities/user-connection.model'
 import { CreateManagerInput } from '../dto/create-manager.input'
+
 
 @Injectable()
 export class UserService {
@@ -41,6 +44,32 @@ export class UserService {
   async getAllUser() {
     return this._service.user.findMany({ orderBy: { id: 'asc' }, include: this.includes })
   }
+
+  async filter(after, before, first, last, query, orderBy) {
+    const a = await findManyCursorConnection(
+      (args) =>
+        this._service.user.findMany({
+          include: { profile: true },
+          where: {
+            firstName: { contains: query || '', mode: 'insensitive' },
+            lastName: { contains: query || '', mode: 'insensitive' },
+            email: { contains: query || '', mode: 'insensitive' },
+          },
+          orderBy: orderBy ? { [orderBy.field]: orderBy.direction } : null,
+          ...args,
+        }),
+      () =>
+        this._service.user.count({
+          where: {
+            firstName: { contains: query || '', mode: 'insensitive' },
+            lastName: { contains: query || '', mode: 'insensitive' },
+            email: { contains: query || '', mode: 'insensitive' },
+          },
+        }),
+      { first, last, before, after },
+    )
+    return a
+  } 
 
   async createManager(input: CreateManagerInput) {
     const hashedPassword = await this._passwordService.hashPassword(input.password)
