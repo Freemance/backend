@@ -30,9 +30,21 @@ export class AuthService {
     try {
       const user = await this._service.user.create({
         data: {
-          ...payload,
+          email: payload.email,
+          firstName: payload.firstName,
+          lastName: payload.lastName,
           password: hashedPassword,
           role: Role.USER,
+        },
+      })
+      const profile = await this._service.profile.create({
+        data: {
+          slykUser: payload.slykUser,
+          user: {
+            connect: {
+              id: user.id,
+            },
+          },
         },
       })
 
@@ -49,7 +61,7 @@ export class AuthService {
   }
 
   async login(email: string, password: string): Promise<Token> {
-    const user = await this._service.user.findUnique({ where: { email } })
+    const user = await this._service.user.findUnique({ where: { email }, include: { profile: true } })
 
     if (!user) {
       throw new NotFoundException(`No user found for email: ${email}`)
@@ -67,12 +79,12 @@ export class AuthService {
   }
 
   validateUser(userId: number): Promise<User> {
-    return this._service.user.findUnique({ where: { id: userId } })
+    return this._service.user.findUnique({ where: { id: userId }, include: { profile: true } })
   }
 
   getUserFromToken(token: string): Promise<User> {
     const id = this._jwtService.decode(token)['userId']
-    return this._service.user.findUnique({ where: { id } })
+    return this._service.user.findUnique({ where: { id }, include: { profile: true } })
   }
 
   generateTokens(payload: { userId: number }): Token {

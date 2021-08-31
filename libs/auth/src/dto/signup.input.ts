@@ -17,4 +17,8 @@ export class SignupInput {
 
   @Field()
   lastName: string
+
+  @Field()
+  @IsNotEmpty()
+  slykUser: string
 }
