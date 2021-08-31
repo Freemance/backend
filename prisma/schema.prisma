@@ -34,9 +34,9 @@ model Profile {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  slykUser String
+  slykUser     String
   // Optional fileds
-
+  avatar       Int?
   jobTitle     String?
   bio          String?
   country      String?
@@ -58,6 +58,21 @@ model Profile {
   courses           Course[]
   portfolioItem     Portfolio[]
   languages         Language[]
+  multimediaId      Int?
+}
+
+model Multimedia {
+  id             Int      @id @default(autoincrement())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  created_by     Int
+  file_name      String?
+  file_path      String?
+  file_size      String?
+  file_type      String?
+  file_extension String?
+  file_height    String?
+  status         Boolean  @default(true)
 }
 
 model Tag {
@@ -138,14 +153,15 @@ model Course {
 }
 
 model Portfolio {
-  id          Int       @id @default(autoincrement())
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   proyect     String?
   link        String?
   description String?
   skills      Skill[]
-  // screenshts    Shots[]
+  screenshts  Int?
   startDate   DateTime?
   endDate     DateTime?
   profile     Profile?  @relation(fields: [profileId], references: [id])
