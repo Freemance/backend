@@ -4,7 +4,7 @@ import { CreateTagInput } from './create-tag.input'
 
 @InputType()
 export class UpdateTagInput extends PartialType(CreateTagInput) {
-  @Field(() => String, { nullable: true })
+  @Field({ nullable: true })
   @IsString()
   @MaxLength(100)
   name: string

@@ -3,7 +3,7 @@ import { IsDate, IsNotEmpty, IsString, MaxLength } from 'class-validator'
 
 @InputType()
 export class CreateJobInput {
-  @Field(() => String, { description: 'Name of the job' })
+  @Field({ description: 'Name of the job' })
   @IsNotEmpty()
   @IsString()
   @MaxLength(100)

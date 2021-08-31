@@ -4,7 +4,7 @@ import { IsString } from 'class-validator'
 
 @InputType()
 export class UpdateJobInput extends PartialType(CreateJobInput) {
-  @Field(() => String, { nullable: true })
+  @Field({ nullable: true })
   @IsString()
   name: string
 }
