@@ -1,8 +1,10 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
+import { Prisma } from '@prisma/client'
+import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common'
 import { DataService } from '@feature/core'
 import { PasswordService, Role } from '@feature/auth'
 import { ChangePasswordInput } from '../dto/change-password.input'
 import { UpdateUserInput } from '../dto/update-user.input'
+import { CreateManagerInput } from '../dto/create-manager.input'
 
 @Injectable()
 export class UserService {
@@ -38,6 +40,27 @@ export class UserService {
 
   async getAllUser() {
     return this._service.user.findMany({ orderBy: { id: 'asc' }, include: this.includes })
+  }
+
+  async createManager(input: CreateManagerInput) {
+    const hashedPassword = await this._passwordService.hashPassword(input.password)
+
+    try {
+      const user = await this._service.user.create({
+        data: {
+          ...input,
+          password: hashedPassword,
+          role: Role.MANAGER,
+        },
+      })
+      return user
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2002') {
+        throw new ConflictException(`Email ${input.email} already used.`)
+      } else {
+        throw new Error(e)
+      }
+    }
   }
 
   async getUserById(id: number) {

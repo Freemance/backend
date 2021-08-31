@@ -7,6 +7,7 @@ import { UserService } from '../service/user.service'
 import { UpdateUserInput } from '../dto/update-user.input'
 import { ChangePasswordInput } from '../dto/change-password.input'
 import { UsersStatistics } from '../dto/userStatistics'
+import { CreateManagerInput } from '../dto/create-manager.input'
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => User)
@@ -46,6 +47,13 @@ export class UserResolver {
   @Query(() => User, { name: 'user', nullable: true })
   getUserById(@Args('id', { type: () => Int }) id: number) {
     return this._userService.getUserById(id)
+  }
+
+  @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
+  @Mutation(() => User, { nullable: true })
+  createManager(@Args('input') input: CreateManagerInput) {
+    return this._userService.createManager(input)
   }
 
   @UseGuards(RolesGuard)
