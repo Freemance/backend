@@ -5,7 +5,10 @@ import { RolesGuard } from '@feature/auth/guards/roles.guard'
 import { Roles } from '@feature/auth/decorators/roles.decorator'
 import { UserService } from '../service/user.service'
 import { UpdateUserInput } from '../dto/update-user.input'
+import { UserConnection } from '../entities/user-connection.model'
 import { ChangePasswordInput } from '../dto/change-password.input'
+import { UserOrder } from '../dto/user-order.input'
+import { DataService, PaginationArgs } from '@feature/core'
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => User)
@@ -26,12 +29,29 @@ export class UserResolver {
   async changePassword(@UserEntity() user: User, @Args('data') changePassword: ChangePasswordInput) {
     return this._userService.changePassword(user.id, user.password, changePassword)
   }
+
   @UseGuards(RolesGuard)
   @Roles(Role.ADMIN)
   @Query(() => [User], { name: 'users', nullable: 'items' })
   getAllUser() {
     return this._userService.getAllUser()
   }
+
+  @Query(() => UserConnection)
+  async filter(
+    @Args() { after, before, first, last }: PaginationArgs,
+    @Args({ name: 'query', type: () => String, nullable: true })
+    query: string,
+    @Args({
+      name: 'orderBy',
+      type: () => UserOrder,
+      nullable: true,
+    })
+    orderBy: UserOrder,
+  ) {
+    return this._userService.filter(after, before, first, last, query, orderBy)
+  }
+
   @UseGuards(RolesGuard)
   @Roles(Role.ADMIN)
   @Query(() => User, { name: 'user', nullable: true })
