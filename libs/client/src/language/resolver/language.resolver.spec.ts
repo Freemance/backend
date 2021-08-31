@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { LanguageService } from '..'
+import { LanguageService } from '../service/language.service'
 import { LanguageResolver } from './language.resolver'
 
 describe('LanguageResolver', () => {

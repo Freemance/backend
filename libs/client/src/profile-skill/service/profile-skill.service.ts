@@ -6,12 +6,12 @@ import { UpdateProfileSkillInput } from '../dto/update-profile-skill.input'
 
 @Injectable()
 export class ProfileSkillService {
-  constructor(private readonly data: DataService) {}
+  constructor(private readonly _service: DataService) {}
 
   private readonly includes = { profile: true, skill: true }
 
   async createProfileSkill(input: CreateProfileSkillInput, profileId: number, skillId: number) {
-    return this.data.profileSkill.create({
+    return this._service.profileSkill.create({
       data: {
         profileId,
         skillId,
@@ -21,11 +21,11 @@ export class ProfileSkillService {
   }
 
   async getAllProfileSkill() {
-    return this.data.profileSkill.findMany({ orderBy: { id: 'asc' }, include: this.includes })
+    return this._service.profileSkill.findMany({ orderBy: { id: 'asc' }, include: this.includes })
   }
 
   async getProfileSkillById(id: number) {
-    const found = await this.data.language.findUnique({ where: { id }, include: this.includes })
+    const found = await this._service.language.findUnique({ where: { id }, include: this.includes })
     if (!found) {
       throw new NotFoundException(`Language with id: ${id} not found`)
     }
@@ -34,7 +34,7 @@ export class ProfileSkillService {
 
   async updateProfileSkill(id: number, input: UpdateProfileSkillInput, profileId: number, skillId: number) {
     const found = await this.getProfileSkillById(id)
-    return this.data.profileSkill.update({
+    return this._service.profileSkill.update({
       where: { id: found.id },
       data: { ...input, profileId, skillId },
     })
@@ -42,7 +42,7 @@ export class ProfileSkillService {
 
   async deleteProfileSkill(id: number) {
     const found = await this.getProfileSkillById(id)
-    const deleted = this.data.profileSkill.delete({
+    const deleted = this._service.profileSkill.delete({
       where: {
         id: found.id,
       },

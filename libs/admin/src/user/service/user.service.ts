@@ -1,16 +1,17 @@
-import { PasswordService } from '@feature/auth'
-import { DataService } from '@feature/core'
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
-import { ChangePasswordInput, UpdateUserInput } from '..'
+import { DataService } from '@feature/core'
+import { PasswordService } from '@feature/auth'
+import { ChangePasswordInput } from '../dto/change-password.input'
+import { UpdateUserInput } from '../dto/update-user.input'
 
 @Injectable()
 export class UserService {
-  constructor(private readonly data: DataService, private passwordService: PasswordService) {}
+  constructor(private readonly _service: DataService, private _passwordService: PasswordService) {}
 
   private readonly includes = { profile: true }
 
   updateUser(userId: number, newUserData: UpdateUserInput) {
-    return this.data.user.update({
+    return this._service.user.update({
       data: newUserData,
       where: {
         id: userId,
@@ -19,15 +20,15 @@ export class UserService {
   }
 
   async changePassword(userId: number, userPassword: string, changePassword: ChangePasswordInput) {
-    const passwordValid = await this.passwordService.validatePassword(changePassword.oldPassword, userPassword)
+    const passwordValid = await this._passwordService.validatePassword(changePassword.oldPassword, userPassword)
 
     if (!passwordValid) {
       throw new BadRequestException('Invalid password')
     }
 
-    const hashedPassword = await this.passwordService.hashPassword(changePassword.newPassword)
+    const hashedPassword = await this._passwordService.hashPassword(changePassword.newPassword)
 
-    return this.data.user.update({
+    return this._service.user.update({
       data: {
         password: hashedPassword,
       },
@@ -36,11 +37,11 @@ export class UserService {
   }
 
   async getAllUser() {
-    return this.data.user.findMany({ orderBy: { id: 'asc' }, include: this.includes })
+    return this._service.user.findMany({ orderBy: { id: 'asc' }, include: this.includes })
   }
 
   async getUserById(id: number) {
-    const found = await this.data.user.findUnique({ where: { id }, include: this.includes })
+    const found = await this._service.user.findUnique({ where: { id }, include: this.includes })
     if (!found) {
       throw new NotFoundException(`User with id: ${id} not found`)
     }
@@ -49,7 +50,7 @@ export class UserService {
 
   async deleteUser(id: number) {
     const found = await this.getUserById(id)
-    const deleted = this.data.user.delete({
+    const deleted = this._service.user.delete({
       where: {
         id: found.id,
       },

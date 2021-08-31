@@ -1,4 +1,4 @@
-import { JwtDto } from './dto/jwt.dto'
+import { JwtDto } from '.'
 import { Strategy, ExtractJwt } from 'passport-jwt'
 import { PassportStrategy } from '@nestjs/passport'
 import { Injectable, UnauthorizedException } from '@nestjs/common'
@@ -8,15 +8,15 @@ import { AuthService } from '.'
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private readonly authService: AuthService, readonly configService: ConfigService) {
+  constructor(private readonly _authService: AuthService, readonly _configService: ConfigService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: configService.get('JWT_ACCESS_SECRET'),
+      secretOrKey: _configService.get('JWT_ACCESS_SECRET'),
     })
   }
 
   async validate(payload: JwtDto): Promise<User> {
-    const user = await this.authService.validateUser(payload.userId)
+    const user = await this._authService.validateUser(payload.userId)
     if (!user) {
       throw new UnauthorizedException()
     }

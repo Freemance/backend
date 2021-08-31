@@ -1,15 +1,16 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
+
+import { DataService } from '@feature/core'
 import { CreateTagInput } from '../dto/create-tag.input'
 import { UpdateTagInput } from '../dto/update-tag.input'
-import { DataService } from '@feature/core'
 
 @Injectable()
 export class TagService {
-  constructor(private readonly data: DataService) {}
+  constructor(private readonly _service: DataService) {}
   private readonly includes = { profiles: true }
 
   public createTag(input: CreateTagInput) {
-    return this.data.tag.create({
+    return this._service.tag.create({
       data: {
         ...input,
       },
@@ -17,11 +18,11 @@ export class TagService {
   }
 
   public async getAllTag() {
-    return this.data.tag.findMany({ orderBy: { id: 'asc' }, include: this.includes })
+    return this._service.tag.findMany({ orderBy: { id: 'asc' }, include: this.includes })
   }
 
   public async getTagById(id: number) {
-    const found = await this.data.tag.findUnique({ where: { id }, include: this.includes })
+    const found = await this._service.tag.findUnique({ where: { id }, include: this.includes })
     if (!found) {
       throw new NotFoundException(`Tag with id: ${id} not found`)
     }
@@ -31,12 +32,12 @@ export class TagService {
   public async updateTag(id: number, input: UpdateTagInput) {
     const found = await this.getTagById(id)
 
-    return this.data.tag.update({ where: { id: found.id }, data: { ...input } })
+    return this._service.tag.update({ where: { id: found.id }, data: { ...input } })
   }
 
   public async deleteTag(id: number) {
     const found = await this.getTagById(id)
-    const deleted = this.data.tag.delete({
+    const deleted = this._service.tag.delete({
       where: {
         id: found.id,
       },

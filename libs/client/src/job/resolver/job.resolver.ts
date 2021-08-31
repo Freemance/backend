@@ -7,30 +7,30 @@ import { JobService } from '../service/job.service'
 
 @Resolver(() => Job)
 export class JobResolver {
-  constructor(private readonly service: JobService) {}
+  constructor(private readonly _service: JobService) {}
 
   @Mutation(() => Job, { nullable: true })
   createJob(@Args('createJobInput') createJobInput: CreateJobInput) {
-    return this.service.createJob(createJobInput)
+    return this._service.createJob(createJobInput)
   }
 
   @Query(() => [Job], { name: 'job', nullable: 'items' })
   findAll() {
-    return this.service.getAllJob()
+    return this._service.getAllJob()
   }
 
   @Query(() => Job, { name: 'job', nullable: true })
   findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.service.getJobById(id)
+    return this._service.getJobById(id)
   }
 
   @Mutation(() => Job, { nullable: true })
   updateJob(@Args('id', { type: () => Int }) id: number, @Args('input') input: UpdateJobInput) {
-    return this.service.updateJob(id, input)
+    return this._service.updateJob(id, input)
   }
 
   @Mutation(() => Job, { nullable: true })
   deleteJob(@Args('id', { type: () => Int }) id: number) {
-    return this.service.deleteJob(id)
+    return this._service.deleteJob(id)
   }
 }

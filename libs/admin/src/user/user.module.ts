@@ -1,8 +1,7 @@
 import { DataModule } from '@feature/core'
 import { Module } from '@nestjs/common'
 
-import { UserService } from './service/user.service'
-import { UserResolver } from './resolver/user.resolver'
+import { UserResolver, UserService } from '.'
 import { PasswordService } from '@feature/auth'
 
 @Module({

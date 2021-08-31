@@ -1,20 +1,20 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { DataService } from '@feature/core'
 
-import { CreateSkillInput, UpdateSkillInput } from '..'
+import { CreateSkillInput } from '../dto/create-skill.input'
+import { UpdateSkillInput } from '../dto/update-skill.input'
 
 @Injectable()
 export class SkillService {
-  constructor(private readonly data: DataService) {}
-  // future includes
+  constructor(private readonly _service: DataService) {}
   private readonly includes = { profiles: true }
 
   public async getAllSkill() {
-    return this.data.skill.findMany({ orderBy: { id: 'asc' }, include: this.includes })
+    return this._service.skill.findMany({ orderBy: { id: 'asc' }, include: this.includes })
   }
 
   public async getSkillById(id: number) {
-    const found = await this.data.skill.findUnique({ where: { id }, include: this.includes })
+    const found = await this._service.skill.findUnique({ where: { id }, include: this.includes })
     if (!found) {
       throw new NotFoundException(`Skill with id: ${id} not found`)
     }
@@ -22,7 +22,7 @@ export class SkillService {
   }
 
   public createSkill(input: CreateSkillInput) {
-    return this.data.skill.create({
+    return this._service.skill.create({
       data: {
         ...input,
       },
@@ -32,13 +32,12 @@ export class SkillService {
   public async updateSkill(id: number, input: UpdateSkillInput) {
     const found = await this.getSkillById(id)
 
-    return this.data.skill.update({ where: { id: found.id }, data: { ...input } })
+    return this._service.skill.update({ where: { id: found.id }, data: { ...input } })
   }
 
   public async deleteSkill(id: number) {
-    // No se si es necesario comprobar que existe
     const found = await this.getSkillById(id)
-    const deleted = this.data.skill.delete({
+    const deleted = this._service.skill.delete({
       where: {
         id: found.id,
       },

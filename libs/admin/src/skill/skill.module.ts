@@ -1,7 +1,6 @@
 import { DataModule } from '@feature/core'
 import { Module } from '@nestjs/common'
-import { SkillResolver } from './resolver/skill.resolver'
-import { SkillService } from './service/skill.service'
+import { SkillResolver, SkillService } from '.'
 
 @Module({
   imports: [DataModule],

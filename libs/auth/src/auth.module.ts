@@ -1,14 +1,10 @@
-import { PasswordService } from './service/password.service'
-import { GqlAuthGuard } from './guards/gql-auth.guard'
-import { JwtStrategy } from './jwt.strategy'
 import { Module } from '@nestjs/common'
 import { JwtModule } from '@nestjs/jwt'
 import { PassportModule } from '@nestjs/passport'
 import { ConfigService } from '@nestjs/config'
 import { DataModule } from '@feature/core'
 import { SecurityConfig } from '@feature/core/core/config/config.interface'
-import { AuthService } from './service/auth.service'
-import { AuthResolver } from './resolver/auth.resolver'
+import { RolesGuard, AuthResolver, AuthService, JwtStrategy, GqlAuthGuard, PasswordService } from '.'
 
 @Module({
   imports: [
@@ -27,7 +23,7 @@ import { AuthResolver } from './resolver/auth.resolver'
     }),
     DataModule,
   ],
-  providers: [AuthService, AuthResolver, JwtStrategy, GqlAuthGuard, PasswordService],
-  exports: [GqlAuthGuard],
+  providers: [AuthService, AuthResolver, JwtStrategy, GqlAuthGuard, PasswordService, RolesGuard],
+  exports: [GqlAuthGuard, RolesGuard],
 })
 export class AuthModule {}
