@@ -18,7 +18,4 @@ export class Course extends BaseModel {
 
   @Field(() => Date, { description: 'End date associated  to the course' })
   endDate: Date
-
-  @Field(() => Profile, { description: 'Profile associated  to the course', nullable: true })
-  profile?: Profile
 }
