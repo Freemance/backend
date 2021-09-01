@@ -7,9 +7,9 @@ import { UpdateLanguageInput } from '../dto/update-language.input'
 import { Language } from '../entities/language.entity'
 import { LanguageService } from '../service/language.service'
 
-@UseGuards(GqlAuthGuard)
 @UseGuards(RolesGuard)
 @Roles(Role.USER)
+@UseGuards(GqlAuthGuard)
 @Resolver(() => Language)
 export class LanguageResolver {
   constructor(private readonly _service: LanguageService) {}
