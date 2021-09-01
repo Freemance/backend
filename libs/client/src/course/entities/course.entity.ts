@@ -4,8 +4,8 @@ import { Profile } from '@feature/client'
 
 @ObjectType()
 export class Course extends BaseModel {
-  @Field({ description: 'Course name', nullable: true })
-  course?: string
+  @Field({ description: 'Course name' })
+  course: string
 
   @Field({ description: 'Institution name', nullable: true })
   institution?: string
