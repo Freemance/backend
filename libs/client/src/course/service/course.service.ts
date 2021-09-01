@@ -9,11 +9,11 @@ export class CourseService {
   constructor(private readonly _service: DataService) {}
 
   async getAllProfileCourses(profileId: number) {
-    return this._service.course.findMany({ where: { id: profileId }, orderBy: { id: 'asc' } })
+    return this._service.course.findMany({ where: { profileId }, orderBy: { id: 'asc' } })
   }
 
   async getProfileCourseById(id: number, profileId: number) {
-    const found = await this._service.course.findUnique({ where: { id: profileId }, include: this.includes })
+    const found = await this._service.course.findUnique({ where: { id: profileId } })
     if (!found) {
       throw new NotFoundException(`Course with id: ${id} not found`)
     }

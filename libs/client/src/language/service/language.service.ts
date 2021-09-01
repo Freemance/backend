@@ -9,7 +9,7 @@ export class LanguageService {
   constructor(private readonly _service: DataService) {}
 
   async getAllProfileLangs(profileId: number) {
-    return this._service.language.findMany({ where: { id: profileId }, orderBy: { id: 'asc' } })
+    return this._service.language.findMany({ where: { profileId }, orderBy: { id: 'asc' } })
   }
 
   async getProfileLangById(id: number, profileId: number) {

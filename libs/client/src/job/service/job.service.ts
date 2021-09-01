@@ -9,7 +9,7 @@ export class JobService {
   constructor(private readonly _service: DataService) {}
 
   public async getAllProfileJobs(profileId: number) {
-    return this._service.job.findMany({ where: { id: profileId }, orderBy: { id: 'asc' } })
+    return this._service.job.findMany({ where: { profileId }, orderBy: { id: 'asc' } })
   }
 
   public async getProfileJobById(id: number, profileId: number) {
