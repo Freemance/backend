@@ -146,9 +146,10 @@ model Course {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   course      String
-  institution String?  
-  starDate    DateTime?
-  endDate     DateTime?
+  institution String  
+  description String?
+  starDate    DateTime
+  endDate     DateTime
   profile     Profile?  @relation(fields: [profileId], references: [id])
   profileId   Int?
 }
