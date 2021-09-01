@@ -101,7 +101,7 @@ export class UserService {
 
   async deleteUser(id: number) {
     const found = await this.getUserById(id)
-    const deleted = this._service.user.delete({
+    const deleted = await this._service.user.delete({
       where: {
         id: found.id,
       },

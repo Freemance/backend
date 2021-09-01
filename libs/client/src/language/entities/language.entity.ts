@@ -7,11 +7,8 @@ import { LANLVL } from './lanLvl.enum'
 @ObjectType()
 export class Language extends BaseModel {
   @Field({ description: 'Language name' })
-  language?: string
+  language: string
 
   @Field(() => LANLVL, { description: 'Language lvl asociated to Language', defaultValue: LANLVL.NATIVE_SPEAKER })
   lvl: LANLVL
-
-  @Field(() => Profile, { description: 'Profile asociated to Language' })
-  profile?: Profile
 }

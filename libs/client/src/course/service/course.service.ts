@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common'
 
 import { DataService } from '@feature/core'
 import { CreateCourseInput } from '../dto/create-course.input'
@@ -7,36 +7,41 @@ import { UpdateCourseInput } from '../dto/update-course.input'
 @Injectable()
 export class CourseService {
   constructor(private readonly _service: DataService) {}
-  private readonly includes = { profile: true }
 
-  async createCourse(input: CreateCourseInput) {
-    return this._service.course.create({
-      data: {
-        ...input,
-      },
-    })
+  async getAllProfileCourses(profileId: number) {
+    return this._service.course.findMany({ where: { profileId }, orderBy: { id: 'asc' } })
   }
 
-  async getAllCourse() {
-    return this._service.course.findMany({ orderBy: { id: 'asc' }, include: this.includes })
-  }
-
-  async getCourseById(id: number) {
-    const found = await this._service.course.findUnique({ where: { id }, include: this.includes })
+  async getProfileCourseById(id: number, profileId: number) {
+    const found = await this._service.course.findUnique({ where: { id } })
     if (!found) {
       throw new NotFoundException(`Course with id: ${id} not found`)
+    }
+    if (found.profileId !== profileId) {
+      throw new UnauthorizedException()
     }
     return found
   }
 
-  async updateCourse(id: number, input: UpdateCourseInput) {
-    const found = await this.getCourseById(id)
+  async createProfileCourse(profileId: number, input: CreateCourseInput) {
+    return this._service.course.create({
+      data: {
+        ...input,
+        profile: {
+          connect: { id: profileId },
+        },
+      },
+    })
+  }
+
+  async updateProfileCourse(id: number, profileId: number, input: UpdateCourseInput) {
+    const found = await this.getProfileCourseById(id, profileId)
     return this._service.course.update({ where: { id: found.id }, data: { ...input } })
   }
 
-  async deleteCourse(id: number) {
-    const found = await this.getCourseById(id)
-    const deleted = this._service.course.delete({
+  async deleteProfileCourse(id: number, profileId: number) {
+    const found = await this.getProfileCourseById(id, profileId)
+    const deleted = await this._service.course.delete({
       where: {
         id: found.id,
       },

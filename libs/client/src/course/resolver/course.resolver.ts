@@ -1,36 +1,45 @@
+import { UseGuards } from '@nestjs/common'
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql'
 
+import { GqlAuthGuard, Role, Roles, RolesGuard, User, UserEntity } from '@feature/auth'
 import { CreateCourseInput } from './../dto/create-course.input'
 import { Course } from '../entities/course.entity'
 import { CourseService } from '../service/course.service'
 import { UpdateCourseInput } from '../dto/update-course.input'
 
+@UseGuards(RolesGuard)
+@Roles(Role.USER)
+@UseGuards(GqlAuthGuard)
 @Resolver(() => Course)
 export class CourseResolver {
   constructor(private readonly _service: CourseService) {}
 
-  @Mutation(() => Course, { nullable: true })
-  createCourse(@Args('input') input: CreateCourseInput) {
-    return this._service.createCourse(input)
+  @Query(() => [Course], { name: 'ProfileCourses', nullable: 'items' })
+  getAllProfileCourses(@UserEntity() user: User) {
+    return this._service.getAllProfileCourses(user.profile.id)
   }
 
-  @Query(() => [Course], { name: 'courses', nullable: 'items' })
-  getAllCourse() {
-    return this._service.getAllCourse()
+  @Query(() => Course, { name: 'ProfileCourseById', nullable: true })
+  getProfileCourseById(@UserEntity() user: User, @Args('id', { type: () => Int }) id: number) {
+    return this._service.getProfileCourseById(id, user.profile.id)
   }
 
-  @Query(() => Course, { name: 'course', nullable: true })
-  getCourseById(@Args('id', { type: () => Int }) id: number) {
-    return this._service.getCourseById(id)
+  @Mutation(() => Course, { name: 'ProfileCreateCourse', nullable: true })
+  createProfileCourse(@UserEntity() user: User, @Args('input') input: CreateCourseInput) {
+    return this._service.createProfileCourse(user.profile.id, input)
   }
 
-  @Mutation(() => Course, { nullable: true })
-  updateCourse(@Args('id', { type: () => Int }) id: number, @Args('input') input: UpdateCourseInput) {
-    return this._service.updateCourse(id, input)
+  @Mutation(() => Course, { name: 'ProfileUpdateCourse', nullable: true })
+  updateProfileCourse(
+    @UserEntity() user: User,
+    @Args('id', { type: () => Int }) id: number,
+    @Args('input') input: UpdateCourseInput,
+  ) {
+    return this._service.updateProfileCourse(id, user.profile.id, input)
   }
 
-  @Mutation(() => Boolean, { nullable: true })
-  deleteCourse(@Args('id', { type: () => Int }) id: number) {
-    return this._service.deleteCourse(id)
+  @Mutation(() => Boolean, { name: 'ProfileDeleteCourse', nullable: true })
+  deleteProfileCourse(@UserEntity() user: User, @Args('id', { type: () => Int }) id: number) {
+    return this._service.deleteProfileCourse(id, user.profile.id)
   }
 }

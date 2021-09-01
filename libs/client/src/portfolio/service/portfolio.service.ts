@@ -36,7 +36,7 @@ export class PortfolioService {
 
   async deletePortfolio(id: number) {
     const found = await this.getPortfolioById(id)
-    const deleted = this._service.portfolio.delete({
+    const deleted = await this._service.portfolio.delete({
       where: {
         id: found.id,
       },

@@ -42,7 +42,7 @@ export class ProfileSkillService {
 
   async deleteProfileSkill(id: number) {
     const found = await this.getProfileSkillById(id)
-    const deleted = this._service.profileSkill.delete({
+    const deleted = await this._service.profileSkill.delete({
       where: {
         id: found.id,
       },

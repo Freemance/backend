@@ -4,18 +4,18 @@ import { Profile } from '@feature/client'
 
 @ObjectType()
 export class Course extends BaseModel {
-  @Field({ description: 'Course name', nullable: true })
-  course?: string
+  @Field({ description: 'Course name' })
+  course: string
 
-  @Field({ description: 'Institution name', nullable: true })
-  institution?: string
+  @Field({ description: 'Institution name' })
+  institution: string
 
-  @Field(() => Date, { description: 'Start date associated  to the course', nullable: true })
-  startDate?: Date
+  @Field({ description: 'Description associated  to the course', nullable: true })
+  description?: string
 
-  @Field(() => Date, { description: 'End date associated  to the course', nullable: true })
-  endDate?: Date
+  @Field(() => Date, { description: 'Start date associated  to the course' })
+  startDate: Date
 
-  @Field(() => Profile, { description: 'Profile associated  to the course', nullable: true })
-  profile?: Profile
+  @Field(() => Date, { description: 'End date associated  to the course' })
+  endDate: Date
 }
