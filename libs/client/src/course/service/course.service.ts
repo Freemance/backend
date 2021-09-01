@@ -13,7 +13,7 @@ export class CourseService {
   }
 
   async getProfileCourseById(id: number, profileId: number) {
-    const found = await this._service.course.findUnique({ where: { id: profileId } })
+    const found = await this._service.course.findUnique({ where: { id } })
     if (!found) {
       throw new NotFoundException(`Course with id: ${id} not found`)
     }
