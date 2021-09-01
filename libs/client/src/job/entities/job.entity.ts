@@ -1,6 +1,5 @@
 import { ObjectType, Field } from '@nestjs/graphql'
 import { BaseModel } from '@feature/core'
-import { Profile } from '@feature/client'
 
 @ObjectType()
 export class Job extends BaseModel {
@@ -21,7 +20,4 @@ export class Job extends BaseModel {
 
   @Field(() => Boolean, { description: 'Checks if the jobs is still in progress, default is false', nullable: true })
   inProgress: boolean
-
-  @Field(() => Profile, { description: 'Profiles asociated to Jobs', nullable: true })
-  profile?: Profile
 }
