@@ -1,4 +1,5 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common'
+
 import { CreateJobInput } from '../dto/create-job.input'
 import { UpdateJobInput } from '../dto/update-job.input'
 import { DataService } from '@feature/core'
@@ -6,36 +7,41 @@ import { DataService } from '@feature/core'
 @Injectable()
 export class JobService {
   constructor(private readonly _service: DataService) {}
-  private readonly includes = { profile: true }
 
-  public createJob(input: CreateJobInput) {
-    return this._service.job.create({
-      data: {
-        ...input,
-      },
-    })
+  public async getAllProfileJobs(profileId: number) {
+    return this._service.job.findMany({ where: { id: profileId }, orderBy: { id: 'asc' } })
   }
 
-  public async getAllJob() {
-    return this._service.job.findMany({ orderBy: { id: 'asc' }, include: this.includes })
-  }
-
-  public async getJobById(id: number) {
-    const found = await this._service.job.findUnique({ where: { id }, include: this.includes })
+  public async getProfileJobById(id: number, profileId: number) {
+    const found = await this._service.job.findUnique({ where: { id } })
     if (!found) {
       throw new NotFoundException(`Job with id: ${id} not found`)
+    }
+    if (found.profileId !== profileId) {
+      throw new UnauthorizedException()
     }
     return found
   }
 
-  public async updateJob(id: number, input: UpdateJobInput) {
-    const found = await this.getJobById(id)
+  public createProfileJob(profileId: number, input: CreateJobInput) {
+    return this._service.job.create({
+      data: {
+        ...input,
+        profile: {
+          connect: { id: profileId },
+        },
+      },
+    })
+  }
+
+  public async updateProfileJob(id: number, profileId: number, input: UpdateJobInput) {
+    const found = await this.getProfileJobById(id, profileId)
 
     return this._service.job.update({ where: { id: found.id }, data: { ...input } })
   }
 
-  public async deleteJob(id: number) {
-    const found = await this.getJobById(id)
+  public async deleteProfileJob(id: number, profileId: number) {
+    const found = await this.getProfileJobById(id, profileId)
     const deleted = this._service.job.delete({
       where: {
         id: found.id,
