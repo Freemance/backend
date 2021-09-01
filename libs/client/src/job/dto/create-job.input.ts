@@ -1,32 +1,38 @@
 import { InputType, Field } from '@nestjs/graphql'
-import { IsDate, IsNotEmpty, IsString, MaxLength } from 'class-validator'
+import { IsBoolean, IsDate, IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator'
 
 @InputType()
 export class CreateJobInput {
   @Field({ description: 'Name of the job' })
-  @IsNotEmpty()
   @IsString()
+  @IsNotEmpty()
   @MaxLength(100)
   name: string
 
-  @Field({ description: 'Company associated  to the job' })
+  @Field({ description: 'Company associated  to the job', nullable: true })
   @IsString()
-  @IsNotEmpty()
   @MaxLength(100)
+  @IsOptional()
   company: string
 
-  @Field({ description: 'Description associated  to the job' })
+  @Field({ description: 'Description associated  to the job', nullable: true })
   @IsString()
   @MaxLength(500)
-  description: string
+  @IsOptional()
+  description?: string
 
   @Field(() => Date, { description: 'Start date associated  to the job' })
   @IsDate()
   @IsNotEmpty()
   startDate: Date
 
-  @Field(() => Date, { description: 'End date associated  to the job' })
+  @Field(() => Date, { description: 'End date associated  to the job', nullable: true })
   @IsDate()
-  @IsNotEmpty()
-  endDate: Date
+  @IsOptional()
+  endDate?: Date
+
+  @Field(() => Boolean, { description: 'Checks if the jobs is still in progress', nullable: true })
+  @IsBoolean()
+  @IsOptional()
+  inProgress?: boolean
 }
