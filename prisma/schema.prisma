@@ -142,15 +142,15 @@ model Job {
 }
 
 model Course {
-  id          Int       @id @default(autoincrement())
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
   course      String
-  institution String  
+  institution String
   description String?
-  starDate    DateTime
+  startDate   DateTime
   endDate     DateTime
-  profile     Profile?  @relation(fields: [profileId], references: [id])
+  profile     Profile? @relation(fields: [profileId], references: [id])
   profileId   Int?
 }
 
