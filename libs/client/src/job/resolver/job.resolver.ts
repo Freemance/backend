@@ -1,3 +1,4 @@
+import { UseGuards } from '@nestjs/common'
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql'
 
 import { GqlAuthGuard, Role, Roles, RolesGuard, User, UserEntity } from '@feature/auth'
@@ -5,7 +6,6 @@ import { CreateJobInput } from '../dto/create-job.input'
 import { UpdateJobInput } from '../dto/update-job.input'
 import { Job } from '../entities/job.entity'
 import { JobService } from '../service/job.service'
-import { UseGuards } from '@nestjs/common'
 
 @UseGuards(GqlAuthGuard)
 @UseGuards(RolesGuard)
@@ -25,7 +25,7 @@ export class JobResolver {
   }
 
   @Mutation(() => Job, { name: 'ProfileCreateJob', nullable: true })
-  createProfileJob(@UserEntity() user: User, @Args('createJobInput') input: CreateJobInput) {
+  createProfileJob(@UserEntity() user: User, @Args('input') input: CreateJobInput) {
     return this._service.createProfileJob(user.profile.id, input)
   }
 

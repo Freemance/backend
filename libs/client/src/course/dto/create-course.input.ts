@@ -1,5 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql'
-import { IsDate, IsNotEmpty, IsString, MaxLength } from 'class-validator'
+import { IsDate, IsNotEmpty, IsString, MaxLength, IsOptional } from 'class-validator'
 
 @InputType()
 export class CreateCourseInput {
@@ -9,11 +9,11 @@ export class CreateCourseInput {
   @MaxLength(50)
   course: string
 
-  @Field({ description: 'Institution name' })
-  @IsNotEmpty()
+  @Field({ description: 'Institution name', nullable: true })
   @IsString()
   @MaxLength(50)
-  institution: string
+  @IsOptional()
+  institution?: string
 
   @Field(() => Date, { description: 'Start date associated  to the course' })
   @IsNotEmpty()
