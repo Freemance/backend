@@ -7,9 +7,9 @@ import { UpdateJobInput } from '../dto/update-job.input'
 import { Job } from '../entities/job.entity'
 import { JobService } from '../service/job.service'
 
-@UseGuards(GqlAuthGuard)
 @UseGuards(RolesGuard)
 @Roles(Role.USER)
+@UseGuards(GqlAuthGuard)
 @Resolver(() => Job)
 export class JobResolver {
   constructor(private readonly _service: JobService) {}
@@ -38,7 +38,7 @@ export class JobResolver {
     return this._service.updateProfileJob(id, user.profile.id, input)
   }
 
-  @Mutation(() => Job, { name: 'ProfileDeleteJob', nullable: true })
+  @Mutation(() => Boolean, { name: 'ProfileDeleteJob', nullable: true })
   deleteProfileJob(@UserEntity() user: User, @Args('id', { type: () => Int }) id: number) {
     return this._service.deleteProfileJob(id, user.profile.id)
   }
