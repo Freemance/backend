@@ -37,7 +37,7 @@ export class TagService {
 
   public async deleteTag(id: number) {
     const found = await this.getTagById(id)
-    const deleted = this._service.tag.delete({
+    const deleted = await this._service.tag.delete({
       where: {
         id: found.id,
       },

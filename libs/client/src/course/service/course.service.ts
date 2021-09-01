@@ -41,7 +41,7 @@ export class CourseService {
 
   async deleteProfileCourse(id: number, profileId: number) {
     const found = await this.getProfileCourseById(id, profileId)
-    const deleted = this._service.course.delete({
+    const deleted = await this._service.course.delete({
       where: {
         id: found.id,
       },

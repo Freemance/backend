@@ -37,7 +37,7 @@ export class SkillService {
 
   public async deleteSkill(id: number) {
     const found = await this.getSkillById(id)
-    const deleted = this._service.skill.delete({
+    const deleted = await this._service.skill.delete({
       where: {
         id: found.id,
       },

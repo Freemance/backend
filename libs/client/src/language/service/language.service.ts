@@ -41,7 +41,7 @@ export class LanguageService {
 
   async deleteProfileLang(id: number, profileId: number) {
     const found = await this.getProfileLangById(id, profileId)
-    const deleted = this._service.language.delete({
+    const deleted = await this._service.language.delete({
       where: {
         id: found.id,
       },

@@ -37,7 +37,7 @@ export class SocialLinksService {
 
   async deleteSocialLink(id: number) {
     const found = await this.getSocialLinkById(id)
-    const deleted = this._service.socialLink.delete({
+    const deleted = await this._service.socialLink.delete({
       where: {
         id: found.id,
       },

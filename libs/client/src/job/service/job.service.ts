@@ -42,7 +42,7 @@ export class JobService {
 
   public async deleteProfileJob(id: number, profileId: number) {
     const found = await this.getProfileJobById(id, profileId)
-    const deleted = this._service.job.delete({
+    const deleted = await this._service.job.delete({
       where: {
         id: found.id,
       },
