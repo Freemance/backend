@@ -61,9 +61,26 @@ export class UserService {
         this._service.user.findMany({
           include: { profile: true },
           where: {
-            firstName: { contains: query || '', mode: 'insensitive' },
-            lastName: { contains: query || '', mode: 'insensitive' },
-            email: { contains: query || '', mode: 'insensitive' },
+            OR: [
+              {
+                firstName: {
+                  contains: query || '',
+                  mode: 'insensitive',
+                },
+              },
+              {
+                lastName: {
+                  contains: query || '',
+                  mode: 'insensitive',
+                },
+              },
+              {
+                email: {
+                  contains: query || '',
+                  mode: 'insensitive',
+                },
+              },
+            ],
           },
           orderBy: orderBy ? { [orderBy.field]: orderBy.direction } : null,
           ...args,
@@ -71,9 +88,26 @@ export class UserService {
       () =>
         this._service.user.count({
           where: {
-            firstName: { contains: query || '', mode: 'insensitive' },
-            lastName: { contains: query || '', mode: 'insensitive' },
-            email: { contains: query || '', mode: 'insensitive' },
+            OR: [
+              {
+                firstName: {
+                  contains: query || '',
+                  mode: 'insensitive',
+                },
+              },
+              {
+                lastName: {
+                  contains: query || '',
+                  mode: 'insensitive',
+                },
+              },
+              {
+                email: {
+                  contains: query || '',
+                  mode: 'insensitive',
+                },
+              },
+            ],
           },
         }),
       { first, last, before, after },
