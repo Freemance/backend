@@ -27,7 +27,7 @@ export class MultimediaService {
     return found
   }
 
-  async removeMultimediaByUser(id: number, profileId: number) {
+  async deleteMultimediaByUser(id: number, profileId: number) {
     const found = await this.getMultimediaById(id)
     if (found.created_by !== profileId) {
       throw new UnauthorizedException()
@@ -40,7 +40,7 @@ export class MultimediaService {
     return !!deleted
   }
 
-  async removeMultimediaByAdmin(id: number) {
+  async deleteMultimediaByAdmin(id: number) {
     const found = await this.getMultimediaById(id)
     const deleted = await this._service.multimedia.delete({
       where: {
