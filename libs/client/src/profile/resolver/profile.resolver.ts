@@ -10,7 +10,6 @@ import { CreateProfileInput } from '../dto/create-profile.input'
 import { UpdateProfileInput } from '../dto/update-profile.input'
 import { ProfileService } from '../service/profile.service'
 
-@UseGuards(GqlAuthGuard)
 @Resolver(() => Profile)
 export class ProfileResolver {
   constructor(private readonly _service: ProfileService) {}
