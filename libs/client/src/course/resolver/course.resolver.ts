@@ -7,9 +7,8 @@ import { Course } from '../entities/course.entity'
 import { CourseService } from '../service/course.service'
 import { UpdateCourseInput } from '../dto/update-course.input'
 
-@UseGuards(RolesGuard)
+@UseGuards(GqlAuthGuard, RolesGuard)
 @Roles(Role.USER)
-@UseGuards(GqlAuthGuard)
 @Resolver(() => Course)
 export class CourseResolver {
   constructor(private readonly _service: CourseService) {}

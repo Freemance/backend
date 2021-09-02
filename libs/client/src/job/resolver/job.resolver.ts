@@ -7,9 +7,8 @@ import { UpdateJobInput } from '../dto/update-job.input'
 import { Job } from '../entities/job.entity'
 import { JobService } from '../service/job.service'
 
-@UseGuards(RolesGuard)
+@UseGuards(GqlAuthGuard, RolesGuard)
 @Roles(Role.USER)
-@UseGuards(GqlAuthGuard)
 @Resolver(() => Job)
 export class JobResolver {
   constructor(private readonly _service: JobService) {}
