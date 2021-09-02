@@ -5,7 +5,7 @@ export enum SkillOrderField {
   id = 'id',
   createdAt = 'createdAt',
   updatedAt = 'updatedAt',
-  name = 'firstName',
+  name = 'name',
 }
 
 registerEnumType(SkillOrderField, {
