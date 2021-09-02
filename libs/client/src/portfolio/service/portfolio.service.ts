@@ -1,4 +1,5 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common'
+
 import { DataService } from '@feature/core'
 import { UpdatePortfolioInput } from '../dto/update-portfolio.input'
 import { CreatePortfolioInput } from '../dto/create-portfolio.input'
@@ -7,35 +8,39 @@ import { CreatePortfolioInput } from '../dto/create-portfolio.input'
 export class PortfolioService {
   constructor(private readonly _service: DataService) {}
 
-  private readonly includes = { profile: true, skills: true }
-
-  createPortfolio(input: CreatePortfolioInput) {
-    return this._service.portfolio.create({
-      data: {
-        ...input,
-      },
-    })
+  async getProfilePortfolioItem(profileId: number) {
+    return this._service.portfolio.findMany({ where: { profileId }, orderBy: { id: 'asc' } })
   }
 
-  async getAllPortfolio() {
-    return this._service.portfolio.findMany({ orderBy: { id: 'asc' }, include: this.includes })
-  }
-
-  async getPortfolioById(id: number) {
-    const found = await this._service.portfolio.findUnique({ where: { id }, include: this.includes })
+  async getProfilePortfolioById(id: number, profileId: number) {
+    const found = await this._service.portfolio.findUnique({ where: { id } })
     if (!found) {
       throw new NotFoundException(`Portfolio with id: ${id} not found`)
+    }
+    if (found.profileId !== profileId) {
+      throw new UnauthorizedException()
     }
     return found
   }
 
-  async updatePortfolio(id: number, input: UpdatePortfolioInput) {
-    const found = await this.getPortfolioById(id)
+  async createProfilePortfolio(profileId: number, input: CreatePortfolioInput) {
+    return this._service.portfolio.create({
+      data: {
+        ...input,
+        profile: {
+          connect: { id: profileId },
+        },
+      },
+    })
+  }
+
+  async updateProfilePortfolio(id: number, profileId: number, input: UpdatePortfolioInput) {
+    const found = await this.getProfilePortfolioById(id, profileId)
     return this._service.portfolio.update({ where: { id: found.id }, data: { ...input } })
   }
 
-  async deletePortfolio(id: number) {
-    const found = await this.getPortfolioById(id)
+  async deleteProfilePortfolio(id: number, profileId: number) {
+    const found = await this.getProfilePortfolioById(id, profileId)
     const deleted = await this._service.portfolio.delete({
       where: {
         id: found.id,
