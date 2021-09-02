@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 
-import { DataService } from '@feature/core'
+import { DataService, findManyCursorConnection } from '@feature/core'
 import { CreateTagInput } from '../dto/create-tag.input'
 import { UpdateTagInput } from '../dto/update-tag.input'
 
@@ -15,6 +15,27 @@ export class TagService {
         ...input,
       },
     })
+  }
+
+  async filter(after, before, first, last, query, orderBy) {
+    const a = await findManyCursorConnection(
+      (args) =>
+        this._service.tag.findMany({
+          where: {
+            name: { contains: query || '', mode: 'insensitive' },
+          },
+          orderBy: orderBy ? { [orderBy.field]: orderBy.direction } : null,
+          ...args,
+        }),
+      () =>
+        this._service.tag.count({
+          where: {
+            name: { contains: query || '', mode: 'insensitive' },
+          },
+        }),
+      { first, last, before, after },
+    )
+    return a
   }
 
   public async getAllTag() {

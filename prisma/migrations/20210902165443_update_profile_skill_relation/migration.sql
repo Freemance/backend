@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "ProfileSkill" ALTER COLUMN "skillId" DROP NOT NULL,
+ALTER COLUMN "profileId" DROP NOT NULL;
