@@ -1,8 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common'
 import { DataService, findManyCursorConnection } from '@feature/core'
 
 import { CreateSkillInput } from '../dto/create-skill.input'
 import { UpdateSkillInput } from '../dto/update-skill.input'
+import { Prisma } from '@prisma/client'
 
 @Injectable()
 export class SkillService {
@@ -38,12 +39,21 @@ export class SkillService {
     return found
   }
 
-  public createSkill(input: CreateSkillInput) {
-    return this._service.skill.create({
-      data: {
-        ...input,
-      },
-    })
+  public async createSkill(input: CreateSkillInput) {
+    try {
+      const skill = await this._service.skill.create({
+        data: {
+          ...input,
+        },
+      })
+      return skill
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2002') {
+        throw new ConflictException(`Skill ${input.name} already used.`)
+      } else {
+        throw new Error(e)
+      }
+    }
   }
 
   public async updateSkill(id: number, input: UpdateSkillInput) {

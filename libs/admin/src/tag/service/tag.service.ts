@@ -1,20 +1,30 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common'
 
 import { DataService, findManyCursorConnection } from '@feature/core'
 import { CreateTagInput } from '../dto/create-tag.input'
 import { UpdateTagInput } from '../dto/update-tag.input'
+import { Prisma } from '@prisma/client'
 
 @Injectable()
 export class TagService {
   constructor(private readonly _service: DataService) {}
   private readonly includes = { profiles: true }
 
-  public createTag(input: CreateTagInput) {
-    return this._service.tag.create({
-      data: {
-        ...input,
-      },
-    })
+  public async createTag(input: CreateTagInput) {
+    try {
+      const tag = await this._service.tag.create({
+        data: {
+          ...input,
+        },
+      })
+      return tag
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2002') {
+        throw new ConflictException(`Tag ${input.name} already used.`)
+      } else {
+        throw new Error(e)
+      }
+    }
   }
 
   async filter(after, before, first, last, query, orderBy) {

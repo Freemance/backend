@@ -79,7 +79,7 @@ model Tag {
   id        Int       @id @default(autoincrement())
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  name      String
+  name      String    @unique
   profiles  Profile[]
 }
 
@@ -87,7 +87,7 @@ model Skill {
   id          Int            @id @default(autoincrement())
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
-  name        String
+  name        String         @unique
   profiles    ProfileSkill[]
   portfolio   Portfolio?     @relation(fields: [portfolioId], references: [id])
   portfolioId Int?
