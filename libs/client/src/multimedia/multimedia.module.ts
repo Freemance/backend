@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common'
-import { MultimediaService } from './multimedia.service'
-import { MultimediaResolver } from './multimedia.resolver'
+import { MultimediaResolver } from './resolver/multimedia.resolver'
+import { MultimediaService } from './service/multimedia.service'
 
 @Module({
   providers: [MultimediaResolver, MultimediaService],
