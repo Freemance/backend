@@ -8,7 +8,7 @@ import { CreatePortfolioInput } from '../dto/create-portfolio.input'
 export class PortfolioService {
   constructor(private readonly _service: DataService) {}
 
-  async getProfilePortfolioItem(profileId: number) {
+  async getProfilePortfolioItems(profileId: number) {
     return this._service.portfolio.findMany({ where: { profileId }, orderBy: { id: 'asc' } })
   }
 
