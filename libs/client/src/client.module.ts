@@ -5,7 +5,7 @@ import { LanguageModule } from './language'
 import { PortfolioModule } from './portfolio'
 import { ProfileModule } from './profile'
 import { ProfileSkillModule } from './profile-skill'
-import { SocialLinksModule } from './social-links'
+// import { SocialLinksModule } from './social-links'
 
 @Module({
   imports: [
@@ -15,7 +15,7 @@ import { SocialLinksModule } from './social-links'
     JobModule,
     CourseModule,
     ProfileModule,
-    SocialLinksModule,
+    // SocialLinksModule,
   ],
 })
 export class ClientModule {}

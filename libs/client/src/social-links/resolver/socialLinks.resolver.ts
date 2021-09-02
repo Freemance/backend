@@ -1,36 +1,38 @@
+import { UseGuards } from '@nestjs/common'
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql'
 
+import { GqlAuthGuard, Role, Roles, RolesGuard, User, UserEntity } from '@feature/auth'
 import { CreateSocialLinkInput } from './../dto/create-socialLinks.input'
 import { SocialLink } from '../entities/socialLinks.entity'
 import { SocialLinksService } from '../service/socialLinks.service'
 import { UpdateSocialLinkInput } from '../dto/update-socialLinks.input'
 
+@UseGuards(GqlAuthGuard, RolesGuard)
+@Roles(Role.USER)
 @Resolver(() => SocialLink)
 export class SocialLinksResolver {
   constructor(private readonly _service: SocialLinksService) {}
 
-  @Mutation(() => SocialLink, { nullable: true })
-  createSocialLink(@Args('input') input: CreateSocialLinkInput) {
-    return this._service.createSocialLink(input)
+  @Query(() => [SocialLink], { name: 'ProfileSLink', nullable: 'items' })
+  getAllSocialLink(@UserEntity() user: User) {
+    return this._service.getAllProfileSLinks(user.profile.id)
   }
 
-  @Query(() => [SocialLink], { name: 'socialLinks', nullable: 'items' })
-  getAllSocialLink() {
-    return this._service.getAllSocialLink()
+  @Mutation(() => SocialLink, { name: 'ProfileCreateSLinks', nullable: true })
+  createProfileSLink(@UserEntity() user: User, @Args('input') input: CreateSocialLinkInput) {
+    return this._service.createProfileSLink(user.profile.id, input)
+  }
+  @Mutation(() => SocialLink, { name: 'ProfileUpdateSLinks', nullable: true })
+  updateProfileSLink(
+    @UserEntity() user: User,
+    @Args('id', { type: () => Int }) id: number,
+    @Args('input') input: UpdateSocialLinkInput,
+  ) {
+    return this._service.updateProfileSLink(id, user.profile.id, input)
   }
 
-  @Query(() => SocialLink, { name: 'socialLink', nullable: true })
-  getSocialLinkById(@Args('id', { type: () => Int }) id: number) {
-    return this._service.getSocialLinkById(id)
-  }
-
-  @Mutation(() => SocialLink, { nullable: true })
-  updateSocialLink(@Args('id', { type: () => Int }) id: number, @Args('input') input: UpdateSocialLinkInput) {
-    return this._service.updateSocialLink(id, input)
-  }
-
-  @Mutation(() => Boolean, { nullable: true })
-  deleteSocialLink(@Args('id', { type: () => Int }) id: number) {
-    return this._service.deleteSocialLink(id)
+  @Mutation(() => Boolean, { name: 'ProfileDeleteSLinks', nullable: true })
+  deleteProfileSLink(@UserEntity() user: User, @Args('id', { type: () => Int }) id: number) {
+    return this._service.deleteProfileSLink(id, user.profile.id)
   }
 }

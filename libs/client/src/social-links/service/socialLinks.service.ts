@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common'
 
 import { DataService } from '@feature/core'
 import { CreateSocialLinkInput } from '../dto/create-socialLinks.input'
@@ -8,35 +8,40 @@ import { UpdateSocialLinkInput } from '../dto/update-socialLinks.input'
 export class SocialLinksService {
   constructor(private readonly _service: DataService) {}
 
-  private readonly includes = { profile: true }
-
-  async createSocialLink(input: CreateSocialLinkInput) {
-    return this._service.socialLink.create({
-      data: {
-        ...input,
-      },
-    })
+  async getAllProfileSLinks(profileId: number) {
+    return this._service.socialLink.findMany({ where: { profileId }, orderBy: { id: 'asc' } })
   }
 
-  async getAllSocialLink() {
-    return this._service.socialLink.findMany({ orderBy: { id: 'asc' }, include: this.includes })
-  }
-
-  async getSocialLinkById(id: number) {
-    const found = await this._service.socialLink.findUnique({ where: { id }, include: this.includes })
+  async getProfileSLinkById(id: number, profileId: number) {
+    const found = await this._service.socialLink.findUnique({ where: { id } })
     if (!found) {
       throw new NotFoundException(`SocialLink with id: ${id} not found`)
+    }
+    if (found.profileId !== profileId) {
+      throw new UnauthorizedException()
     }
     return found
   }
 
-  async updateSocialLink(id: number, input: UpdateSocialLinkInput) {
-    const found = await this.getSocialLinkById(id)
+  async createProfileSLink(profileId: number, input: CreateSocialLinkInput) {
+    return this._service.socialLink.create({
+      data: {
+        ...input,
+        profile: {
+          connect: { id: profileId },
+        },
+      },
+    })
+  }
+
+  async updateProfileSLink(id: number, profileId: number, input: UpdateSocialLinkInput) {
+    const found = await this.getProfileSLinkById(id, profileId)
+
     return this._service.socialLink.update({ where: { id: found.id }, data: { ...input } })
   }
 
-  async deleteSocialLink(id: number) {
-    const found = await this.getSocialLinkById(id)
+  async deleteProfileSLink(id: number, profileId: number) {
+    const found = await this.getProfileSLinkById(id, profileId)
     const deleted = await this._service.socialLink.delete({
       where: {
         id: found.id,
