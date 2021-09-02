@@ -5,7 +5,7 @@ export class UsersStatistics {
   @Field()
   totalUsers: number
   @Field()
-  usersAproved: number
+  usersApproved: number
   @Field()
   usersPending: number
 }

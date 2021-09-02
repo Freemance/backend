@@ -47,7 +47,7 @@ export class UserResolver {
   }
 
   @Query(() => UserConnection)
-  async filter(
+  async filterUsers(
     @Args() { after, before, first, last }: PaginationArgs,
     @Args({ name: 'query', type: () => String, nullable: true })
     query: string,
@@ -66,6 +66,13 @@ export class UserResolver {
   @Query(() => User, { name: 'user', nullable: true })
   getUserById(@Args('id', { type: () => Int }) id: number) {
     return this._userService.getUserById(id)
+  }
+
+  @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
+  @Mutation(() => User, { nullable: true })
+  approveUser(@Args('id', { type: () => Int }) id: number) {
+    return this._userService.approveUser(id)
   }
 
   @UseGuards(RolesGuard)

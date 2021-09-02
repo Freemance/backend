@@ -5,7 +5,6 @@ import { PasswordService, Role } from '@feature/auth'
 import { ChangePasswordInput } from '../dto/change-password.input'
 import { UpdateUserInput } from '../dto/update-user.input'
 import { findManyCursorConnection } from '@feature/core/data/common/pagination/cursor-conecction'
-import { UserConnection } from '@feature/admin/user/entities/user-connection.model'
 import { CreateManagerInput } from '../dto/create-manager.input'
 
 @Injectable()
@@ -19,6 +18,18 @@ export class UserService {
       data: newUserData,
       where: {
         id: userId,
+      },
+    })
+  }
+
+  async approveUser(userId: number) {
+    const found = await this.getUserById(userId)
+    return this._service.user.update({
+      data: {
+        state: !found.state,
+      },
+      where: {
+        id: found.id,
       },
     })
   }
@@ -79,6 +90,7 @@ export class UserService {
           ...input,
           password: hashedPassword,
           role: Role.MANAGER,
+          state: true,
         },
       })
       return user

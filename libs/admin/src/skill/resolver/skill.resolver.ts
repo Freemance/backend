@@ -45,7 +45,7 @@ export class SkillResolver {
   updateSkill(@Args('id', { type: () => Int }) id: number, @Args('input') input: UpdateSkillInput) {
     return this._service.updateSkill(id, input)
   }
-  @UseGuards(RolesGuard)
+  @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   @Mutation(() => Boolean, { nullable: true })
   deleteSkill(@Args('id', { type: () => Int }) id: number) {
