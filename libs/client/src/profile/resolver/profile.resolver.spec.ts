@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { ProfileResolver } from './profile.resolver'
-import { ProfileService } from '../profile.service'
+import { ProfileService } from '../service/profile.service'
 
 describe('ProfileResolver', () => {
   let resolver: ProfileResolver

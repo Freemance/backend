@@ -1,6 +1,5 @@
 import { Field, InputType, registerEnumType } from '@nestjs/graphql'
 import { Order } from '@feature/core'
-import { object } from 'joi'
 
 export enum ProfileOrderField {
   id = 'id',

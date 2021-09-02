@@ -13,15 +13,62 @@ export class ProfileService {
       (args) =>
         this._service.profile.findMany({
           where: {
-            slykUser: { contains: query || '', mode: 'insensitive' },
-            jobTitle: { contains: query || '', mode: 'insensitive' },
-            bio: { contains: query || '', mode: 'insensitive' },
-            country: { contains: query || '', mode: 'insensitive' },
-            city: { contains: query || '', mode: 'insensitive' },
-            address: { contains: query || '', mode: 'insensitive' },
-            postalCode: { contains: query || '', mode: 'insensitive' },
-            placeOfBirth: { contains: query || '', mode: 'insensitive' },
-            phone: { contains: query || '', mode: 'insensitive' },
+            OR: [
+              {
+                slykUser: {
+                  contains: query || '',
+                  mode: 'insensitive',
+                },
+              },
+              {
+                jobTitle: {
+                  contains: query || '',
+                  mode: 'insensitive',
+                },
+              },
+              {
+                bio: {
+                  contains: query || '',
+                  mode: 'insensitive',
+                },
+              },
+              {
+                country: {
+                  contains: query || '',
+                  mode: 'insensitive',
+                },
+              },
+              {
+                city: {
+                  contains: query || '',
+                  mode: 'insensitive',
+                },
+              },
+              {
+                address: {
+                  contains: query || '',
+                  mode: 'insensitive',
+                },
+              },
+              {
+                postalCode: {
+                  contains: query || '',
+                  mode: 'insensitive',
+                },
+              },
+              {
+                placeOfBirth: {
+                  contains: query || '',
+                  mode: 'insensitive',
+                },
+              },
+              {
+                phone: {
+                  contains: query || '',
+                  mode: 'insensitive',
+                },
+              },
+            ],
           },
           orderBy: orderBy ? { [orderBy.field]: orderBy.direction } : null,
           ...args,
@@ -29,15 +76,62 @@ export class ProfileService {
       () =>
         this._service.profile.count({
           where: {
-            slykUser: { contains: query || '', mode: 'insensitive' },
-            jobTitle: { contains: query || '', mode: 'insensitive' },
-            bio: { contains: query || '', mode: 'insensitive' },
-            country: { contains: query || '', mode: 'insensitive' },
-            city: { contains: query || '', mode: 'insensitive' },
-            address: { contains: query || '', mode: 'insensitive' },
-            postalCode: { contains: query || '', mode: 'insensitive' },
-            placeOfBirth: { contains: query || '', mode: 'insensitive' },
-            phone: { contains: query || '', mode: 'insensitive' },
+            OR: [
+              {
+                slykUser: {
+                  contains: query || '',
+                  mode: 'insensitive',
+                },
+              },
+              {
+                jobTitle: {
+                  contains: query || '',
+                  mode: 'insensitive',
+                },
+              },
+              {
+                bio: {
+                  contains: query || '',
+                  mode: 'insensitive',
+                },
+              },
+              {
+                country: {
+                  contains: query || '',
+                  mode: 'insensitive',
+                },
+              },
+              {
+                city: {
+                  contains: query || '',
+                  mode: 'insensitive',
+                },
+              },
+              {
+                address: {
+                  contains: query || '',
+                  mode: 'insensitive',
+                },
+              },
+              {
+                postalCode: {
+                  contains: query || '',
+                  mode: 'insensitive',
+                },
+              },
+              {
+                placeOfBirth: {
+                  contains: query || '',
+                  mode: 'insensitive',
+                },
+              },
+              {
+                phone: {
+                  contains: query || '',
+                  mode: 'insensitive',
+                },
+              },
+            ],
           },
         }),
       { first, last, before, after },

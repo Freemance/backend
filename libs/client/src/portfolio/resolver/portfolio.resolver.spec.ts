@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { PortfolioResolver } from './portfolio.resolver'
-import { PortfolioService } from '../portfolio.service'
+import { PortfolioService } from '../service/portfolio.service'
 
 describe('PortfolioResolver', () => {
   let resolver: PortfolioResolver
