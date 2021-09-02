@@ -31,6 +31,16 @@ export class AuthResolver {
     }
   }
 
+  @Mutation(() => Auth)
+  async loginDashboard(@Args('data') { email, password }: LoginInput) {
+    const { accessToken, refreshToken } = await this._authService.login(email.toLowerCase(), password, true)
+
+    return {
+      accessToken,
+      refreshToken,
+    }
+  }
+
   @Mutation(() => Token)
   async refreshToken(@Args() { token }: RefreshTokenInput) {
     return this._authService.refreshToken(token)
