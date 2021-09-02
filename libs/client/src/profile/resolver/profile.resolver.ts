@@ -1,36 +1,37 @@
+import { UseGuards } from '@nestjs/common'
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql'
 
+import { PaginationArgs } from '@feature/core'
+import { GqlAuthGuard } from '@feature/auth'
+import { ProfileOrder } from '../dto/profile-order.input'
+import { Profile } from '../entities/profile.entity'
+import { ProfileConnection } from '../entities/profile-connection.model'
 import { CreateProfileInput } from '../dto/create-profile.input'
 import { UpdateProfileInput } from '../dto/update-profile.input'
-import { Profile } from '../entities/profile.entity'
 import { ProfileService } from '../service/profile.service'
 
+@UseGuards(GqlAuthGuard)
 @Resolver(() => Profile)
 export class ProfileResolver {
   constructor(private readonly _service: ProfileService) {}
 
-  @Mutation(() => Profile)
-  createProfile(@Args('createProfileInput') createProfileInput: CreateProfileInput) {
-    return this._service.create(createProfileInput)
+  @Query(() => ProfileConnection, { name: 'ProfileFilter', nullable: true })
+  async filter(
+    @Args() { after, before, first, last }: PaginationArgs,
+    @Args({ name: 'query', type: () => String, nullable: true })
+    query: string,
+    @Args({
+      name: 'orderBy',
+      type: () => ProfileOrder,
+      nullable: true,
+    })
+    orderBy: ProfileOrder,
+  ) {
+    return this._service.filter(after, before, first, last, query, orderBy)
   }
 
-  @Query(() => [Profile], { name: 'profile' })
-  findAll() {
-    return this._service.findAll()
-  }
-
-  @Query(() => Profile, { name: 'profile' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this._service.findOne(id)
-  }
-
-  @Mutation(() => Profile)
-  updateProfile(@Args('updateProfileInput') updateProfileInput: UpdateProfileInput) {
-    return this._service.update(updateProfileInput.id, updateProfileInput)
-  }
-
-  @Mutation(() => Profile)
-  removeProfile(@Args('id', { type: () => Int }) id: number) {
-    return this._service.remove(id)
+  @Query(() => [Profile], { name: 'GetAllProfilees', nullable: true })
+  async getAllProfiles() {
+    return this._service.getProfiles()
   }
 }

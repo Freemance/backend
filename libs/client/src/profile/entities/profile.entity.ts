@@ -6,7 +6,7 @@ import { ProfileSkill, SocialLink, Job, Course, Portfolio, Language } from '@fea
 
 @ObjectType()
 export class Profile extends BaseModel {
-  @Field({ description: 'Slyck User name' })
+  @Field({ description: 'Slyk User name' })
   slykUser: string
 
   @Field({ description: 'JobTitle name', nullable: true })
