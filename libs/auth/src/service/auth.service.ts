@@ -60,7 +60,7 @@ export class AuthService {
     }
   }
 
-  async login(email: string, password: string): Promise<Token> {
+  async login(email: string, password: string, loginAsManager = false): Promise<Token> {
     const user = await this._service.user.findUnique({ where: { email }, include: { profile: true } })
 
     if (!user) {
@@ -71,6 +71,9 @@ export class AuthService {
 
     if (!passwordValid) {
       throw new BadRequestException('Invalid password')
+    }
+    if ((loginAsManager && user.role === Role.USER) || (!loginAsManager && user.role !== Role.USER)) {
+      throw new UnauthorizedException('Unauthorized')
     }
 
     return this.generateTokens({
