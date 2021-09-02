@@ -9,13 +9,13 @@ export class CreatePortfolioInput {
   @MaxLength(75)
   proyect: string
 
-  @Field({ description: 'Link associated  to the proyect' })
+  @Field({ description: 'Link associated  to the proyect', nullable: true })
   @IsString()
   @IsNotEmpty()
   @MaxLength(75)
   link: string
 
-  @Field({ description: 'Description associated  to the proyect' })
+  @Field({ description: 'Description associated  to the proyect', nullable: true })
   @IsString()
   @IsNotEmpty()
   @MaxLength(500)
