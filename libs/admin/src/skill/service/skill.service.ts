@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
-import { DataService } from '@feature/core'
+import { DataService, findManyCursorConnection } from '@feature/core'
 
 import { CreateSkillInput } from '../dto/create-skill.input'
 import { UpdateSkillInput } from '../dto/update-skill.input'
@@ -9,8 +9,25 @@ export class SkillService {
   constructor(private readonly _service: DataService) {}
   private readonly includes = { profiles: true }
 
-  public async getAllSkill() {
-    return this._service.skill.findMany({ orderBy: { id: 'asc' }, include: this.includes })
+  async filter(after, before, first, last, query, orderBy) {
+    const a = await findManyCursorConnection(
+      (args) =>
+        this._service.skill.findMany({
+          where: {
+            name: { contains: query || '', mode: 'insensitive' },
+          },
+          orderBy: orderBy ? { [orderBy.field]: orderBy.direction } : null,
+          ...args,
+        }),
+      () =>
+        this._service.skill.count({
+          where: {
+            name: { contains: query || '', mode: 'insensitive' },
+          },
+        }),
+      { first, last, before, after },
+    )
+    return a
   }
 
   public async getSkillById(id: number) {
