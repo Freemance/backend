@@ -1,7 +1,7 @@
 import { UseGuards } from '@nestjs/common'
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql'
 
-import { GraphQLUpload, FileUpload } from 'graphql-upload'
+import { FileUpload, GraphQLUpload } from 'graphql-upload'
 import { GqlAuthGuard, Role, Roles, RolesGuard, User, UserEntity } from '@feature/auth'
 import { MultimediaService } from './../service/multimedia.service'
 import { Multimedia } from '../entities/multimedia.entity'
@@ -14,10 +14,10 @@ export class MultimediaResolver {
 
   @UseGuards(RolesGuard)
   @Roles(Role.USER)
-  @Mutation(() => Multimedia || Boolean)
+  @Mutation(() => Multimedia || Boolean, { name: 'CreateMultimedia' })
   createMultimedia(
     @UserEntity() user: User,
-    @Args({ name: 'file', type: () => GraphQLUpload }) { createReadStream, filename, metadata }: FileUpload,
+    @Args({ name: 'file', type: () => GraphQLUpload }) { createReadStream, filename }: FileUpload,
   ): Promise<Multimedia | boolean> {
     return new Promise(async (resolve, reject) =>
       createReadStream()
@@ -26,10 +26,10 @@ export class MultimediaResolver {
           const input: CreateMultimediaInput = {
             file_path: `./uploads/${filename}`,
             file_name: filename,
-            file_extension: metadata.file_extension,
-            file_height: metadata.file_height,
-            file_size: metadata.file_size,
-            file_type: metadata.file_type,
+            // file_extension: metadata.file_extension,
+            // file_height: metadata.file_height,
+            // file_size: metadata.file_size,
+            // file_type: metadata.file_type,
             status: true,
           }
           console.log(input)
@@ -44,12 +44,16 @@ export class MultimediaResolver {
     return this._service.getAllMultimedias()
   }
 
+  @UseGuards(RolesGuard)
+  @Roles(Role.USER)
   @Mutation(() => Boolean, { name: 'DeleteMultimediaByUser' })
   deleteMultimediaByUser(@UserEntity() user: User, @Args('id', { type: () => Int }) id: number) {
     return this._service.deleteMultimediaByUser(id, user.profile.id)
   }
 
-  @Mutation(() => Boolean, { name: 'RemoveMultimediaByUser' })
+  @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
+  @Mutation(() => Boolean, { name: 'DeleteMultimediaByAdmin' })
   deleteMultimediaByAdmin(@Args('id', { type: () => Int }) id: number) {
     return this._service.deleteMultimediaByAdmin(id)
   }

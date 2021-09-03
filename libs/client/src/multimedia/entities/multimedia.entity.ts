@@ -3,7 +3,7 @@ import { BaseModel } from '@feature/core'
 
 @ObjectType()
 export class Multimedia extends BaseModel {
-  @Field(() => Int, { description: 'Id of the user)' })
+  @Field(() => Int, { description: 'Id of the user)', nullable: true })
   created_by: number
 
   @Field({ description: 'Name of the file', nullable: true })

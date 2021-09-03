@@ -7,7 +7,7 @@ export class MultimediaService {
   constructor(private readonly _service: DataService) {}
 
   async getAllMultimedias() {
-    return this._service.course.findMany({ orderBy: { id: 'asc' } })
+    return this._service.multimedia.findMany({ orderBy: { id: 'asc' } })
   }
 
   async createMultimedia(profileId: number, input: CreateMultimediaInput) {
