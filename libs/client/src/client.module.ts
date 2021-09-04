@@ -5,6 +5,7 @@ import { LanguageModule } from './language'
 import { PortfolioModule } from './portfolio'
 import { ProfileModule } from './profile'
 import { ProfileSkillModule } from './profile-skill'
+import { MultimediaModule } from './multimedia/multimedia.module'
 // import { SocialLinksModule } from './social-links'
 
 @Module({
@@ -15,6 +16,7 @@ import { ProfileSkillModule } from './profile-skill'
     JobModule,
     CourseModule,
     ProfileModule,
+    MultimediaModule,
     // SocialLinksModule,
   ],
 })

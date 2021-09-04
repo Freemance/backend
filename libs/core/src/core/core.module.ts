@@ -26,6 +26,7 @@ import { GraphqlConfig } from '@feature/core/core/config/config.interface'
           autoSchemaFile: true,
           debug: graphqlConfig.debug,
           playground: graphqlConfig.playgroundEnabled,
+          uploads: false,
           context: ({ req }) => ({ req }),
         }
       },
