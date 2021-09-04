@@ -17,16 +17,16 @@ enum Role {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            Int      @id @default(autoincrement())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
-  email    String   @unique
-  userName String   @unique
-  password String
-  active   Boolean  @default(false)
-  role     Role     @default(USER)
-  profile  Profile?
+  email         String   @unique
+  username      String   @unique
+  password      String
+  active        Boolean  @default(false)
+  role          Role     @default(USER)
+  profile       Profile?
 }
 
 enum ProfileStatus {
@@ -38,9 +38,9 @@ enum ProfileStatus {
 }
 
 model Profile {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            Int      @id @default(autoincrement())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   slykUser      String
   firstName     String
@@ -76,34 +76,33 @@ model Multimedia {
   id             Int      @id @default(autoincrement())
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
-  created_by     Int
-  file_name      String?
-  file_path      String?
-  file_size      String?
-  file_type      String?
-  file_extension String?
-  file_height    String?
+  createdBy      Int
+  filename       String   @unique
+  path           String?
+  size           String?
+  type           String?
+  extension      String?
   status         Boolean  @default(true)
 }
 
 model Tag {
-  id        Int       @id @default(autoincrement())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  name      String    @unique
-  profiles  Profile[]
+  id            Int       @id @default(autoincrement())
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  name          String    @unique
+  profiles      Profile[]
 }
 
 model Skill {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  name      String   @unique
-  icon      String?
+  id            Int      @id @default(autoincrement())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  name          String   @unique
+  icon          String?
 
-  profiles    Profile[]
-  portfolio   Portfolio? @relation(fields: [portfolioId], references: [id])
-  portfolioId Int?
+  profiles      Profile[]
+  portfolio     Portfolio? @relation(fields: [portfolioId], references: [id])
+  portfolioId   Int?
 }
 
 // relacion implicita vamos ahora
@@ -117,73 +116,73 @@ enum LVL {
 }
 
 model SocialLink {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            Int      @id @default(autoincrement())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
-  twitter    String?
-  instagram  String?
-  linkedin   String?
-  facebook   String?
-  telegram   String?
-  whatsapp   String?
-  googlePlus String?
-  slack      String?
-  github     String?
-  youtube    String?
-  behance    String?
-  dribbble   String?
+  twitter       String?
+  instagram     String?
+  linkedin      String?
+  facebook      String?
+  telegram      String?
+  whatsapp      String?
+  googlePlus    String?
+  slack         String?
+  github        String?
+  youtube       String?
+  behance       String?
+  dribbble      String?
 
   profile   Profile? @relation(fields: [profileId], references: [id])
   profileId Int?
 }
 
 model Job {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            Int      @id @default(autoincrement())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
-  name        String
-  company     String?
-  description String?
-  startDate   DateTime
-  endDate     DateTime?
-  inProgress  Boolean   @default(false)
+  name          String
+  company       String?
+  description   String?
+  startDate     DateTime
+  endDate       DateTime?
+  inProgress    Boolean   @default(false)
 
-  profile   Profile? @relation(fields: [profileId], references: [id])
-  profileId Int?
+  profile       Profile? @relation(fields: [profileId], references: [id])
+  profileId     Int?
 }
 
 model Course {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            Int      @id @default(autoincrement())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
-  course      String
-  institution String
-  description String?
-  startDate   DateTime
-  endDate     DateTime
+  course        String
+  institution   String
+  description   String?
+  startDate     DateTime
+  endDate       DateTime
 
-  profile   Profile? @relation(fields: [profileId], references: [id])
-  profileId Int?
+  profile       Profile? @relation(fields: [profileId], references: [id])
+  profileId     Int?
 }
 
 model Portfolio {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            Int      @id @default(autoincrement())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
-  proyect     String?
-  link        String?
-  description String?
-  skills      Skill[]
-  screenshts  String[]
-  startDate   DateTime?
-  endDate     DateTime?
+  proyect       String?
+  link          String?
+  description   String?
+  skills        Skill[]
+  screenshts    String[]
+  startDate     DateTime?
+  endDate       DateTime?
 
-  profile   Profile? @relation(fields: [profileId], references: [id])
-  profileId Int?
+  profile       Profile? @relation(fields: [profileId], references: [id])
+  profileId     Int?
 }
 
 enum LANLVL {
@@ -201,13 +200,13 @@ enum LANLVL {
 }
 
 model Language {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            Int      @id @default(autoincrement())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
-  language String
-  lvl      LANLVL @default(NATIVE_SPEAKER)
+  language      String
+  lvl           LANLVL @default(NATIVE_SPEAKER)
 
-  profile   Profile? @relation(fields: [profileId], references: [id])
-  profileId Int?
+  profile       Profile? @relation(fields: [profileId], references: [id])
+  profileId     Int?
 }
