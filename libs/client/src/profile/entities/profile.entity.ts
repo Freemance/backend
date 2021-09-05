@@ -1,8 +1,8 @@
 import { ObjectType, Field } from '@nestjs/graphql'
 import { BaseModel } from '@feature/core'
-import { Tag } from '@feature/admin'
+import { Skill, Tag } from '@feature/admin'
 import { User } from '@feature/auth'
-import { ProfileSkill, SocialLink, Job, Course, Portfolio, Language } from '@feature/client'
+import { SocialLink, Job, Course, Portfolio, Language } from '@feature/client'
 
 @ObjectType()
 export class Profile extends BaseModel {
@@ -42,8 +42,8 @@ export class Profile extends BaseModel {
   @Field(() => Tag, { description: 'Tag associated  to the profile' })
   tag: Tag
 
-  @Field(() => [ProfileSkill], { description: 'Skills associated  to the profile' })
-  skills: [ProfileSkill]
+  @Field(() => [Skill], { description: 'Skills associated  to the profile' })
+  skills: [Skill]
 
   @Field(() => SocialLink, { description: 'Social links associated  to the profile', nullable: true })
   socialLinks?: SocialLink

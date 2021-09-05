@@ -13,6 +13,9 @@ export class SignupInput {
   password: string
 
   @Field()
+  username: string
+
+  @Field()
   firstName: string
 
   @Field()

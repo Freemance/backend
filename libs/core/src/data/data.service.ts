@@ -24,8 +24,7 @@ export class DataService extends PrismaClient implements OnModuleInit, OnModuleD
       data: {
         email: 'admin@admin.com',
         password: await hashPassword(),
-        firstName: 'admin',
-        lastName: 'admin',
+        username: 'admin',
         role: 'ADMIN',
       },
     })

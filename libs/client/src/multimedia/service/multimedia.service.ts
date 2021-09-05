@@ -13,7 +13,7 @@ export class MultimediaService {
   async createMultimedia(profileId: number, input: CreateMultimediaInput) {
     return this._service.multimedia.create({
       data: {
-        created_by: profileId,
+        createdBy: profileId,
         ...input,
       },
     })
@@ -29,7 +29,7 @@ export class MultimediaService {
 
   async deleteMultimediaByUser(id: number, profileId: number) {
     const found = await this.getMultimediaById(id)
-    if (found.created_by !== profileId) {
+    if (found.createdBy !== profileId) {
       throw new UnauthorizedException()
     }
     const deleted = await this._service.multimedia.delete({

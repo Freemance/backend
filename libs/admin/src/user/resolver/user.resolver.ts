@@ -30,20 +30,8 @@ export class UserResolver {
   }
 
   @Mutation(() => User, { nullable: true })
-  async updateUser(@UserEntity() user: User, @Args('data') newUserData: UpdateUserInput) {
-    return this._userService.updateUser(user.id, newUserData)
-  }
-
-  @Mutation(() => User, { nullable: true })
   async changePassword(@UserEntity() user: User, @Args('data') changePassword: ChangePasswordInput) {
     return this._userService.changePassword(user.id, user.password, changePassword)
-  }
-
-  @UseGuards(RolesGuard)
-  @Roles(Role.ADMIN)
-  @Query(() => [User], { name: 'users', nullable: 'items' })
-  getAllUser() {
-    return this._userService.getAllUser()
   }
 
   @Query(() => UserConnection)
@@ -71,7 +59,7 @@ export class UserResolver {
   @UseGuards(RolesGuard)
   @Roles(Role.ADMIN)
   @Mutation(() => User, { nullable: true })
-  approveUser(@Args('id', { type: () => Int }) id: number) {
+  activeUser(@Args('id', { type: () => Int }) id: number) {
     return this._userService.approveUser(id)
   }
 

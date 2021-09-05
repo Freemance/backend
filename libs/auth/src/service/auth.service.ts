@@ -31,8 +31,7 @@ export class AuthService {
       const user = await this._service.user.create({
         data: {
           email: payload.email,
-          firstName: payload.firstName,
-          lastName: payload.lastName,
+          username: payload.username,
           password: hashedPassword,
           role: Role.USER,
         },
@@ -40,6 +39,8 @@ export class AuthService {
       const profile = await this._service.profile.create({
         data: {
           slykUser: payload.slykUser,
+          firstName: payload.firstName,
+          lastName: payload.lastName,
           user: {
             connect: {
               id: user.id,
