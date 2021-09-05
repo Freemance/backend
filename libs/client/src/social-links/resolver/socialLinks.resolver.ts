@@ -13,9 +13,9 @@ import { UpdateSocialLinkInput } from '../dto/update-socialLinks.input'
 export class SocialLinksResolver {
   constructor(private readonly _service: SocialLinksService) {}
 
-  @Query(() => [SocialLink], { name: 'ProfileSLink', nullable: 'items' })
-  getAllSocialLink(@UserEntity() user: User) {
-    return this._service.getAllProfileSLinks(user.profile.id)
+  @Query(() => SocialLink, { name: 'ProfileSLink', nullable: true })
+  getProfileSLinkById(@UserEntity() user: User, @Args('id', { type: () => Int }) id: number) {
+    return this._service.getProfileSLinkById(id, user.profile.id)
   }
 
   @Mutation(() => SocialLink, { name: 'ProfileCreateSLinks', nullable: true })
