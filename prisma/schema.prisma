@@ -12,7 +12,7 @@ generator client {
 
 enum Role {
   USER
-  CONTRACTOR
+  MANAGER
   ADMIN
 }
 
@@ -20,60 +20,88 @@ model User {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  email     String   @unique
-  password  String
-  state     Boolean  @default(false)
-  role      Role     @default(USER)
-  profile   Profile?
+
+  email    String   @unique
+  username String   @unique
+  password String
+  active   Boolean  @default(false)
+  role     Role     @default(USER)
+  profile  Profile?
+}
+
+enum ProfileStatus {
+  PENDING
+  REVIEWING
+  NEEDFIX
+  APPROVED
+  DISAPPROVED
 }
 
 model Profile {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  id        Int    @id @default(autoincrement())
-  firstMame String
-  lastName  String
-  slykUser  String
+  slykUser      String
+  firstName     String
+  lastName      String
+  profileStatus ProfileStatus @default(PENDING)
   // Optional fileds
-
-  jobTitle     String?
-  bio          String?
-  country      String?
-  city         String?
-  address      String?
-  postalCode   String?
-  placeOfBirth String?
-  dateOfBirth  DateTime?
-  phone        String?
+  avatar        String?
+  jobTitle      String?
+  bio           String?
+  country       String?
+  city          String?
+  address       String?
+  postalCode    String?
+  placeOfBirth  String?
+  dateOfBirth   DateTime?
+  phone         String?
 
   // Relations fields
-  user              User           @relation(fields: [userId], references: [id])
+  user              User        @relation(fields: [userId], references: [id])
   userId            Int
-  tag               Tag?           @relation(fields: [tagId], references: [id])
+  tag               Tag?        @relation(fields: [tagId], references: [id])
   tagId             Int?
-  skills            ProfileSkill[]
-  socialLinks       SocialLink[]
+  skills            Skill[]
+  socialLinks       SocialLink?
   employmentHistory Job[]
   courses           Course[]
   portfolioItem     Portfolio[]
   languages         Language[]
+  multimediaId      Int?
+}
+
+model Multimedia {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  createdBy Int
+  filename  String   @unique
+  path      String?
+  size      String?
+  type      String?
+  extension String?
+  status    Boolean  @default(true)
 }
 
 model Tag {
   id        Int       @id @default(autoincrement())
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  name      String
+  name      String    @unique
   profiles  Profile[]
 }
 
 model Skill {
-  id          Int            @id @default(autoincrement())
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
-  name        String
-  profiles    ProfileSkill[]
-  portfolio   Portfolio?     @relation(fields: [portfolioId], references: [id])
-  portfolioId Int?
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String   @unique
+  icon      String?
+
+  profiles   Profile[]
+  portfolios Portfolio[]
 }
 
 // relacion implicita vamos ahora
@@ -86,62 +114,74 @@ enum LVL {
   EXPERT
 }
 
-model ProfileSkill {
-  skill      Skill    @relation(fields: [skillId], references: [id])
-  skillId    Int
-  profile    Profile  @relation(fields: [profileId], references: [id])
-  profileId  Int
-  assignedAt DateTime @default(now())
-  level      LVL      @default(NOVICE)
-
-  @@id([skillId, profileId])
-}
-
 model SocialLink {
-  id        Int     @id @default(autoincrement())
-  linkedin  String?
-  instagram String?
-  facebook  String?
-  telegram  String?
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  twitter    String?
+  instagram  String?
+  linkedin   String?
+  facebook   String?
+  telegram   String?
+  whatsapp   String?
+  googlePlus String?
+  slack      String?
+  github     String?
+  youtube    String?
+  behance    String?
+  dribbble   String?
 
   profile   Profile? @relation(fields: [profileId], references: [id])
   profileId Int?
 }
 
 model Job {
-  id          Int      @id @default(autoincrement())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   name        String
-  company     String
+  company     String?
   description String?
-  starDate    DateTime
-  endDate     DateTime
-  profile     Profile? @relation(fields: [profileId], references: [id])
-  profileId   Int?
+  startDate   DateTime
+  endDate     DateTime?
+  inProgress  Boolean   @default(false)
+
+  profile   Profile? @relation(fields: [profileId], references: [id])
+  profileId Int?
 }
 
 model Course {
-  id          Int       @id @default(autoincrement())
-  course      String?
-  institution String?
-  starDate    DateTime?
-  endDate     DateTime?
-  profile     Profile?  @relation(fields: [profileId], references: [id])
-  profileId   Int?
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  course      String
+  institution String
+  description String?
+  startDate   DateTime
+  endDate     DateTime
+
+  profile   Profile? @relation(fields: [profileId], references: [id])
+  profileId Int?
 }
 
 model Portfolio {
-  id          Int      @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   proyect     String?
   link        String?
   description String?
-  skills      Skill[]
-  // screenshts    Shots[]
-  startDate   String?
-  endDate     String?
-  profile     Profile? @relation(fields: [profileId], references: [id])
-  profileId   Int?
+  screenshts  String[]
+  startDate   DateTime?
+  endDate     DateTime?
+
+  skills    Skill[]
+  profile   Profile? @relation(fields: [profileId], references: [id])
+  profileId Int?
 }
 
 enum LANLVL {
@@ -160,8 +200,12 @@ enum LANLVL {
 
 model Language {
   id        Int      @id @default(autoincrement())
-  langage   String?
-  lvl       LANLVL   @default(NATIVE_SPEAKER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  language String
+  lvl      LANLVL @default(NATIVE_SPEAKER)
+
   profile   Profile? @relation(fields: [profileId], references: [id])
   profileId Int?
 }

@@ -1,0 +1,53 @@
+import { Resolver, Mutation, Args, Parent, ResolveField } from '@nestjs/graphql'
+
+import { LoginInput } from '../dto/login.input'
+import { RefreshTokenInput } from '../dto/refresh-token.input'
+import { SignupInput } from '../dto/signup.input'
+import { Auth } from '../entities/auth.model'
+import { Token } from '../entities/token.model'
+import { AuthService } from '../service/auth.service'
+
+@Resolver(() => Auth)
+export class AuthResolver {
+  constructor(private readonly _authService: AuthService) {}
+
+  @Mutation(() => Auth)
+  async signup(@Args('data') data: SignupInput) {
+    data.email = data.email.toLowerCase()
+    const { accessToken, refreshToken } = await this._authService.createUser(data)
+    return {
+      accessToken,
+      refreshToken,
+    }
+  }
+
+  @Mutation(() => Auth)
+  async login(@Args('data') { email, password }: LoginInput) {
+    const { accessToken, refreshToken } = await this._authService.login(email.toLowerCase(), password)
+
+    return {
+      accessToken,
+      refreshToken,
+    }
+  }
+
+  @Mutation(() => Auth)
+  async loginDashboard(@Args('data') { email, password }: LoginInput) {
+    const { accessToken, refreshToken } = await this._authService.login(email.toLowerCase(), password, true)
+
+    return {
+      accessToken,
+      refreshToken,
+    }
+  }
+
+  @Mutation(() => Token)
+  async refreshToken(@Args() { token }: RefreshTokenInput) {
+    return this._authService.refreshToken(token)
+  }
+
+  @ResolveField('user')
+  async user(@Parent() auth: Auth) {
+    return await this._authService.getUserFromToken(auth.accessToken)
+  }
+}
