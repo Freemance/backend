@@ -30,9 +30,4 @@ export class CreateJobInput {
   @IsDate()
   @IsOptional()
   endDate?: Date
-
-  @Field(() => Boolean, { description: 'Checks if the jobs is still in progress', nullable: true })
-  @IsBoolean()
-  @IsOptional()
-  inProgress?: boolean
 }

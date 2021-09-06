@@ -24,9 +24,11 @@ export class JobService {
   }
 
   public createProfileJob(profileId: number, input: CreateJobInput) {
+    const inProgress = !input.endDate ? true : false
     return this._service.job.create({
       data: {
         ...input,
+        inProgress: inProgress,
         profile: {
           connect: { id: profileId },
         },
@@ -36,8 +38,9 @@ export class JobService {
 
   public async updateProfileJob(id: number, profileId: number, input: UpdateJobInput) {
     const found = await this.getProfileJobById(id, profileId)
+    const inProgress = !input.endDate && !found.endDate && input.endDate === null ? true : false
 
-    return this._service.job.update({ where: { id: found.id }, data: { ...input } })
+    return this._service.job.update({ where: { id: found.id }, data: { ...input, inProgress: inProgress } })
   }
 
   public async deleteProfileJob(id: number, profileId: number) {
