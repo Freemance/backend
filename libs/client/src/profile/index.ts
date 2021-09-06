@@ -1,8 +1,8 @@
-export * from './dto/create-profile.input'
-export * from './dto/update-profile.input'
+export * from './dto/update-basicProfile.input'
 export * from './dto/profile-order.input'
 
 export * from './entities/profile.entity'
+export * from './entities/profileStatus.enum'
 export * from './entities/profile-connection.model'
 
 export * from './resolver/profile.resolver'

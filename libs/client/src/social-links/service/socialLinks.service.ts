@@ -1,16 +1,13 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common'
+import { Injectable, NotFoundException, UnauthorizedException, ConflictException } from '@nestjs/common'
 
 import { DataService } from '@feature/core'
 import { CreateSocialLinkInput } from '../dto/create-socialLinks.input'
 import { UpdateSocialLinkInput } from '../dto/update-socialLinks.input'
+import { exists } from 'fs'
 
 @Injectable()
 export class SocialLinksService {
   constructor(private readonly _service: DataService) {}
-
-  async getAllProfileSLinks(profileId: number) {
-    return this._service.socialLink.findMany({ where: { profileId }, orderBy: { id: 'asc' } })
-  }
 
   async getProfileSLinkById(id: number, profileId: number) {
     const found = await this._service.socialLink.findUnique({ where: { id } })

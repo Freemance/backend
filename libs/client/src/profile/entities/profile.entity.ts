@@ -1,13 +1,26 @@
-import { ObjectType, Field } from '@nestjs/graphql'
+import { ObjectType, Field, HideField } from '@nestjs/graphql'
 import { BaseModel } from '@feature/core'
-import { Skill, Tag } from '@feature/admin'
 import { User } from '@feature/auth'
+import { Skill, Tag } from '@feature/admin'
+import { ProfileStatus } from './profileStatus.enum'
 import { SocialLink, Job, Course, Portfolio, Language } from '@feature/client'
 
 @ObjectType()
 export class Profile extends BaseModel {
-  @Field({ description: 'Slyk User name' })
+  @Field({ description: 'Slyk Username' })
   slykUser: string
+
+  @Field({ description: 'First name' })
+  firstName: string
+
+  @Field({ description: 'Last name' })
+  lastName: string
+
+  @Field(() => ProfileStatus, { description: 'Profile Status ' })
+  profileStatus: ProfileStatus
+
+  @Field({ description: 'Profile Status ', nullable: true })
+  avatar?: string
 
   @Field({ description: 'JobTitle name', nullable: true })
   jobTitle?: string
@@ -36,6 +49,7 @@ export class Profile extends BaseModel {
   @Field({ description: 'Phone number', nullable: true })
   phone?: string
 
+  @HideField()
   @Field(() => User, { description: 'User associated  to the profile' })
   user: User
 

@@ -15,4 +15,28 @@ export class SocialLink extends BaseModel {
 
   @Field({ description: 'Telegram link', nullable: true })
   telegram?: string
+
+  @Field({ description: 'Twitter link', nullable: true })
+  twitter?: string
+
+  @Field({ description: 'Whatsapp link', nullable: true })
+  whatsapp?: string
+
+  @Field({ description: 'GooglePlus link', nullable: true })
+  googlePlus?: string
+
+  @Field({ description: 'Slack link', nullable: true })
+  slack?: string
+
+  @Field({ description: 'github link', nullable: true })
+  github?: string
+
+  @Field({ description: 'Youtube link', nullable: true })
+  youtube?: string
+
+  @Field({ description: 'Behance link', nullable: true })
+  behance?: string
+
+  @Field({ description: 'Dribble link', nullable: true })
+  dribbble?: string
 }

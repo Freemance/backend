@@ -1,5 +1,5 @@
 import { InputType, Field } from '@nestjs/graphql'
-import { IsDate, IsNotEmpty, IsString, MaxLength } from 'class-validator'
+import { IsArray, IsDate, IsNotEmpty, IsString, MaxLength } from 'class-validator'
 
 @InputType()
 export class CreatePortfolioInput {
@@ -20,6 +20,11 @@ export class CreatePortfolioInput {
   @IsNotEmpty()
   @MaxLength(500)
   description: string
+
+  @Field({ description: 'List of screenshts associated to the proyect', nullable: 'items' })
+  @IsArray()
+  @IsNotEmpty()
+  screenshts: [string]
 
   @Field(() => Date, { description: 'Start date associated  to the proyect' })
   @IsDate()
