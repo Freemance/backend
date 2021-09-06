@@ -23,23 +23,41 @@ export class PortfolioService {
     return found
   }
 
-  async createProfilePortfolio(profileId: number, input: CreatePortfolioInput, skillsId: [{ id: number }]) {
+  async createProfilePortfolio(profileId: number, input: CreatePortfolioInput) {
     return this._service.portfolio.create({
       data: {
         ...input,
         profile: {
           connect: { id: profileId },
         },
-        skills: { connect: skillsId },
       },
     })
   }
 
-  async updateProfilePortfolio(id: number, profileId: number, input: UpdatePortfolioInput, skillsId: [{ id: number }]) {
+  async updateProfilePortfolio(id: number, profileId: number, input: UpdatePortfolioInput) {
     const found = await this.getProfilePortfolioById(id, profileId)
     return this._service.portfolio.update({
       where: { id: found.id },
-      data: { ...input, skills: { connect: skillsId } },
+      data: { ...input },
+    })
+  }
+  async addPortfolioSkill(id: number, profileId: number, skillId: number) {
+    const found = await this.getProfilePortfolioById(id, profileId)
+    return this._service.portfolio.update({
+      where: { id: found.id },
+      data: {
+        skills: { connect: { id: skillId } },
+      },
+    })
+  }
+
+  async removePortfolioSkill(id: number, profileId: number, skillId: number) {
+    const found = await this.getProfilePortfolioById(id, profileId)
+    return this._service.portfolio.update({
+      where: { id: found.id },
+      data: {
+        skills: { disconnect: { id: skillId } },
+      },
     })
   }
 
