@@ -3,6 +3,18 @@ import { IsDate, IsOptional, IsString, MaxLength } from 'class-validator'
 
 @InputType()
 export class UpdateBasicProfileInput {
+  @Field({ description: 'First name', nullable: true })
+  @IsString()
+  @MaxLength(350)
+  @IsOptional()
+  firstName?: string
+
+  @Field({ description: 'Last name', nullable: true })
+  @IsString()
+  @MaxLength(550)
+  @IsOptional()
+  lastName?: string
+
   @Field({ description: 'JobTitle name', nullable: true })
   @IsString()
   @MaxLength(350)

@@ -181,8 +181,9 @@ export class ProfileService {
     return found
   }
 
-  async updateBasicProfileInfo(profileId: number, input: UpdateBasicProfileInput, avatar?: string) {
+  async updateProfileBasicInfo(profileId: number, input: UpdateBasicProfileInput, avatar?: string) {
     const found = await this.getProfileById(profileId)
+
     return this._service.profile.update({
       include: this.includes,
       where: { id: found.id },
@@ -220,12 +221,16 @@ export class ProfileService {
 
   async updateProfileTag(profileId: number, tagId: number) {
     const found = await this.getProfileById(profileId)
+    const foundTag = await this._service.tag.findUnique({ where: { id: tagId } })
+    if (!foundTag) {
+      throw new NotFoundException(`Tag with id: ${tagId} not found`)
+    }
     return this._service.profile.update({
       include: this.includes,
       where: { id: found.id },
       data: {
         tag: {
-          connect: { id: tagId },
+          connect: { id: foundTag.id },
         },
       },
     })

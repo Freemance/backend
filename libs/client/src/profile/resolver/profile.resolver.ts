@@ -36,12 +36,12 @@ export class ProfileResolver {
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles(Role.USER)
   @Mutation(() => Profile, { name: 'ProfileUpdateBasicInfo', nullable: true })
-  async updateBasicProfileInfo(
+  async updateProfileBasicInfo(
     @UserEntity() user: User,
     @Args('input') input: UpdateBasicProfileInput,
     @Args('avatar') avatar?: string,
   ) {
-    return this._service.updateBasicProfileInfo(user.profile.id, input, avatar)
+    return this._service.updateProfileBasicInfo(user.profile.id, input, avatar)
   }
 
   @UseGuards(GqlAuthGuard, RolesGuard)
@@ -60,7 +60,7 @@ export class ProfileResolver {
 
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles(Role.USER)
-  @Mutation(() => Profile, { name: 'UpdateProfileTag', nullable: true })
+  @Mutation(() => Profile, { name: 'ProfileUpdateTag', nullable: true })
   async updateProfileTag(@UserEntity() user: User, @Args('tagId', { type: () => Int }) tagId: number) {
     return this._service.updateProfileTag(user.profile.id, tagId)
   }
