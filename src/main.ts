@@ -4,11 +4,15 @@ import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
 import { CorsConfig, NestConfig } from '@feature/core/core/config/config.interface'
 import { graphqlUploadExpress } from 'graphql-upload'
+import { NestExpressApplication } from '@nestjs/platform-express'
+import { join } from 'path'
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule)
+  const app = await NestFactory.create<NestExpressApplication>(AppModule)
   app.use(graphqlUploadExpress({ maxFileSize: 1000000, maxFiles: 10 }))
-
+  app.useStaticAssets(join(__dirname, '..', 'uploads'), {
+    prefix: '/uploads/',
+  })
   // Validation
   app.useGlobalPipes(new ValidationPipe())
 
