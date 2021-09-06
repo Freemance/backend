@@ -18,6 +18,10 @@ export class ProfileResolver {
     @Args() { after, before, first, last }: PaginationArgs,
     @Args({ name: 'query', type: () => String, nullable: true })
     query: string,
+    @Args({ name: 'skills', type: () => [Int], nullable: true })
+    skills: [number],
+    @Args({ name: 'tag', type: () => Int, nullable: true })
+    tag: number,
     @Args({
       name: 'orderBy',
       type: () => ProfileOrder,
@@ -25,7 +29,7 @@ export class ProfileResolver {
     })
     orderBy: ProfileOrder,
   ) {
-    return this._service.filter(after, before, first, last, query, orderBy)
+    return this._service.filter(after, before, first, last, query, orderBy, skills, tag)
   }
 
   @Query(() => Profile, { name: 'GetProfileById', nullable: true })

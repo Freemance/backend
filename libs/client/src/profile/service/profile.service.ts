@@ -5,6 +5,7 @@ import { UpdateBasicProfileInput } from '../dto/update-basicProfile.input'
 @Injectable()
 export class ProfileService {
   constructor(private readonly _service: DataService) {}
+
   private includes = {
     tag: true,
     skills: true,
@@ -15,155 +16,111 @@ export class ProfileService {
     languages: true,
   }
 
-  async filter(after: number, before: number, first: number, last: number, query: string, orderBy) {
+  async filter(
+    after: number,
+    before: number,
+    first: number,
+    last: number,
+    query: string,
+    orderBy,
+    skills: [number],
+    tag: number,
+  ) {
+    const conditions: any = {
+      OR: [
+        {
+          firstName: {
+            contains: query || '',
+            mode: 'insensitive',
+          },
+        },
+        {
+          lastName: {
+            contains: query || '',
+            mode: 'insensitive',
+          },
+        },
+        {
+          slykUser: {
+            contains: query || '',
+            mode: 'insensitive',
+          },
+        },
+        {
+          jobTitle: {
+            contains: query || '',
+            mode: 'insensitive',
+          },
+        },
+        {
+          bio: {
+            contains: query || '',
+            mode: 'insensitive',
+          },
+        },
+        {
+          country: {
+            contains: query || '',
+            mode: 'insensitive',
+          },
+        },
+        {
+          city: {
+            contains: query || '',
+            mode: 'insensitive',
+          },
+        },
+        {
+          address: {
+            contains: query || '',
+            mode: 'insensitive',
+          },
+        },
+        {
+          postalCode: {
+            contains: query || '',
+            mode: 'insensitive',
+          },
+        },
+        {
+          placeOfBirth: {
+            contains: query || '',
+            mode: 'insensitive',
+          },
+        },
+        {
+          phone: {
+            contains: query || '',
+            mode: 'insensitive',
+          },
+        },
+      ],
+      AND: [
+        {
+          skills: {
+            every: {
+              id: { in: skills },
+            },
+          },
+        },
+      ],
+    }
+
+    if (tag) {
+      conditions.AND.push({ tagId: { equals: tag } })
+    }
+
     const a = await findManyCursorConnection(
       (args) =>
         this._service.profile.findMany({
-          where: {
-            OR: [
-              {
-                firstName: {
-                  contains: query || '',
-                  mode: 'insensitive',
-                },
-              },
-              {
-                lastName: {
-                  contains: query || '',
-                  mode: 'insensitive',
-                },
-              },
-              {
-                slykUser: {
-                  contains: query || '',
-                  mode: 'insensitive',
-                },
-              },
-              {
-                jobTitle: {
-                  contains: query || '',
-                  mode: 'insensitive',
-                },
-              },
-              {
-                bio: {
-                  contains: query || '',
-                  mode: 'insensitive',
-                },
-              },
-              {
-                country: {
-                  contains: query || '',
-                  mode: 'insensitive',
-                },
-              },
-              {
-                city: {
-                  contains: query || '',
-                  mode: 'insensitive',
-                },
-              },
-              {
-                address: {
-                  contains: query || '',
-                  mode: 'insensitive',
-                },
-              },
-              {
-                postalCode: {
-                  contains: query || '',
-                  mode: 'insensitive',
-                },
-              },
-              {
-                placeOfBirth: {
-                  contains: query || '',
-                  mode: 'insensitive',
-                },
-              },
-              {
-                phone: {
-                  contains: query || '',
-                  mode: 'insensitive',
-                },
-              },
-            ],
-          },
+          include: { skills: true },
+          where: conditions,
           orderBy: orderBy ? { [orderBy.field]: orderBy.direction } : null,
           ...args,
         }),
       () =>
         this._service.profile.count({
-          where: {
-            OR: [
-              {
-                firstName: {
-                  contains: query || '',
-                  mode: 'insensitive',
-                },
-              },
-              {
-                lastName: {
-                  contains: query || '',
-                  mode: 'insensitive',
-                },
-              },
-              {
-                slykUser: {
-                  contains: query || '',
-                  mode: 'insensitive',
-                },
-              },
-              {
-                jobTitle: {
-                  contains: query || '',
-                  mode: 'insensitive',
-                },
-              },
-              {
-                bio: {
-                  contains: query || '',
-                  mode: 'insensitive',
-                },
-              },
-              {
-                country: {
-                  contains: query || '',
-                  mode: 'insensitive',
-                },
-              },
-              {
-                city: {
-                  contains: query || '',
-                  mode: 'insensitive',
-                },
-              },
-              {
-                address: {
-                  contains: query || '',
-                  mode: 'insensitive',
-                },
-              },
-              {
-                postalCode: {
-                  contains: query || '',
-                  mode: 'insensitive',
-                },
-              },
-              {
-                placeOfBirth: {
-                  contains: query || '',
-                  mode: 'insensitive',
-                },
-              },
-              {
-                phone: {
-                  contains: query || '',
-                  mode: 'insensitive',
-                },
-              },
-            ],
-          },
+          where: conditions,
         }),
       { first, last, before, after },
     )
@@ -206,6 +163,7 @@ export class ProfileService {
       },
     })
   }
+
   async removeProfileSkill(profileId: number, skillId: number) {
     const found = await this.getProfileById(profileId)
     return this._service.profile.update({
