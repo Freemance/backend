@@ -16,10 +16,10 @@ export class Profile extends BaseModel {
   @Field({ description: 'Last name' })
   lastName: string
 
-  @Field(() => ProfileStatus, { description: 'Profile Status ' })
+  @Field(() => ProfileStatus, { description: 'Profile Status' })
   profileStatus: ProfileStatus
 
-  @Field({ description: 'Profile Status ', nullable: true })
+  @Field({ description: 'Avatar name', nullable: true })
   avatar?: string
 
   @Field({ description: 'JobTitle name', nullable: true })

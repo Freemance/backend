@@ -9,6 +9,6 @@ export enum ProfileStatus {
 }
 
 registerEnumType(ProfileStatus, {
-  name: 'Profile Status',
+  name: 'ProfileStatus',
   description: 'Profile Status',
 })
