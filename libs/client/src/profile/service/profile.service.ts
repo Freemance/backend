@@ -153,6 +153,10 @@ export class ProfileService {
 
   async addProfileSkill(profileId: number, skillId: number) {
     const found = await this.getProfileById(profileId)
+    const foundSkill = await this._service.skill.findUnique({ where: { id: skillId } })
+    if (!foundSkill) {
+      throw new NotFoundException(`Skill with id: ${skillId} not found`)
+    }
     return this._service.profile.update({
       include: this.includes,
       where: { id: found.id },
