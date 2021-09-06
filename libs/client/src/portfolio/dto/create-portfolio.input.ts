@@ -21,9 +21,7 @@ export class CreatePortfolioInput {
   @MaxLength(500)
   description: string
 
-  @Field({ description: 'List of screenshts associated to the proyect', nullable: 'items' })
-  @IsArray()
-  @IsNotEmpty()
+  @Field(() => [String], { description: 'List of screenshts associated to the proyect', nullable: true })
   screenshts: [string]
 
   @Field(() => Date, { description: 'Start date associated  to the proyect' })

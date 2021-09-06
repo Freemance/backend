@@ -14,7 +14,7 @@ export class Portfolio extends BaseModel {
   @Field({ description: 'Description associated to the proyect', nullable: true })
   description?: string
 
-  @Field({ description: 'Screenshots associated to the proyect', nullable: true })
+  @Field(() => [String], { description: 'Screenshots associated to the proyect', nullable: true })
   screenshts: [string]
 
   @Field(() => Date, { description: 'Start date associated to the proyect' })
