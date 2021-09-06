@@ -22,6 +22,18 @@ export class ProfileService {
           where: {
             OR: [
               {
+                firstName: {
+                  contains: query || '',
+                  mode: 'insensitive',
+                },
+              },
+              {
+                lastName: {
+                  contains: query || '',
+                  mode: 'insensitive',
+                },
+              },
+              {
                 slykUser: {
                   contains: query || '',
                   mode: 'insensitive',
@@ -84,6 +96,18 @@ export class ProfileService {
         this._service.profile.count({
           where: {
             OR: [
+              {
+                firstName: {
+                  contains: query || '',
+                  mode: 'insensitive',
+                },
+              },
+              {
+                lastName: {
+                  contains: query || '',
+                  mode: 'insensitive',
+                },
+              },
               {
                 slykUser: {
                   contains: query || '',

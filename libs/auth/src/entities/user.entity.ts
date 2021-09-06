@@ -19,13 +19,10 @@ export class User extends BaseModel {
   email: string
 
   @Field()
-  firstName: string
+  username: string
 
   @Field()
-  lastName: string
-
-  @Field()
-  state: boolean
+  active: boolean
 
   @Field()
   role: Role

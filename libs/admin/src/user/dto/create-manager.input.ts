@@ -12,13 +12,8 @@ export class CreateManagerInput {
   @MinLength(8)
   password: string
 
-  @Field({ description: 'Manager firstname' })
+  @Field({ description: 'Manager username' })
   @IsNotEmpty()
   @IsString()
-  firstName: string
-
-  @Field({ description: 'Manager lastName' })
-  @IsNotEmpty()
-  @IsString()
-  lastName: string
+  username: string
 }

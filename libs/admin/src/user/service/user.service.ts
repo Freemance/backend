@@ -3,7 +3,6 @@ import { BadRequestException, ConflictException, Injectable, NotFoundException }
 import { DataService } from '@feature/core'
 import { PasswordService, Role } from '@feature/auth'
 import { ChangePasswordInput } from '../dto/change-password.input'
-import { UpdateUserInput } from '../dto/update-user.input'
 import { findManyCursorConnection } from '@feature/core/data/common/pagination/cursor-conecction'
 import { CreateManagerInput } from '../dto/create-manager.input'
 
@@ -13,20 +12,11 @@ export class UserService {
 
   private readonly includes = { profile: true }
 
-  updateUser(userId: number, newUserData: UpdateUserInput) {
-    return this._service.user.update({
-      data: newUserData,
-      where: {
-        id: userId,
-      },
-    })
-  }
-
   async approveUser(userId: number) {
     const found = await this.getUserById(userId)
     return this._service.user.update({
       data: {
-        state: !found.state,
+        active: !found.active,
       },
       where: {
         id: found.id,
@@ -63,13 +53,7 @@ export class UserService {
           where: {
             OR: [
               {
-                firstName: {
-                  contains: query || '',
-                  mode: 'insensitive',
-                },
-              },
-              {
-                lastName: {
+                username: {
                   contains: query || '',
                   mode: 'insensitive',
                 },
@@ -90,13 +74,7 @@ export class UserService {
           where: {
             OR: [
               {
-                firstName: {
-                  contains: query || '',
-                  mode: 'insensitive',
-                },
-              },
-              {
-                lastName: {
+                username: {
                   contains: query || '',
                   mode: 'insensitive',
                 },
@@ -124,7 +102,7 @@ export class UserService {
           ...input,
           password: hashedPassword,
           role: Role.MANAGER,
-          state: true,
+          active: true,
         },
       })
       return user
@@ -157,8 +135,8 @@ export class UserService {
 
   async getStatistics() {
     const totalUsers = await this._service.user.count({ where: { role: Role.USER } })
-    const usersAproved = await this._service.user.count({ where: { role: Role.USER, state: true } })
-    const usersPending = totalUsers - usersAproved
-    return { totalUsers, usersAproved, usersPending }
+    const usersApproved = await this._service.user.count({ where: { role: Role.USER, active: true } })
+    const usersPending = totalUsers - usersApproved
+    return { totalUsers, usersApproved, usersPending }
   }
 }

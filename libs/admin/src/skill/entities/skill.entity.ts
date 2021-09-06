@@ -1,14 +1,17 @@
 import { Field, HideField, ObjectType } from '@nestjs/graphql'
 
 import { BaseModel } from '@feature/core'
-import { ProfileSkill } from '@feature/client'
+import { Profile } from '@feature/client'
 
 @ObjectType()
 export class Skill extends BaseModel {
   @Field({ description: 'Skill name' })
   name: string
 
+  @Field({ description: 'Skill icon' })
+  icon: string
+
   @HideField()
-  @Field(() => [ProfileSkill], { description: 'Profiles asociated to Skill', nullable: 'items' })
-  profiles: ProfileSkill[]
+  @Field(() => [Profile], { description: 'Profiles asociated to Skill', nullable: 'items' })
+  profiles: Profile[]
 }
