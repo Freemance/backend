@@ -34,16 +34,14 @@ export class AuthService {
           username: payload.username,
           password: hashedPassword,
           role: Role.USER,
-        },
-      })
-      const profile = await this._service.profile.create({
-        data: {
-          slykUser: payload.slykUser,
-          firstName: payload.firstName,
-          lastName: payload.lastName,
-          user: {
-            connect: {
-              id: user.id,
+          profile: {
+            create: {
+              slykUser: payload.slykUser,
+              firstName: payload.firstName,
+              lastName: payload.lastName,
+              socialLinks: {
+                create: {},
+              },
             },
           },
         },
