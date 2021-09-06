@@ -193,18 +193,31 @@ export class ProfileService {
     })
   }
 
-  async updateProfileSkills(profileId: number, skillsId: [{ id: number }]) {
+  async addProfileSkill(profileId: number, skillId: number) {
     const found = await this.getProfileById(profileId)
     return this._service.profile.update({
       include: this.includes,
       where: { id: found.id },
       data: {
         skills: {
-          connect: skillsId,
+          connect: { id: skillId },
         },
       },
     })
   }
+  async removeProfileSkill(profileId: number, skillId: number) {
+    const found = await this.getProfileById(profileId)
+    return this._service.profile.update({
+      include: this.includes,
+      where: { id: found.id },
+      data: {
+        skills: {
+          disconnect: { id: skillId },
+        },
+      },
+    })
+  }
+
   async updateProfileTag(profileId: number, tagId: number) {
     const found = await this.getProfileById(profileId)
     return this._service.profile.update({
