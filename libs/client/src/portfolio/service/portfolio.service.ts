@@ -43,20 +43,28 @@ export class PortfolioService {
   }
   async addPortfolioSkill(id: number, profileId: number, skillId: number) {
     const found = await this.getProfilePortfolioById(id, profileId)
+    const foundSkill = await this._service.skill.findUnique({ where: { id: skillId } })
+    if (!found) {
+      throw new NotFoundException(`Skill with id: ${skillId} not found`)
+    }
     return this._service.portfolio.update({
       where: { id: found.id },
       data: {
-        skills: { connect: { id: skillId } },
+        skills: { connect: { id: foundSkill.id } },
       },
     })
   }
 
   async removePortfolioSkill(id: number, profileId: number, skillId: number) {
     const found = await this.getProfilePortfolioById(id, profileId)
+    const foundSkill = await this._service.skill.findUnique({ where: { id: skillId } })
+    if (!found) {
+      throw new NotFoundException(`Skill with id: ${skillId} not found`)
+    }
     return this._service.portfolio.update({
       where: { id: found.id },
       data: {
-        skills: { disconnect: { id: skillId } },
+        skills: { disconnect: { id: foundSkill.id } },
       },
     })
   }
