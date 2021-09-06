@@ -13,7 +13,7 @@ import { UpdateBasicProfileInput } from '../dto/update-basicProfile.input'
 export class ProfileResolver {
   constructor(private readonly _service: ProfileService) {}
 
-  @Query(() => ProfileConnection, { name: 'ProfileFilter', nullable: true })
+  @Query(() => ProfileConnection, { name: 'profileFilter', nullable: true })
   async filter(
     @Args() { after, before, first, last }: PaginationArgs,
     @Args({ name: 'query', type: () => String, nullable: true })
@@ -32,14 +32,14 @@ export class ProfileResolver {
     return this._service.filter(after, before, first, last, query, orderBy, skills, tag)
   }
 
-  @Query(() => Profile, { name: 'GetProfileById', nullable: true })
+  @Query(() => Profile, { name: 'profileById', nullable: true })
   async getProfileById(@Args('id', { type: () => Int }) id: number) {
     return this._service.getProfileById(id)
   }
 
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles(Role.USER)
-  @Mutation(() => Profile, { name: 'ProfileUpdateBasicInfo', nullable: true })
+  @Mutation(() => Profile, { name: 'profileUpdateBasicInfo', nullable: true })
   async updateProfileBasicInfo(
     @UserEntity() user: User,
     @Args('input') input: UpdateBasicProfileInput,
@@ -50,21 +50,21 @@ export class ProfileResolver {
 
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles(Role.USER)
-  @Mutation(() => Profile, { name: 'ProfileAddSkill', nullable: true })
+  @Mutation(() => Profile, { name: 'profileAddSkill', nullable: true })
   async addProfileSkill(@UserEntity() user: User, @Args('skillId', { type: () => Int }) skillId: number) {
     return this._service.addProfileSkill(user.profile.id, skillId)
   }
 
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles(Role.USER)
-  @Mutation(() => Profile, { name: 'ProfileRemoveSkill', nullable: true })
+  @Mutation(() => Profile, { name: 'profileRemoveSkill', nullable: true })
   async removeProfileSkill(@UserEntity() user: User, @Args('skillId', { type: () => Int }) skillId: number) {
     return this._service.removeProfileSkill(user.profile.id, skillId)
   }
 
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles(Role.USER)
-  @Mutation(() => Profile, { name: 'ProfileUpdateTag', nullable: true })
+  @Mutation(() => Profile, { name: 'profileUpdateTag', nullable: true })
   async updateProfileTag(@UserEntity() user: User, @Args('tagId', { type: () => Int }) tagId: number) {
     return this._service.updateProfileTag(user.profile.id, tagId)
   }

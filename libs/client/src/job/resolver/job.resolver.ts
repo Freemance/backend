@@ -13,22 +13,22 @@ import { JobService } from '../service/job.service'
 export class JobResolver {
   constructor(private readonly _service: JobService) {}
 
-  @Query(() => [Job], { name: 'ProfileJobs', nullable: 'items' })
+  @Query(() => [Job], { name: 'profileJobs', nullable: 'items' })
   getAllProfileJobs(@UserEntity() user: User) {
     return this._service.getAllProfileJobs(user.profile.id)
   }
 
-  @Query(() => Job, { name: 'ProfileJobById', nullable: true })
+  @Query(() => Job, { name: 'profileJobById', nullable: true })
   getProfileJobById(@UserEntity() user: User, @Args('id', { type: () => Int }) id: number) {
     return this._service.getProfileJobById(id, user.profile.id)
   }
 
-  @Mutation(() => Job, { name: 'ProfileCreateJob', nullable: true })
+  @Mutation(() => Job, { name: 'profileCreateJob', nullable: true })
   createProfileJob(@UserEntity() user: User, @Args('input') input: CreateJobInput) {
     return this._service.createProfileJob(user.profile.id, input)
   }
 
-  @Mutation(() => Job, { name: 'ProfileUpdateJob', nullable: true })
+  @Mutation(() => Job, { name: 'profileUpdateJob', nullable: true })
   updateProfileJob(
     @UserEntity() user: User,
     @Args('id', { type: () => Int }) id: number,
@@ -37,7 +37,7 @@ export class JobResolver {
     return this._service.updateProfileJob(id, user.profile.id, input)
   }
 
-  @Mutation(() => Boolean, { name: 'ProfileDeleteJob', nullable: true })
+  @Mutation(() => Boolean, { name: 'profileDeleteJob', nullable: true })
   deleteProfileJob(@UserEntity() user: User, @Args('id', { type: () => Int }) id: number) {
     return this._service.deleteProfileJob(id, user.profile.id)
   }
