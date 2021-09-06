@@ -13,22 +13,22 @@ import { LanguageService } from '../service/language.service'
 export class LanguageResolver {
   constructor(private readonly _service: LanguageService) {}
 
-  @Query(() => [Language], { name: 'ProfileLangs', nullable: 'items' })
+  @Query(() => [Language], { name: 'profileLangs', nullable: 'items' })
   getAllLanguage(@UserEntity() user: User) {
     return this._service.getAllProfileLangs(user.profile.id)
   }
 
-  @Query(() => Language, { name: 'getProfileLangById', nullable: true })
+  @Query(() => Language, { name: 'profileLangById', nullable: true })
   getProfileLangById(@UserEntity() user: User, @Args('id', { type: () => Int }) id: number) {
     return this._service.getProfileLangById(id, user.profile.id)
   }
 
-  @Mutation(() => Language, { name: 'ProfileCreateLang', nullable: true })
+  @Mutation(() => Language, { name: 'profileCreateLang', nullable: true })
   createProfileLang(@UserEntity() user: User, @Args('input') input: CreateLanguageInput) {
     return this._service.createProfileLang(user.profile.id, input)
   }
 
-  @Mutation(() => Language, { name: 'ProfileUpdateLang', nullable: true })
+  @Mutation(() => Language, { name: 'profileUpdateLang', nullable: true })
   updateProfileLang(
     @UserEntity() user: User,
     @Args('id', { type: () => Int }) id: number,
@@ -37,7 +37,7 @@ export class LanguageResolver {
     return this._service.updateProfileLang(id, user.profile.id, input)
   }
 
-  @Mutation(() => Boolean, { name: 'ProfileDeleteLang', nullable: true })
+  @Mutation(() => Boolean, { name: 'profileDeleteLang', nullable: true })
   deleteLanguage(@UserEntity() user: User, @Args('id', { type: () => Int }) id: number) {
     return this._service.deleteProfileLang(id, user.profile.id)
   }

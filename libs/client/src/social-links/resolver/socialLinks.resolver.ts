@@ -12,12 +12,12 @@ import { UpdateSocialLinkInput } from '../dto/update-socialLinks.input'
 export class SocialLinksResolver {
   constructor(private readonly _service: SocialLinksService) {}
 
-  @Query(() => SocialLink, { name: 'ProfileSLink', nullable: true })
+  @Query(() => SocialLink, { name: 'profileSLink', nullable: true })
   getProfileSLinkById(@UserEntity() user: User) {
     return this._service.getProfileSLinkById(user.profile.id)
   }
 
-  @Mutation(() => SocialLink, { name: 'ProfileUpdateSLinks', nullable: true })
+  @Mutation(() => SocialLink, { name: 'profileUpdateSLinks', nullable: true })
   updateProfileSLink(@UserEntity() user: User, @Args('input') input: UpdateSocialLinkInput) {
     return this._service.updateProfileSLink(user.profile.id, input)
   }

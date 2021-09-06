@@ -13,22 +13,22 @@ import { GqlAuthGuard, Role, Roles, RolesGuard, UserEntity, User } from '@featur
 export class PortfolioResolver {
   constructor(private readonly _service: PortfolioService) {}
 
-  @Query(() => [Portfolio], { name: 'ProfilePortfolios', nullable: 'items' })
+  @Query(() => [Portfolio], { name: 'profilePortfolios', nullable: 'items' })
   getProfilePortfolioItems(@UserEntity() user: User) {
     return this._service.getProfilePortfolioItems(user.profile.id)
   }
 
-  @Mutation(() => Portfolio, { name: 'ProfileCreatePortfolio', nullable: true })
+  @Mutation(() => Portfolio, { name: 'profileCreatePortfolio', nullable: true })
   createProfilePortfolio(@UserEntity() user: User, @Args('input') input: CreatePortfolioInput) {
     return this._service.createProfilePortfolio(user.profile.id, input)
   }
 
-  @Query(() => Portfolio, { name: 'ProfilePortfolioById', nullable: true })
+  @Query(() => Portfolio, { name: 'profilePortfolioById', nullable: true })
   getProfilePortfolioById(@UserEntity() user: User, @Args('id', { type: () => Int }) id: number) {
     return this._service.getProfilePortfolioById(id, user.profile.id)
   }
 
-  @Mutation(() => Portfolio, { name: 'ProfileUpdatePortfolio', nullable: true })
+  @Mutation(() => Portfolio, { name: 'profileUpdatePortfolio', nullable: true })
   updateProfilePortfolio(
     @UserEntity() user: User,
     @Args('id', { type: () => Int }) id: number,
@@ -37,7 +37,7 @@ export class PortfolioResolver {
     return this._service.updateProfilePortfolio(id, user.profile.id, input)
   }
 
-  @Mutation(() => Portfolio, { name: 'ProfilePortfolioAddSkill', nullable: true })
+  @Mutation(() => Portfolio, { name: 'profilePortfolioAddSkill', nullable: true })
   addPortfolioSkill(
     @UserEntity() user: User,
     @Args('id', { type: () => Int }) id: number,
@@ -45,7 +45,7 @@ export class PortfolioResolver {
   ) {
     return this._service.addPortfolioSkill(id, user.profile.id, skillId)
   }
-  @Mutation(() => Portfolio, { name: 'ProfilePortfolioRemoveSkill', nullable: true })
+  @Mutation(() => Portfolio, { name: 'profilePortfolioRemoveSkill', nullable: true })
   removePortfolioSkill(
     @UserEntity() user: User,
     @Args('id', { type: () => Int }) id: number,
@@ -54,7 +54,7 @@ export class PortfolioResolver {
     return this._service.removePortfolioSkill(id, user.profile.id, skillId)
   }
 
-  @Mutation(() => Boolean, { name: 'ProfileDeletePortfolio', nullable: true })
+  @Mutation(() => Boolean, { name: 'profileDeletePortfolio', nullable: true })
   deleteProfilePortfolio(@UserEntity() user: User, @Args('id', { type: () => Int }) id: number) {
     return this._service.deleteProfilePortfolio(id, user.profile.id)
   }
