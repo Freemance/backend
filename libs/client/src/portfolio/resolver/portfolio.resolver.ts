@@ -19,12 +19,8 @@ export class PortfolioResolver {
   }
 
   @Mutation(() => Portfolio, { name: 'ProfileCreatePortfolio', nullable: true })
-  createProfilePortfolio(
-    @UserEntity() user: User,
-    @Args('input') input: CreatePortfolioInput,
-    @Args('skillsId', { type: () => [{ id: Int }], description: 'List of skills ids' }) skillsId: [{ id: number }],
-  ) {
-    return this._service.createProfilePortfolio(user.profile.id, input, skillsId)
+  createProfilePortfolio(@UserEntity() user: User, @Args('input') input: CreatePortfolioInput) {
+    return this._service.createProfilePortfolio(user.profile.id, input)
   }
 
   @Query(() => Portfolio, { name: 'ProfilePortfolioById', nullable: true })
@@ -37,9 +33,25 @@ export class PortfolioResolver {
     @UserEntity() user: User,
     @Args('id', { type: () => Int }) id: number,
     @Args('input') input: UpdatePortfolioInput,
-    @Args('skillsId', { type: () => [{ id: Int }], description: 'List of skills ids' }) skillsId: [{ id: number }],
   ) {
-    return this._service.updateProfilePortfolio(id, user.profile.id, input, skillsId)
+    return this._service.updateProfilePortfolio(id, user.profile.id, input)
+  }
+
+  @Mutation(() => Portfolio, { name: 'ProfilePortfolioAddSkill', nullable: true })
+  addPortfolioSkill(
+    @UserEntity() user: User,
+    @Args('id', { type: () => Int }) id: number,
+    @Args('skillId', { type: () => Int }) skillId: number,
+  ) {
+    return this._service.addPortfolioSkill(id, user.profile.id, skillId)
+  }
+  @Mutation(() => Portfolio, { name: 'ProfilePortfolioRemoveSkill', nullable: true })
+  removePortfolioSkill(
+    @UserEntity() user: User,
+    @Args('id', { type: () => Int }) id: number,
+    @Args('skillId', { type: () => Int }) skillId: number,
+  ) {
+    return this._service.removePortfolioSkill(id, user.profile.id, skillId)
   }
 
   @Mutation(() => Boolean, { name: 'ProfileDeletePortfolio', nullable: true })
