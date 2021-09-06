@@ -29,22 +29,25 @@ export class SkillResolver {
     return this._service.filter(after, before, first, last, query, orderBy)
   }
 
-  @Query(() => Skill, { name: 'skill', nullable: true })
+  @Query(() => Skill, { nullable: true })
   getSkillById(@Args('id', { type: () => Int }) id: number) {
     return this._service.getSkillById(id)
   }
+
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   @Mutation(() => Skill, { nullable: true })
   createSkill(@Args('input') input: CreateSkillInput) {
     return this._service.createSkill(input)
   }
+
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   @Mutation(() => Skill, { nullable: true })
   updateSkill(@Args('id', { type: () => Int }) id: number, @Args('input') input: UpdateSkillInput) {
     return this._service.updateSkill(id, input)
   }
+
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   @Mutation(() => Boolean, { nullable: true })

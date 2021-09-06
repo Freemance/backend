@@ -44,7 +44,7 @@ export class PortfolioService {
   async addPortfolioSkill(id: number, profileId: number, skillId: number) {
     const found = await this.getProfilePortfolioById(id, profileId)
     const foundSkill = await this._service.skill.findUnique({ where: { id: skillId } })
-    if (!found) {
+    if (!foundSkill) {
       throw new NotFoundException(`Skill with id: ${skillId} not found`)
     }
     return this._service.portfolio.update({
