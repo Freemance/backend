@@ -13,16 +13,12 @@ export class SocialLinksResolver {
   constructor(private readonly _service: SocialLinksService) {}
 
   @Query(() => SocialLink, { name: 'ProfileSLink', nullable: true })
-  getProfileSLinkById(@UserEntity() user: User, @Args('id', { type: () => Int }) id: number) {
-    return this._service.getProfileSLinkById(id, user.profile.id)
+  getProfileSLinkById(@UserEntity() user: User) {
+    return this._service.getProfileSLinkById(user.profile.id)
   }
 
   @Mutation(() => SocialLink, { name: 'ProfileUpdateSLinks', nullable: true })
-  updateProfileSLink(
-    @UserEntity() user: User,
-    @Args('id', { type: () => Int }) id: number,
-    @Args('input') input: UpdateSocialLinkInput,
-  ) {
-    return this._service.updateProfileSLink(id, user.profile.id, input)
+  updateProfileSLink(@UserEntity() user: User, @Args('input') input: UpdateSocialLinkInput) {
+    return this._service.updateProfileSLink(user.profile.id, input)
   }
 }
