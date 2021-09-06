@@ -46,12 +46,16 @@ export class ProfileResolver {
 
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles(Role.USER)
-  @Mutation(() => Profile, { name: 'UpdateProfileSkills', nullable: true })
-  async updateProfileSkills(
-    @UserEntity() user: User,
-    @Args('skillsId', { type: () => [{ id: Int }] }) skillsId: [{ id: number }],
-  ) {
-    return this._service.updateProfileSkills(user.profile.id, skillsId)
+  @Mutation(() => Profile, { name: 'AddProfileSkill', nullable: true })
+  async addProfileSkill(@UserEntity() user: User, @Args('skillId', { type: () => Int }) skillId: number) {
+    return this._service.addProfileSkill(user.profile.id, skillId)
+  }
+
+  @UseGuards(GqlAuthGuard, RolesGuard)
+  @Roles(Role.USER)
+  @Mutation(() => Profile, { name: 'RemoveProfileSkill', nullable: true })
+  async removeProfileSkill(@UserEntity() user: User, @Args('skillId', { type: () => Int }) skillId: number) {
+    return this._service.removeProfileSkill(user.profile.id, skillId)
   }
 
   @UseGuards(GqlAuthGuard, RolesGuard)
