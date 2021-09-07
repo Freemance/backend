@@ -1,10 +1,24 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common'
+import { Injectable, NotFoundException, UnauthorizedException, UnsupportedMediaTypeException } from '@nestjs/common'
+import { FileUpload } from 'graphql-upload'
+import { createWriteStream, readFile, mkdir } from 'fs'
+import { promisify } from 'util'
+import * as sharp from 'sharp'
+
 import { DataService } from '@feature/core'
 import { CreateMultimediaInput } from '../dto/create-multimedia.input'
 
+const readFileAsyc = promisify(readFile)
 @Injectable()
 export class MultimediaService {
-  constructor(private readonly _service: DataService) {}
+  private readonly sizes: string[]
+  constructor(private readonly _service: DataService) {
+    this.sizes = ['150X150', '600X600', '740X560', '1024X1024', '1900X600']
+    this.sizes.forEach((size) => {
+      mkdir(`uploads/${size}`, { recursive: true }, (err) => {
+        if (err) throw err
+      })
+    })
+  }
 
   async getAllMultimedias() {
     return this._service.multimedia.findMany({ orderBy: { id: 'asc' } })
@@ -17,6 +31,45 @@ export class MultimediaService {
         ...input,
       },
     })
+  }
+
+  async saveMultimedia(user, file: FileUpload, formats: Array<string> = ['jpeg', 'jpg', 'png', 'svh']) {
+    const { mimetype } = file
+    const [, ext] = mimetype.split('/')
+    const filename = `${Math.random().toString(36).substring(2, 12)}.${ext}`
+    if (formats.includes(ext)) {
+      return new Promise(async (resolve, reject) =>
+        file
+          .createReadStream()
+          .pipe(createWriteStream(`uploads/${filename}`))
+          .on('finish', () => {
+            const input: CreateMultimediaInput = {
+              path: `uploads/${filename}`,
+              filename: filename,
+              extension: ext,
+              status: true,
+            }
+            const savedFile = this.createMultimedia(user.profile.id, input)
+
+            if (['jpeg', 'jpg', 'png'].includes(ext)) {
+              this.sizes.forEach((s: string) => {
+                const [size] = s.split('X')
+                readFileAsyc(`uploads/${filename}`)
+                  .then((b: Buffer) => {
+                    return sharp(b)
+                      .resize(+size)
+                      .toFile(`uploads/${s}/${filename}`)
+                  })
+                  .catch(console.error)
+              })
+            }
+            return resolve(savedFile)
+          })
+          .on('error', () => reject(new UnsupportedMediaTypeException('Cant upload file'))),
+      )
+    } else {
+      throw new UnsupportedMediaTypeException('Cant upload file')
+    }
   }
 
   async getMultimediaById(id: number) {
