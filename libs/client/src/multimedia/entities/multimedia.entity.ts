@@ -7,22 +7,19 @@ export class Multimedia extends BaseModel {
   created_by: number
 
   @Field({ description: 'Name of the file', nullable: true })
-  file_name?: string
+  filename?: string
 
   @Field({ description: 'Path of the file', nullable: true })
-  file_path?: string
+  path?: string
 
   @Field({ description: 'Size of the file', nullable: true })
-  file_size?: string
+  size?: string
 
   @Field({ description: 'Type of the file', nullable: true })
-  file_type?: string
+  type?: string
 
   @Field({ description: 'Extension of the file', nullable: true })
-  file_extension?: string
-
-  @Field({ description: 'Height of the file', nullable: true })
-  file_height?: string
+  extension?: string
 
   @Field({ description: 'Status of the file ' })
   status: boolean
