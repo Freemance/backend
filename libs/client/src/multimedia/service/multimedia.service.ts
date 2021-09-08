@@ -122,7 +122,6 @@ export class MultimediaService {
   }
 
   deleteFilesInServer(filename: string, extension: string) {
-    console.log(extension)
     if (['jpeg', 'jpg', 'png'].includes(extension)) {
       this.sizes.forEach((s: string) => {
         unlinkSync(`uploads/${s}/${filename}`)

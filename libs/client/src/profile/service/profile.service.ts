@@ -142,19 +142,20 @@ export class ProfileService {
 
   async updateProfileBasicInfo(profileId: number, input: UpdateBasicProfileInput, file: FileUpload) {
     const found = await this.getProfileById(profileId)
-    if (file) await this._multimediaService.saveMultimedia(profileId, file)
-
-    //   if (found.avatar !== null) {
-    //     console.log(found.avatar)
-    //     await this._multimediaService.deleteMultimediaByUser(profileId, found.avatar)
-    //   }
-    // }
-
+    let newAvatar: string = found.avatar
+    if (file) {
+      const { filename } = await this._multimediaService.saveMultimedia(profileId, file)
+      newAvatar = filename
+      if (found.avatar !== null) {
+        await this._multimediaService.deleteMultimediaByUser(profileId, found.avatar)
+      }
+    }
     return this._service.profile.update({
       include: this.includes,
       where: { id: found.id },
       data: {
         ...input,
+        avatar: newAvatar,
       },
     })
   }
