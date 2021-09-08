@@ -26,14 +26,14 @@ export class MultimediaResolver {
     return this._service.getAllMultimedias()
   }
 
-  @UseGuards(RolesGuard)
+  @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles(Role.USER)
   @Mutation(() => Boolean, { name: 'DeleteMultimediaByUser' })
-  deleteMultimediaByUser(@UserEntity() user: User, @Args('id', { type: () => Int }) id: number) {
-    return this._service.deleteMultimediaByUser(id, user.profile.id)
+  deleteMultimediaByUser(@UserEntity() user: User, @Args('filename') filename: string) {
+    return this._service.deleteMultimediaByUser(filename, user.profile.id)
   }
 
-  @UseGuards(RolesGuard)
+  @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   @Mutation(() => Boolean, { name: 'DeleteMultimediaByAdmin' })
   deleteMultimediaByAdmin(@Args('id', { type: () => Int }) id: number) {

@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, UnauthorizedException, UnsupportedMediaTypeException } from '@nestjs/common'
 import { FileUpload } from 'graphql-upload'
-import { createWriteStream, readFile, mkdir } from 'fs'
+import { createWriteStream, readFile, mkdir, unlinkSync } from 'fs'
 import { promisify } from 'util'
 import * as sharp from 'sharp'
 
@@ -33,7 +33,7 @@ export class MultimediaService {
     })
   }
 
-  async saveMultimedia(user, file: FileUpload, formats: Array<string> = ['jpeg', 'jpg', 'png', 'svh']) {
+  async saveMultimedia(user, file: FileUpload, formats: Array<string> = ['jpeg', 'jpg', 'png']) {
     const { mimetype } = file
     const [, ext] = mimetype.split('/')
     const filename = `${Math.random().toString(36).substring(2, 12)}.${ext}`
@@ -50,19 +50,7 @@ export class MultimediaService {
               status: true,
             }
             const savedFile = this.createMultimedia(user.profile.id, input)
-
-            if (['jpeg', 'jpg', 'png'].includes(ext)) {
-              this.sizes.forEach((s: string) => {
-                const [size] = s.split('X')
-                readFileAsyc(`uploads/${filename}`)
-                  .then((b: Buffer) => {
-                    return sharp(b)
-                      .resize(+size)
-                      .toFile(`uploads/${s}/${filename}`)
-                  })
-                  .catch(console.error)
-              })
-            }
+            this.createFilesInServer(filename, ext)
             return resolve(savedFile)
           })
           .on('error', () => reject(new UnsupportedMediaTypeException('Cant upload file'))),
@@ -80,8 +68,16 @@ export class MultimediaService {
     return found
   }
 
-  async deleteMultimediaByUser(id: number, profileId: number) {
-    const found = await this.getMultimediaById(id)
+  async getMultimediaByFilename(filename: string) {
+    const found = await this._service.multimedia.findUnique({ where: { filename: filename } })
+    if (!found) {
+      throw new NotFoundException(`Multimedia with id: ${filename} not found`)
+    }
+    return found
+  }
+
+  async deleteMultimediaByUser(filename: string, profileId: number) {
+    const found = await this.getMultimediaByFilename(filename)
     if (found.createdBy !== profileId) {
       throw new UnauthorizedException()
     }
@@ -90,6 +86,7 @@ export class MultimediaService {
         id: found.id,
       },
     })
+    await this.deleteFilesInServer(found.filename, found.path, found.extension)
     return !!deleted
   }
 
@@ -100,6 +97,31 @@ export class MultimediaService {
         id: found.id,
       },
     })
+    await this.deleteFilesInServer(found.filename, found.path, found.extension)
     return !!deleted
+  }
+
+  async createFilesInServer(filename: string, extension: string) {
+    if (['jpeg', 'jpg', 'png'].includes(extension)) {
+      this.sizes.forEach((s: string) => {
+        const [size] = s.split('X')
+        readFileAsyc(`uploads/${filename}`)
+          .then((b: Buffer) => {
+            return sharp(b)
+              .resize(+size)
+              .toFile(`uploads/${s}/${filename}`)
+          })
+          .catch(console.error)
+      })
+    }
+  }
+
+  deleteFilesInServer(filename: string, path: string, extension: string) {
+    if (['jpeg', 'jpg', 'png'].includes(extension)) {
+      this.sizes.forEach((s: string) => {
+        unlinkSync(`uploads/${s}/${filename}`)
+      })
+    }
+    unlinkSync(path)
   }
 }
