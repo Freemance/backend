@@ -1,11 +1,12 @@
 import { Injectable, NotFoundException, UnauthorizedException, UnsupportedMediaTypeException } from '@nestjs/common'
 import { FileUpload } from 'graphql-upload'
-import { createWriteStream, readFile, mkdir, unlinkSync } from 'fs'
+import { createReadStream, createWriteStream, readFile, mkdir, unlinkSync } from 'fs'
 import { promisify } from 'util'
 import * as sharp from 'sharp'
 
 import { DataService } from '@feature/core'
 import { CreateMultimediaInput } from '../dto/create-multimedia.input'
+import { Multimedia } from '../entities/multimedia.entity'
 
 const readFileAsyc = promisify(readFile)
 @Injectable()
@@ -24,17 +25,12 @@ export class MultimediaService {
     return this._service.multimedia.findMany({ orderBy: { id: 'asc' } })
   }
 
-  async createMultimedia(profileId: number, input: CreateMultimediaInput) {
-    return this._service.multimedia.create({
-      data: {
-        createdBy: profileId,
-        ...input,
-      },
-    })
-  }
-
-  async saveMultimedia(user, file: FileUpload, formats: Array<string> = ['jpeg', 'jpg', 'png']) {
-    const { mimetype } = file
+  async saveMultimedia(
+    profileId: number,
+    file: FileUpload,
+    formats: Array<string> = ['jpeg', 'jpg', 'png'],
+  ): Promise<string> {
+    const { mimetype } = await file
     const [, ext] = mimetype.split('/')
     const filename = `${Math.random().toString(36).substring(2, 12)}.${ext}`
     if (formats.includes(ext)) {
@@ -49,15 +45,24 @@ export class MultimediaService {
               extension: ext,
               status: true,
             }
-            const savedFile = this.createMultimedia(user.profile.id, input)
+            this.createMultimedia(profileId, input)
             this.createFilesInServer(filename, ext)
-            return resolve(savedFile)
+            return resolve(filename)
           })
           .on('error', () => reject(new UnsupportedMediaTypeException('Cant upload file'))),
       )
     } else {
       throw new UnsupportedMediaTypeException('Cant upload file')
     }
+  }
+
+  async createMultimedia(profileId: number, input: CreateMultimediaInput): Promise<Multimedia> {
+    return this._service.multimedia.create({
+      data: {
+        ...input,
+        createdBy: profileId,
+      },
+    })
   }
 
   async getMultimediaById(id: number) {
@@ -76,7 +81,7 @@ export class MultimediaService {
     return found
   }
 
-  async deleteMultimediaByUser(filename: string, profileId: number) {
+  async deleteMultimediaByUser(profileId: number, filename: string) {
     const found = await this.getMultimediaByFilename(filename)
     if (found.createdBy !== profileId) {
       throw new UnauthorizedException()
@@ -86,7 +91,7 @@ export class MultimediaService {
         id: found.id,
       },
     })
-    await this.deleteFilesInServer(found.filename, found.path, found.extension)
+    await this.deleteFilesInServer(found.filename, found.extension)
     return !!deleted
   }
 
@@ -97,7 +102,7 @@ export class MultimediaService {
         id: found.id,
       },
     })
-    await this.deleteFilesInServer(found.filename, found.path, found.extension)
+    await this.deleteFilesInServer(found.filename, found.extension)
     return !!deleted
   }
 
@@ -116,12 +121,13 @@ export class MultimediaService {
     }
   }
 
-  deleteFilesInServer(filename: string, path: string, extension: string) {
+  deleteFilesInServer(filename: string, extension: string) {
+    console.log(extension)
     if (['jpeg', 'jpg', 'png'].includes(extension)) {
       this.sizes.forEach((s: string) => {
         unlinkSync(`uploads/${s}/${filename}`)
       })
     }
-    unlinkSync(path)
+    unlinkSync(`uploads/${filename}`)
   }
 }

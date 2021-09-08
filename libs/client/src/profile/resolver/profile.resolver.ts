@@ -8,6 +8,7 @@ import { Profile } from '../entities/profile.entity'
 import { ProfileConnection } from '../entities/profile-connection.model'
 import { ProfileService } from '../service/profile.service'
 import { UpdateBasicProfileInput } from '../dto/update-basicProfile.input'
+import { FileUpload, GraphQLUpload } from 'graphql-upload'
 
 @Resolver(() => Profile)
 export class ProfileResolver {
@@ -40,12 +41,8 @@ export class ProfileResolver {
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles(Role.USER)
   @Mutation(() => Profile, { name: 'profileUpdateBasicInfo', nullable: true })
-  async updateProfileBasicInfo(
-    @UserEntity() user: User,
-    @Args('input') input: UpdateBasicProfileInput,
-    @Args('avatar') avatar?: string,
-  ) {
-    return this._service.updateProfileBasicInfo(user.profile.id, input, avatar)
+  async updateProfileBasicInfo(@UserEntity() user: User, @Args('input') input: UpdateBasicProfileInput) {
+    return this._service.updateProfileBasicInfo(user.profile.id, input)
   }
 
   @UseGuards(GqlAuthGuard, RolesGuard)

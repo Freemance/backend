@@ -6,5 +6,6 @@ import { MultimediaService } from './service/multimedia.service'
 @Module({
   imports: [DataModule],
   providers: [MultimediaResolver, MultimediaService],
+  exports: [MultimediaService],
 })
 export class MultimediaModule {}

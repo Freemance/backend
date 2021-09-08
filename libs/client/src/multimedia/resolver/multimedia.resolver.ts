@@ -18,7 +18,7 @@ export class MultimediaResolver {
     @Args({ name: 'file', type: () => GraphQLUpload })
     file: FileUpload,
   ) {
-    return this._service.saveMultimedia(user, file)
+    return this._service.saveMultimedia(user.profile.id, file)
   }
 
   @Query(() => [Multimedia], { name: 'GetAllMultimedias' })
@@ -30,7 +30,7 @@ export class MultimediaResolver {
   @Roles(Role.USER)
   @Mutation(() => Boolean, { name: 'DeleteMultimediaByUser' })
   deleteMultimediaByUser(@UserEntity() user: User, @Args('filename') filename: string) {
-    return this._service.deleteMultimediaByUser(filename, user.profile.id)
+    return this._service.deleteMultimediaByUser(user.profile.id, filename)
   }
 
   @UseGuards(GqlAuthGuard, RolesGuard)

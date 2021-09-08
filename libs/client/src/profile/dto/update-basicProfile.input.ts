@@ -1,5 +1,6 @@
 import { InputType, Field } from '@nestjs/graphql'
 import { IsDate, IsOptional, IsString, MaxLength } from 'class-validator'
+import { GraphQLUpload, FileUpload } from 'graphql-upload'
 
 @InputType()
 export class UpdateBasicProfileInput {
@@ -14,6 +15,10 @@ export class UpdateBasicProfileInput {
   @MaxLength(550)
   @IsOptional()
   lastName?: string
+
+  @Field(() => GraphQLUpload, { description: 'Avatar file', nullable: true })
+  @IsOptional()
+  avatar?: FileUpload
 
   @Field({ description: 'JobTitle name', nullable: true })
   @IsString()

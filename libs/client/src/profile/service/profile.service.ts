@@ -1,10 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { DataService, findManyCursorConnection } from '@feature/core'
 import { UpdateBasicProfileInput } from '../dto/update-basicProfile.input'
+import { MultimediaService } from '@feature/client/multimedia'
 
 @Injectable()
 export class ProfileService {
-  constructor(private readonly _service: DataService) {}
+  constructor(private readonly _service: DataService, private readonly _multimediaService: MultimediaService) {}
 
   private includes = {
     tag: true,
@@ -138,15 +139,28 @@ export class ProfileService {
     return found
   }
 
-  async updateProfileBasicInfo(profileId: number, input: UpdateBasicProfileInput, avatar?: string) {
+  async updateProfileBasicInfo(profileId: number, input: UpdateBasicProfileInput) {
     const found = await this.getProfileById(profileId)
+    let newAvatar = found.avatar
+    if (input.avatar !== null) {
+      let PromiseAvatar = await this._multimediaService.saveMultimedia(profileId, input.avatar)
+
+      console.log(newAvatar)
+      console.log(PromiseAvatar)
+    }
+
+    //   if (found.avatar !== null) {
+    //     console.log(found.avatar)
+    //     await this._multimediaService.deleteMultimediaByUser(profileId, found.avatar)
+    //   }
+    // }
 
     return this._service.profile.update({
       include: this.includes,
       where: { id: found.id },
       data: {
         ...input,
-        avatar: avatar ? avatar : found.avatar,
+        avatar: newAvatar,
       },
     })
   }
