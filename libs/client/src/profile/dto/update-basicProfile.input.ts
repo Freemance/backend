@@ -16,10 +16,6 @@ export class UpdateBasicProfileInput {
   @IsOptional()
   lastName?: string
 
-  @Field(() => GraphQLUpload, { description: 'Avatar file', nullable: true })
-  @IsOptional()
-  avatar?: FileUpload
-
   @Field({ description: 'JobTitle name', nullable: true })
   @IsString()
   @MaxLength(350)

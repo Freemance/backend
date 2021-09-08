@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common'
 import { DataService, findManyCursorConnection } from '@feature/core'
 import { UpdateBasicProfileInput } from '../dto/update-basicProfile.input'
 import { MultimediaService } from '@feature/client/multimedia'
+import { FileUpload } from 'graphql-upload'
 
 @Injectable()
 export class ProfileService {
@@ -139,15 +140,9 @@ export class ProfileService {
     return found
   }
 
-  async updateProfileBasicInfo(profileId: number, input: UpdateBasicProfileInput) {
+  async updateProfileBasicInfo(profileId: number, input: UpdateBasicProfileInput, file: FileUpload) {
     const found = await this.getProfileById(profileId)
-    let newAvatar = found.avatar
-    if (input.avatar !== null) {
-      let PromiseAvatar = await this._multimediaService.saveMultimedia(profileId, input.avatar)
-
-      console.log(newAvatar)
-      console.log(PromiseAvatar)
-    }
+    if (file) await this._multimediaService.saveMultimedia(profileId, file)
 
     //   if (found.avatar !== null) {
     //     console.log(found.avatar)
@@ -160,7 +155,6 @@ export class ProfileService {
       where: { id: found.id },
       data: {
         ...input,
-        avatar: newAvatar,
       },
     })
   }

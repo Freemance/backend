@@ -41,8 +41,13 @@ export class ProfileResolver {
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles(Role.USER)
   @Mutation(() => Profile, { name: 'profileUpdateBasicInfo', nullable: true })
-  async updateProfileBasicInfo(@UserEntity() user: User, @Args('input') input: UpdateBasicProfileInput) {
-    return this._service.updateProfileBasicInfo(user.profile.id, input)
+  async updateProfileBasicInfo(
+    @UserEntity() user: User,
+    @Args('input') input: UpdateBasicProfileInput,
+    @Args({ name: 'file', type: () => GraphQLUpload, nullable: true })
+    file: FileUpload,
+  ) {
+    return this._service.updateProfileBasicInfo(user.profile.id, input, file)
   }
 
   @UseGuards(GqlAuthGuard, RolesGuard)
