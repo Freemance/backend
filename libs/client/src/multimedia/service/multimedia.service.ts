@@ -29,7 +29,7 @@ export class MultimediaService {
     profileId: number,
     file: FileUpload,
     formats: Array<string> = ['jpeg', 'jpg', 'png'],
-  ): Promise<string> {
+  ): Promise<Multimedia> {
     const { mimetype } = await file
     const [, ext] = mimetype.split('/')
     const filename = `${Math.random().toString(36).substring(2, 12)}.${ext}`
@@ -38,16 +38,16 @@ export class MultimediaService {
         file
           .createReadStream()
           .pipe(createWriteStream(`uploads/${filename}`))
-          .on('finish', () => {
+          .on('finish', async () => {
             const input: CreateMultimediaInput = {
               path: `uploads/${filename}`,
               filename: filename,
               extension: ext,
               status: true,
             }
-            this.createMultimedia(profileId, input)
-            this.createFilesInServer(filename, ext)
-            return resolve(filename)
+            const multimedia = await this.createMultimedia(profileId, input)
+            await this.createFilesInServer(filename, ext)
+            return resolve(multimedia)
           })
           .on('error', () => reject(new UnsupportedMediaTypeException('Cant upload file'))),
       )
