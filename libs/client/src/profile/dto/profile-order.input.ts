@@ -5,6 +5,8 @@ export enum ProfileOrderField {
   id = 'id',
   createdAt = 'createdAt',
   updatedAt = 'updatedAt',
+  firstName = 'firstName',
+  lastName = 'lastName',
   slykUser = 'slykUser',
   jobTitle = 'jobTitle',
   bio = 'bio',

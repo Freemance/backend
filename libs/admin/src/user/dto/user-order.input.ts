@@ -5,8 +5,7 @@ export enum UserOrderField {
   id = 'id',
   createdAt = 'createdAt',
   updatedAt = 'updatedAt',
-  firstName = 'firstName',
-  lastName = 'lastName',
+  username = 'username',
   email = 'email',
   state = 'state',
 }
