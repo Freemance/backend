@@ -56,6 +56,7 @@ export class MultimediaService {
       throw new UnsupportedMediaTypeException('Cant upload file')
     }
   }
+
   async saveMultimedias(profileId: number, files: [FileUpload]) {
     return Promise.all(
       files.map(async (file: FileUpload) => {
@@ -63,6 +64,7 @@ export class MultimediaService {
       }),
     )
   }
+
   async createMultimedia(profileId: number, input: CreateMultimediaInput): Promise<Multimedia> {
     return this._service.multimedia.create({
       data: {

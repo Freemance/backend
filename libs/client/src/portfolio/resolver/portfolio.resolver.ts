@@ -39,8 +39,10 @@ export class PortfolioResolver {
     @UserEntity() user: User,
     @Args('id', { type: () => Int }) id: number,
     @Args('input') input: UpdatePortfolioInput,
+    @Args({ name: 'files', type: () => [GraphQLUpload], nullable: true })
+    files: [FileUpload],
   ) {
-    return this._service.updateProfilePortfolio(id, user.profile.id, input)
+    return this._service.updateProfilePortfolio(id, user.profile.id, input, files)
   }
 
   @Mutation(() => Portfolio, { name: 'profilePortfolioAddSkill', nullable: true })

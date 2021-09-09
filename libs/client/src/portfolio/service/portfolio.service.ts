@@ -43,13 +43,19 @@ export class PortfolioService {
     })
   }
 
-  async updateProfilePortfolio(id: number, profileId: number, input: UpdatePortfolioInput) {
+  async updateProfilePortfolio(id: number, profileId: number, input: UpdatePortfolioInput, files: [FileUpload]) {
     const found = await this.getProfilePortfolioById(id, profileId)
+    let screenshts: Array<string> = found.screenshts
+    if (files && files.length > 0) {
+      const multimedias = await this._multimediaService.saveMultimedias(profileId, files)
+      screenshts = [...screenshts, ...multimedias.map((m) => m.filename)]
+    }
     return this._service.portfolio.update({
       where: { id: found.id },
-      data: { ...input },
+      data: { ...input, screenshts: screenshts },
     })
   }
+
   async addPortfolioSkill(id: number, profileId: number, skillId: number) {
     const found = await this.getProfilePortfolioById(id, profileId)
     const foundSkill = await this._service.skill.findUnique({ where: { id: skillId } })
