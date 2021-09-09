@@ -31,13 +31,13 @@ export class MultimediaService {
     formats: Array<string> = ['image/svg+xml', 'image/png', 'image/jpeg'],
   ): Promise<Multimedia> {
     const extensions: any = { 'image/svg+xml': 'svg', 'image/png': 'png', 'image/jpeg': 'jpg' }
-    const { mimetype } = await file
+    const { mimetype, createReadStream } = await file
+    const stream = createReadStream()
     const ext = extensions[mimetype]
     const filename = `${Math.random().toString(36).substring(2, 12)}.${ext}`
     if (formats.includes(mimetype)) {
       return new Promise(async (resolve, reject) =>
-        file
-          .createReadStream()
+        stream
           .pipe(createWriteStream(`uploads/${filename}`))
           .on('finish', async () => {
             const input: CreateMultimediaInput = {
@@ -56,7 +56,13 @@ export class MultimediaService {
       throw new UnsupportedMediaTypeException('Cant upload file')
     }
   }
-
+  async saveMultimedias(profileId: number, files: [FileUpload]) {
+    return Promise.all(
+      files.map(async (file: FileUpload) => {
+        return this.saveMultimedia(profileId, file)
+      }),
+    )
+  }
   async createMultimedia(profileId: number, input: CreateMultimediaInput): Promise<Multimedia> {
     return this._service.multimedia.create({
       data: {
