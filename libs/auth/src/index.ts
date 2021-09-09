@@ -14,6 +14,7 @@ export * from './guards/gql-auth.guard'
 export * from './guards/roles.guard'
 
 export * from './service/password.service'
+export * from './service/email.service'
 export * from './service/auth.service'
 export * from './resolver/auth.resolver'
 

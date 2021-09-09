@@ -14,6 +14,8 @@ import { PasswordService } from './password.service'
 import { SignupInput } from '../dto/signup.input'
 import { Token } from '../entities/token.model'
 import { Role } from '../entities/user.entity'
+import { PasswordResets } from '../entities/passwordResets.entity'
+import { EmailService } from './email.service'
 
 @Injectable()
 export class AuthService {
@@ -22,10 +24,19 @@ export class AuthService {
     private readonly _jwtService: JwtService,
     private readonly _passwordService: PasswordService,
     private readonly _configService: ConfigService,
+    private readonly _emailService: EmailService,
   ) {}
 
   async createUser(payload: SignupInput): Promise<Token> {
     const hashedPassword = await this._passwordService.hashPassword(payload.password)
+
+    const confirmToken = this._jwtService.sign(
+      { email: payload.email },
+      {
+        secret: this._configService.get('JWT_CONFIRM_SECRET'),
+        expiresIn: '15m',
+      },
+    )
 
     try {
       const user = await this._service.user.create({
@@ -34,6 +45,7 @@ export class AuthService {
           username: payload.username,
           password: hashedPassword,
           role: Role.USER,
+          token: confirmToken,
           profile: {
             create: {
               slykUser: payload.slykUser,
@@ -46,6 +58,8 @@ export class AuthService {
           },
         },
       })
+
+      this._emailService.verifyRequest(user, confirmToken)
 
       return this.generateTokens({
         userId: user.id,
@@ -71,7 +85,7 @@ export class AuthService {
     if (!passwordValid) {
       throw new BadRequestException('Invalid password')
     }
-    if ((loginAsManager && user.role === Role.USER) || (!loginAsManager && user.role !== Role.USER)) {
+    if ((loginAsManager && user.role === Role.USER) || (!loginAsManager && user.role !== Role.USER) || !user.active) {
       throw new UnauthorizedException('Unauthorized')
     }
 
@@ -81,7 +95,7 @@ export class AuthService {
   }
 
   validateUser(userId: number): Promise<User> {
-    return this._service.user.findUnique({ where: { id: userId }, include: { profile: true } })
+    return this._service.user.findFirst({ where: { id: userId, active: true }, include: { profile: true } })
   }
 
   getUserFromToken(token: string): Promise<User> {
@@ -119,6 +133,101 @@ export class AuthService {
       })
     } catch (e) {
       throw new UnauthorizedException()
+    }
+  }
+
+  async verifyAccount(token: string): Promise<Token> {
+    let user = await this._service.user.findFirst({ where: { token: token, active: false } })
+
+    if (!user) {
+      throw new NotFoundException('This token is not valid')
+    }
+
+    user = await this._service.user.update({
+      data: {
+        active: !user.active,
+      },
+      where: {
+        id: user.id,
+      },
+    })
+    console.log(user)
+
+    return this.generateTokens({
+      userId: user.id,
+    })
+  }
+
+  async resetPassword(token: string, password: string): Promise<Token> {
+    const hashedPassword = await this._passwordService.hashPassword(password)
+    const passwordResets = await this._service.passwordResets.findFirst({ where: { token: token } })
+    if (!passwordResets) {
+      throw new NotFoundException('This token is not valid')
+    }
+    try {
+      const user = await this._service.user.update({
+        data: {
+          password: hashedPassword,
+        },
+        where: {
+          email: passwordResets.email,
+        },
+      })
+
+      await this._service.passwordResets.delete({
+        where: {
+          email: passwordResets.email,
+        },
+      })
+
+      return this.generateTokens({
+        userId: user.id,
+      })
+    } catch (e) {
+      throw new NotFoundException(`No user found for email: ${passwordResets.email}`)
+    }
+  }
+
+  async recoveryPassword(email: string) {
+    const foundUser = await this._service.user.findFirst({ where: { email: email, active: true } })
+    if (!foundUser) throw new NotFoundException(`No user found for email: ${email}`)
+    const tokenModel = await this.createPasswordResetToken(email)
+    await this._emailService.resetPassword(foundUser, tokenModel.token)
+    return true
+  }
+
+  async createPasswordResetToken(email: string): Promise<PasswordResets> {
+    let passwordReset = await this._service.passwordResets.findUnique({ where: { email: email } })
+    if (passwordReset && (new Date().getTime() - passwordReset.timestamp.getTime()) / 60000 < 2) {
+      throw new NotFoundException(`Recently send email: ${email}`)
+    } else {
+      passwordReset = await this._service.passwordResets.upsert({
+        where: {
+          email: email,
+        },
+        update: {
+          token: this._jwtService.sign(
+            { email: email },
+            {
+              secret: this._configService.get('JWT_CONFIRM_SECRET'),
+              expiresIn: '15m',
+            },
+          ),
+          timestamp: new Date(),
+        },
+        create: {
+          email: email,
+          token: this._jwtService.sign(
+            { email: email },
+            {
+              secret: this._configService.get('JWT_CONFIRM_SECRET'),
+              expiresIn: '15m',
+            },
+          ),
+          timestamp: new Date(),
+        },
+      })
+      return passwordReset
     }
   }
 }

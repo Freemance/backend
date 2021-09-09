@@ -4,7 +4,7 @@ import { PassportModule } from '@nestjs/passport'
 import { ConfigService } from '@nestjs/config'
 import { DataModule } from '@feature/core'
 import { SecurityConfig } from '@feature/core/core/config/config.interface'
-import { RolesGuard, AuthResolver, AuthService, JwtStrategy, GqlAuthGuard, PasswordService } from '.'
+import { RolesGuard, AuthResolver, AuthService, JwtStrategy, GqlAuthGuard, PasswordService, EmailService } from '.'
 
 @Module({
   imports: [
@@ -23,7 +23,7 @@ import { RolesGuard, AuthResolver, AuthService, JwtStrategy, GqlAuthGuard, Passw
     }),
     DataModule,
   ],
-  providers: [AuthService, AuthResolver, JwtStrategy, GqlAuthGuard, PasswordService, RolesGuard],
+  providers: [AuthService, AuthResolver, JwtStrategy, GqlAuthGuard, PasswordService, RolesGuard, EmailService],
   exports: [GqlAuthGuard, RolesGuard],
 })
 export class AuthModule {}

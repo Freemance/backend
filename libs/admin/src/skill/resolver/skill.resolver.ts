@@ -8,7 +8,8 @@ import { UpdateSkillInput } from '../dto/update-skill.input'
 import { SkillOrder } from '../dto/skill-order.input'
 import { PaginationArgs } from '@feature/core'
 import { UseGuards } from '@nestjs/common'
-import { GqlAuthGuard, Role, Roles, RolesGuard } from '@feature/auth'
+import { GqlAuthGuard, Role, Roles, RolesGuard, User, UserEntity } from '@feature/auth'
+import { FileUpload, GraphQLUpload } from 'graphql-upload'
 
 @Resolver()
 export class SkillResolver {
@@ -37,21 +38,32 @@ export class SkillResolver {
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   @Mutation(() => Skill, { nullable: true })
-  createSkill(@Args('input') input: CreateSkillInput) {
-    return this._service.createSkill(input)
+  createSkill(
+    @UserEntity() user: User,
+    @Args('input') input: CreateSkillInput,
+    @Args({ name: 'file', type: () => GraphQLUpload, nullable: true })
+    file: FileUpload,
+  ) {
+    return this._service.createSkill(user.id, input, file)
   }
 
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   @Mutation(() => Skill, { nullable: true })
-  updateSkill(@Args('id', { type: () => Int }) id: number, @Args('input') input: UpdateSkillInput) {
-    return this._service.updateSkill(id, input)
+  updateSkill(
+    @UserEntity() user: User,
+    @Args('id', { type: () => Int }) id: number,
+    @Args('input') input: UpdateSkillInput,
+    @Args({ name: 'file', type: () => GraphQLUpload, nullable: true })
+    file: FileUpload,
+  ) {
+    return this._service.updateSkill(user.id, id, input, file)
   }
 
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   @Mutation(() => Boolean, { nullable: true })
-  deleteSkill(@Args('id', { type: () => Int }) id: number) {
-    return this._service.deleteSkill(id)
+  deleteSkill(@UserEntity() user: User, @Args('id', { type: () => Int }) id: number) {
+    return this._service.deleteSkill(user.id, id)
   }
 }

@@ -26,6 +26,7 @@ model User {
   password String
   active   Boolean  @default(false)
   role     Role     @default(USER)
+  token    String?
   profile  Profile?
 }
 
@@ -208,4 +209,10 @@ model Language {
 
   profile   Profile? @relation(fields: [profileId], references: [id])
   profileId Int?
+}
+
+model PasswordResets {
+  email String @unique
+  token String
+  timestamp DateTime
 }
