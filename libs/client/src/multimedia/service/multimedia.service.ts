@@ -28,12 +28,13 @@ export class MultimediaService {
   async saveMultimedia(
     profileId: number,
     file: FileUpload,
-    formats: Array<string> = ['jpeg', 'jpg', 'png'],
+    formats: Array<string> = ['image/svg+xml', 'image/png', 'image/jpeg'],
   ): Promise<Multimedia> {
+    const extensions: any = { 'image/svg+xml': 'svg', 'image/png': 'png', 'image/jpeg': 'jpg' }
     const { mimetype } = await file
-    const [, ext] = mimetype.split('/')
+    const ext = extensions[mimetype]
     const filename = `${Math.random().toString(36).substring(2, 12)}.${ext}`
-    if (formats.includes(ext)) {
+    if (formats.includes(mimetype)) {
       return new Promise(async (resolve, reject) =>
         file
           .createReadStream()
@@ -76,7 +77,7 @@ export class MultimediaService {
   async getMultimediaByFilename(filename: string) {
     const found = await this._service.multimedia.findUnique({ where: { filename: filename } })
     if (!found) {
-      throw new NotFoundException(`Multimedia with id: ${filename} not found`)
+      throw new NotFoundException(`Multimedia with filename: ${filename} not found`)
     }
     return found
   }
@@ -107,7 +108,7 @@ export class MultimediaService {
   }
 
   async createFilesInServer(filename: string, extension: string) {
-    if (['jpeg', 'jpg', 'png'].includes(extension)) {
+    if (['jpg', 'png'].includes(extension)) {
       this.sizes.forEach((s: string) => {
         const [size] = s.split('X')
         readFileAsyc(`uploads/${filename}`)
@@ -122,7 +123,7 @@ export class MultimediaService {
   }
 
   deleteFilesInServer(filename: string, extension: string) {
-    if (['jpeg', 'jpg', 'png'].includes(extension)) {
+    if (['jpg', 'png'].includes(extension)) {
       this.sizes.forEach((s: string) => {
         unlinkSync(`uploads/${s}/${filename}`)
       })
