@@ -5,6 +5,7 @@ import { CreatePortfolioInput } from '../dto/create-portfolio.input'
 import { UpdatePortfolioInput } from '../dto/update-portfolio.input'
 import { UseGuards } from '@nestjs/common'
 import { GqlAuthGuard, Role, Roles, RolesGuard, UserEntity, User } from '@feature/auth'
+import { FileUpload, GraphQLUpload } from 'graphql-upload'
 
 @UseGuards(RolesGuard)
 @Roles(Role.USER)
@@ -19,8 +20,13 @@ export class PortfolioResolver {
   }
 
   @Mutation(() => Portfolio, { name: 'profileCreatePortfolio', nullable: true })
-  createProfilePortfolio(@UserEntity() user: User, @Args('input') input: CreatePortfolioInput) {
-    return this._service.createProfilePortfolio(user.profile.id, input)
+  createProfilePortfolio(
+    @UserEntity() user: User,
+    @Args('input') input: CreatePortfolioInput,
+    @Args({ name: 'files', type: () => GraphQLUpload, nullable: true })
+    files: FileUpload[],
+  ) {
+    return this._service.createProfilePortfolio(user.profile.id, input, files)
   }
 
   @Query(() => Portfolio, { name: 'profilePortfolioById', nullable: true })
