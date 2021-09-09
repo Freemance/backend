@@ -69,6 +69,17 @@ export class PortfolioService {
       },
     })
   }
+  async removeProfilePortfolioScreenshot(id: number, profileId: number, filename: string) {
+    const { id: foundId, screenshts } = await this.getProfilePortfolioById(id, profileId)
+    if (screenshts.includes(filename)) {
+      const { filename: foundFilename, extension } = await this._multimediaService.getMultimediaByFilename(filename)
+      await this._multimediaService.deleteFilesInServer(foundFilename, extension)
+      screenshts.splice(screenshts.indexOf(filename), 1)
+      return this._service.portfolio.update({ where: { id: foundId }, data: { screenshts } })
+    } else {
+      throw new NotFoundException(`Screenshot: ${filename} not exist on Portfolio with id: ${id}`)
+    }
+  }
 
   async removePortfolioSkill(id: number, profileId: number, skillId: number) {
     const found = await this.getProfilePortfolioById(id, profileId)

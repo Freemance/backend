@@ -45,6 +45,15 @@ export class PortfolioResolver {
     return this._service.updateProfilePortfolio(id, user.profile.id, input, files)
   }
 
+  @Mutation(() => Portfolio, { name: 'profileRemovePortfolioScreenshot', nullable: true })
+  removeProfilePortfolioScreenshot(
+    @UserEntity() user: User,
+    @Args('id', { type: () => Int }) id: number,
+    @Args('filename') filename: string,
+  ) {
+    return this._service.removeProfilePortfolioScreenshot(id, user.profile.id, filename)
+  }
+
   @Mutation(() => Portfolio, { name: 'profilePortfolioAddSkill', nullable: true })
   addPortfolioSkill(
     @UserEntity() user: User,

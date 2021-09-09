@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, UnauthorizedException, UnsupportedMediaTypeException } from '@nestjs/common'
 import { FileUpload } from 'graphql-upload'
-import { createReadStream, createWriteStream, readFile, mkdir, unlinkSync } from 'fs'
+import { createWriteStream, readFile, mkdir, unlinkSync } from 'fs'
 import { promisify } from 'util'
 import * as sharp from 'sharp'
 
