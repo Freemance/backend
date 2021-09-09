@@ -23,8 +23,8 @@ export class PortfolioResolver {
   createProfilePortfolio(
     @UserEntity() user: User,
     @Args('input') input: CreatePortfolioInput,
-    @Args({ name: 'files', type: () => GraphQLUpload, nullable: true })
-    files: FileUpload[],
+    @Args({ name: 'files', type: () => [GraphQLUpload], nullable: true })
+    files: [FileUpload],
   ) {
     return this._service.createProfilePortfolio(user.profile.id, input, files)
   }

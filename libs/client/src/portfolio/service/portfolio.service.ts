@@ -3,10 +3,12 @@ import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/co
 import { DataService } from '@feature/core'
 import { UpdatePortfolioInput } from '../dto/update-portfolio.input'
 import { CreatePortfolioInput } from '../dto/create-portfolio.input'
+import { MultimediaService } from '@feature/client/multimedia'
+import { FileUpload } from 'graphql-upload'
 
 @Injectable()
 export class PortfolioService {
-  constructor(private readonly _service: DataService) {}
+  constructor(private readonly _service: DataService, private readonly _multimediaService: MultimediaService) {}
 
   async getProfilePortfolioItems(profileId: number) {
     return this._service.portfolio.findMany({ where: { profileId }, orderBy: { id: 'asc' } })
@@ -23,10 +25,17 @@ export class PortfolioService {
     return found
   }
 
-  async createProfilePortfolio(profileId: number, input: CreatePortfolioInput) {
+  async createProfilePortfolio(profileId: number, input: CreatePortfolioInput, files: [FileUpload]) {
+    let screenshts: Array<string> = []
+    if (files && files.length > 0) {
+      const multimedias = await this._multimediaService.saveMultimedias(profileId, files)
+      screenshts = [...multimedias.map((m) => m.filename)]
+    }
+
     return this._service.portfolio.create({
       data: {
         ...input,
+        screenshts: screenshts,
         profile: {
           connect: { id: profileId },
         },
