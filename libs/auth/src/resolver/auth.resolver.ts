@@ -1,4 +1,4 @@
-import { Resolver, Mutation, Args, Parent, ResolveField } from '@nestjs/graphql'
+import { Resolver, Mutation, Args, Parent, ResolveField, Int } from '@nestjs/graphql'
 
 import { LoginInput } from '../dto/login.input'
 import { RefreshTokenInput } from '../dto/refresh-token.input'
@@ -6,6 +6,7 @@ import { SignupInput } from '../dto/signup.input'
 import { Auth } from '../entities/auth.model'
 import { Token } from '../entities/token.model'
 import { AuthService } from '../service/auth.service'
+import { resetPasswordInput } from '../dto/reset-password.input'
 
 @Resolver(() => Auth)
 export class AuthResolver {
@@ -30,6 +31,24 @@ export class AuthResolver {
       refreshToken,
     }
   }
+  @Mutation(() => Auth)
+  async verifyEmail(@Args() { token }: RefreshTokenInput) {
+    const { accessToken, refreshToken } = await this._authService.verifyAccount(token)
+
+    return {
+      accessToken,
+      refreshToken,
+    }
+  }
+  @Mutation(() => Auth)
+  async resetPassword(@Args('data') { token, password }: resetPasswordInput) {
+    const { accessToken, refreshToken } = await this._authService.resetPassword(token, password)
+
+    return {
+      accessToken,
+      refreshToken,
+    }
+  }
 
   @Mutation(() => Auth)
   async loginDashboard(@Args('data') { email, password }: LoginInput) {
@@ -44,6 +63,11 @@ export class AuthResolver {
   @Mutation(() => Token)
   async refreshToken(@Args() { token }: RefreshTokenInput) {
     return this._authService.refreshToken(token)
+  }
+
+  @Mutation(() => Boolean, { nullable: true })
+  recoveryPassword(@Args({ name: 'email', type: () => String }) email: string) {
+    return this._authService.recoveryPassword(email.toLowerCase())
   }
 
   @ResolveField('user')

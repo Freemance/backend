@@ -26,6 +26,7 @@
     "prisma:apply": "yarn prisma:migrate && yarn prisma:generate"
   },
   "dependencies": {
+    "@nestjs-modules/mailer": "^1.6.0",
     "@nestjs/common": "^8.0.0",
     "@nestjs/config": "^1.0.1",
     "@nestjs/core": "^8.0.0",
@@ -43,7 +44,9 @@
     "fs": "^0.0.1-security",
     "graphql": "^15.5.1",
     "graphql-upload": "^12.0.0",
+    "handlebars": "^4.7.7",
     "joi": "^17.4.2",
+    "nodemailer": "^6.6.3",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "reflect-metadata": "^0.1.13",
@@ -59,6 +62,7 @@
     "@types/graphql-upload": "^8.0.7",
     "@types/jest": "^27.0.1",
     "@types/node": "^16.0.0",
+    "@types/nodemailer": "^6.4.4",
     "@types/passport-jwt": "^3.0.6",
     "@types/sharp": "^0.28.6",
     "@types/supertest": "^2.0.11",
