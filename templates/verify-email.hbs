@@ -2,8 +2,8 @@
 <html>
 
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>Simple Transactional Email</title>
     <style>
         /* -------------------------------------
@@ -15,9 +15,10 @@
             -ms-interpolation-mode: bicubic;
             max-width: 100%;
         }
+
         body {
             background-color: #f6f6f6;
-            font-family: sans-serif;
+            font-family: 'Open Sans','Helvetica Neue',Arial,Helvetica,sans-serif;
             -webkit-font-smoothing: antialiased;
             font-size: 14px;
             line-height: 1.4;
@@ -26,17 +27,20 @@
             -ms-text-size-adjust: 100%;
             -webkit-text-size-adjust: 100%;
         }
+
         table {
             border-collapse: separate;
             mso-table-lspace: 0pt;
             mso-table-rspace: 0pt;
             width: 100%;
         }
+
         table td {
-            font-family: sans-serif;
+            font-family: 'Open Sans','Helvetica Neue',Arial,Helvetica,sans-serif;
             font-size: 14px;
             vertical-align: top;
         }
+
         /* -------------------------------------
           BODY & CONTAINER
       ------------------------------------- */
@@ -44,6 +48,7 @@
             background-color: #f6f6f6;
             width: 100%;
         }
+
         /* Set a max-width, and make it display as block so it will automatically stretch to that width, but will also shrink down on a phone or something */
         .container {
             display: block;
@@ -53,6 +58,7 @@
             padding: 10px;
             width: 580px;
         }
+
         /* This should also be a block element, so that it will fill 100% of the .container */
         .content {
             box-sizing: border-box;
@@ -61,6 +67,7 @@
             max-width: 580px;
             padding: 10px;
         }
+
         /* -------------------------------------
           HEADER, FOOTER, MAIN
       ------------------------------------- */
@@ -69,20 +76,24 @@
             border-radius: 3px;
             width: 100%;
         }
+
         .wrapper {
             box-sizing: border-box;
             padding: 20px;
         }
+
         .content-block {
             padding-bottom: 10px;
             padding-top: 10px;
         }
+
         .footer {
             clear: both;
             margin-top: 10px;
             text-align: center;
             width: 100%;
         }
+
         .footer td,
         .footer p,
         .footer span,
@@ -91,6 +102,7 @@
             font-size: 12px;
             text-align: center;
         }
+
         /* -------------------------------------
           TYPOGRAPHY
       ------------------------------------- */
@@ -98,62 +110,69 @@
         h2,
         h3,
         h4 {
-            color: #000000;
-            font-family: sans-serif;
-            font-weight: 400;
-            line-height: 1.4;
-            margin: 0;
-            margin-bottom: 30px;
+            color: #4d4d4d;
+            font-family: 'Open Sans','Helvetica Neue',Arial,Helvetica,sans-serif;
         }
+
         h1 {
             font-size: 35px;
             font-weight: 300;
             text-align: center;
             text-transform: capitalize;
         }
+
         p,
         ul,
         ol {
-            font-family: sans-serif;
+            font-family: 'Open Sans','Helvetica Neue',Arial,Helvetica,sans-serif;
             font-size: 14px;
             font-weight: normal;
             margin: 0;
             margin-bottom: 15px;
         }
+
         p li,
         ul li,
         ol li {
             list-style-position: inside;
             margin-left: 5px;
         }
+
         a {
-            color: #3498db;
+            color: #0c0540;
             text-decoration: underline;
+
         }
+
         /* -------------------------------------
           BUTTONS
       ------------------------------------- */
         .btn {
             box-sizing: border-box;
-            width: 100%;
         }
-        .btn>tbody>tr>td {
+
+        .btn > tbody > tr > td {
             padding-bottom: 15px;
+            padding-top: 15px;
         }
+
         .btn table {
             width: auto;
         }
+
         .btn table td {
             background-color: #ffffff;
             border-radius: 5px;
             text-align: center;
+            justify-content: center;
         }
+
         .btn a {
             background-color: #ffffff;
-            border: solid 1px #3498db;
+            border: solid 1px #0c0540;
             border-radius: 5px;
             box-sizing: border-box;
-            color: #3498db;
+            color: #0c0540;
             cursor: pointer;
             display: inline-block;
             font-size: 14px;
@@ -163,41 +182,56 @@
             text-decoration: none;
             text-transform: capitalize;
         }
+
         .btn-primary table td {
-            background-color: #3498db;
+            background-color: #0c0540;
         }
+
         .btn-primary a {
-            background-color: #3498db;
-            border-color: #3498db;
+            background-color: #0c0540;
+            border-color: #0c0540;
             color: #ffffff;
         }
+
+        .circle {
+            border-radius: 50px;
+        }
+
         /* -------------------------------------
           OTHER STYLES THAT MIGHT BE USEFUL
       ------------------------------------- */
         .last {
             margin-bottom: 0;
         }
+
         .first {
             margin-top: 0;
         }
+
         .align-center {
             text-align: center;
         }
+
         .align-right {
             text-align: right;
         }
+
         .align-left {
             text-align: left;
         }
+
         .clear {
             clear: both;
         }
+
         .mt0 {
             margin-top: 0;
         }
+
         .mb0 {
             margin-bottom: 0;
         }
+
         .preheader {
             color: transparent;
             display: none;
@@ -210,14 +244,17 @@
             visibility: hidden;
             width: 0;
         }
+
         .powered-by a {
             text-decoration: none;
         }
+
         hr {
             border: 0;
             border-bottom: 1px solid #f6f6f6;
             margin: 20px 0;
         }
+
         /* -------------------------------------
           RESPONSIVE AND MOBILE FRIENDLY STYLES
       ------------------------------------- */
@@ -226,6 +263,7 @@
                 font-size: 28px !important;
                 margin-bottom: 10px !important;
             }
+
             table[class=body] p,
             table[class=body] ul,
             table[class=body] ol,
@@ -234,34 +272,28 @@
             table[class=body] a {
                 font-size: 16px !important;
             }
+
             table[class=body] .wrapper,
             table[class=body] .article {
                 padding: 10px !important;
             }
+
             table[class=body] .content {
                 padding: 0 !important;
             }
+
             table[class=body] .container {
                 padding: 0 !important;
-                width: 100% !important;
+               /* width: 100% !important;*/
             }
+
             table[class=body] .main {
                 border-left-width: 0 !important;
                 border-radius: 0 !important;
                 border-right-width: 0 !important;
             }
-            table[class=body] .btn table {
-                width: 100% !important;
-            }
-            table[class=body] .btn a {
-                width: 100% !important;
-            }
-            table[class=body] .img-responsive {
-                height: auto !important;
-                max-width: 100% !important;
-                width: auto !important;
-            }
         }
+
         /* -------------------------------------
           PRESERVE THESE STYLES IN THE HEAD
       ------------------------------------- */
@@ -269,6 +301,7 @@
             .ExternalClass {
                 width: 100%;
             }
+
             .ExternalClass,
             .ExternalClass p,
             .ExternalClass span,
@@ -277,6 +310,7 @@
             .ExternalClass div {
                 line-height: 100%;
             }
+
             .apple-link a {
                 color: inherit !important;
                 font-family: inherit !important;
@@ -285,6 +319,7 @@
                 line-height: inherit !important;
                 text-decoration: none !important;
             }
+
             #MessageViewBody a {
                 color: inherit;
                 text-decoration: none;
@@ -293,9 +328,11 @@
                 font-weight: inherit;
                 line-height: inherit;
             }
+
             .btn-primary table td:hover {
                 background-color: #34495e !important;
             }
+
             .btn-primary a:hover {
                 background-color: #34495e !important;
                 border-color: #34495e !important;
@@ -305,7 +342,7 @@
 </head>
 
 <body class="">
-<span class="preheader">This is preheader text. Some clients will show this text as a preview.</span>
+<span class="preheader">Activa tu cuenta en freemance</span>
 <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body">
     <tr>
         <td>&nbsp;</td>
@@ -321,20 +358,30 @@
                             <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                 <tr>
                                     <td>
-                                        <p>Hi there,</p>
-                                        <p>Context Code : {{code}}</p>
-                                        <p>Context Username: {{username}}</p>
+                                        <h1 style="display:block;text-transform:none;color:#223553!important;font-size:22px;font-style:normal;font-weight:bolder;letter-spacing:normal;text-align:center;margin:0;padding: 10px 0px;">¡Hola {{username}}!</h1>
+                                        <img width="115"
+                                             src="https://ik.imagekit.io/htpvzpin7pc/unnamed__1__JLsTRSaGBZ.png?updatedAt=1631404068036"
+                                             style="max-width:115px;padding-top:15px;padding-bottom:5px;
+                                             border-radius:50px;height:auto!important;outline:none;text-decoration:none;display:block;margin:0px auto;border:0;">
+                                        <h3 style="text-align:center;display:block;text-transform:none;font-size:15px;font-style:normal;font-weight:lighter;letter-spacing:normal;margin:0;padding: 10px 0px;"
+                                            align="center">Queremos darte la bienvenida a <strong>FREEMANCE.</strong>
+                                        </h3>
+                                        <h3 style="text-align:center;color:#223553!important;display:block;text-transform:none;font-size:15px;font-style:normal;font-weight:lighter;letter-spacing:normal;margin:0;padding: 10px 0px;"
+                                            align="center">Para comenzar tu Carrera Freelance, activa tu cuenta haciendo
+                                            click en el siguiente botón:
+                                        </h3>
+
                                         <table role="presentation" border="0" cellpadding="0" cellspacing="0"
-                                               class="btn btn-primary">
+                                               class="btn btn-primary circle">
                                             <tbody>
                                             <tr>
-                                                <td align="left">
+                                                <td align="center">
                                                     <table role="presentation" border="0" cellpadding="0"
                                                            cellspacing="0">
                                                         <tbody>
                                                         <tr>
-                                                            <td> <a href="http://htmlemail.io"
-                                                                    target="_blank">Call To Action</a> </td>
+                                                            <td align="center"><a href="{{url}}"
+                                                                   target="_blank">ACTIVAR CUENTA</a></td>
                                                         </tr>
                                                         </tbody>
                                                     </table>
@@ -342,9 +389,9 @@
                                             </tr>
                                             </tbody>
                                         </table>
-                                        <p>This is a really simple email template. Its sole purpose is to get the
-                                            recipient to click the button with no distractions.</p>
-                                        <p>Good luck! Hope it works.</p>
+                                        <h3 style="text-align:center;display:block;text-transform:none;color:#4d4d4d!important;font-family:'Open Sans','Helvetica Neue',Arial,Helvetica,sans-serif;font-size:15px;font-style:normal;font-weight:lighter;line-height:150%;letter-spacing:normal;margin:0;padding: 10px 0px;"
+                                            align="center">¡Te esperamos!<br>
+                                            El Equipo de freemance</h3>
                                     </td>
                                 </tr>
                             </table>
@@ -358,16 +405,10 @@
                 <!-- START FOOTER -->
                 <div class="footer">
                     <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-                        <tr>
-                            <td class="content-block">
-                                <span class="apple-link">Company Inc, 3 Abbey Road, San Francisco CA 94102</span>
-                                <br> Don't like these emails? <a
-                                    href="http://i.imgur.com/CScmqnj.gif">Unsubscribe</a>.
-                            </td>
-                        </tr>
+
                         <tr>
                             <td class="content-block powered-by">
-                                Powered by <a href="http://htmlemail.io">HTMLemail</a>.
+                                Powered by <a href="http://freemance.com">Freemance</a>.
                             </td>
                         </tr>
                     </table>
@@ -380,5 +421,6 @@
     </tr>
 </table>
 </body>
+
 
 </html>

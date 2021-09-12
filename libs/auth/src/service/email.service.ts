@@ -14,7 +14,7 @@ export class EmailService {
         template: './verify-email', // The `.pug` or `.hbs` extension is appended automatically.
         context: {
           // Data to be sent to template engine.
-          code: token,
+          url: 'https://freemance.herokuapp.com/confirm/' + token,
           username: user.username,
         },
       })
@@ -32,7 +32,7 @@ export class EmailService {
         template: './reset-password', // The `.pug` or `.hbs` extension is appended automatically.
         context: {
           // Data to be sent to template engine.
-          code: token,
+          url: 'https://freemance.herokuapp.com/reset-password/' + token,
           username: user.username,
         },
       })
