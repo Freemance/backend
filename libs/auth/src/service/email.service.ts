@@ -40,4 +40,40 @@ export class EmailService {
         console.log(err)
       })
   }
+
+  approvedProfile(user: any): void {
+    this._mailerService
+      .sendMail({
+        to: user.email, // List of receivers email address
+        from: '"Profile Approved" <no-replay@example.com>', // Senders email address
+        subject: 'Profile Approved ✔', // Subject line
+        template: './profile-approved', // The `.pug` or `.hbs` extension is appended automatically.
+        context: {
+          // Data to be sent to template engine.
+          url: 'https://freemance.herokuapp.com',
+          username: user.username,
+        },
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
+  updateProfile(user: any): void {
+    this._mailerService
+      .sendMail({
+        to: user.email, // List of receivers email address
+        from: '"Profile Update" <no-replay@example.com>', // Senders email address
+        subject: 'Profile Update ✔', // Subject line
+        template: './profile-pending', // The `.pug` or `.hbs` extension is appended automatically.
+        context: {
+          // Data to be sent to template engine.
+          url: 'https://freemance.herokuapp.com',
+          username: user.username,
+        },
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
 }

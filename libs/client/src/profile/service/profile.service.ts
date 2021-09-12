@@ -3,10 +3,16 @@ import { DataService, findManyCursorConnection } from '@feature/core'
 import { UpdateBasicProfileInput } from '../dto/update-basicProfile.input'
 import { MultimediaService } from '@feature/client/multimedia'
 import { FileUpload } from 'graphql-upload'
+import { ProfileStatus } from '@feature/client/profile'
+import { EmailService } from '@feature/auth'
 
 @Injectable()
 export class ProfileService {
-  constructor(private readonly _service: DataService, private readonly _multimediaService: MultimediaService) {}
+  constructor(
+    private readonly _service: DataService,
+    private readonly _multimediaService: MultimediaService,
+    private readonly _emailService: EmailService,
+  ) {}
 
   private includes = {
     tag: true,
@@ -105,6 +111,11 @@ export class ProfileService {
             },
           },
         },
+        {
+          profileStatus: {
+            equals: ProfileStatus.APPROVED,
+          },
+        },
       ],
     }
 
@@ -115,7 +126,7 @@ export class ProfileService {
     const a = await findManyCursorConnection(
       (args) =>
         this._service.profile.findMany({
-          include: { skills: true },
+          include: { skills: true, tag: true, user: true },
           where: conditions,
           orderBy: orderBy ? { [orderBy.field]: orderBy.direction } : null,
           ...args,
@@ -160,6 +171,23 @@ export class ProfileService {
     })
   }
 
+  async updateProfileStatus(profileId: number, status: ProfileStatus) {
+    const found = await this.getProfileById(profileId)
+    const user = await this._service.user.findUnique({ where: { id: found.userId } })
+    if (status === ProfileStatus.APPROVED) {
+      this._emailService.approvedProfile(user)
+    } else if (status !== ProfileStatus.DISAPPROVED) {
+      this._emailService.updateProfile(user)
+    }
+    return this._service.profile.update({
+      include: this.includes,
+      where: { id: found.id },
+      data: {
+        profileStatus: status,
+      },
+    })
+  }
+
   async addProfileSkill(profileId: number, skillId: number) {
     const found = await this.getProfileById(profileId)
     const foundSkill = await this._service.skill.findUnique({ where: { id: skillId } })
@@ -191,7 +219,9 @@ export class ProfileService {
   }
 
   async updateProfileTag(profileId: number, tagId: number) {
+    console.log(profileId)
     const found = await this.getProfileById(profileId)
+
     const foundTag = await this._service.tag.findUnique({ where: { id: tagId } })
     if (!foundTag) {
       throw new NotFoundException(`Tag with id: ${tagId} not found`)

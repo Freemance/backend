@@ -9,6 +9,7 @@ import { ProfileConnection } from '../entities/profile-connection.model'
 import { ProfileService } from '../service/profile.service'
 import { UpdateBasicProfileInput } from '../dto/update-basicProfile.input'
 import { FileUpload, GraphQLUpload } from 'graphql-upload'
+import { ProfileStatus } from '@feature/client/profile'
 
 @Resolver(() => Profile)
 export class ProfileResolver {
@@ -62,6 +63,16 @@ export class ProfileResolver {
   @Mutation(() => Profile, { name: 'profileRemoveSkill', nullable: true })
   async removeProfileSkill(@UserEntity() user: User, @Args('skillId', { type: () => Int }) skillId: number) {
     return this._service.removeProfileSkill(user.profile.id, skillId)
+  }
+
+  @UseGuards(GqlAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  @Mutation(() => Profile, { name: 'profileUpdateStatus', nullable: true })
+  async updateProfileStatus(
+    @Args('profileId', { type: () => Int }) profileId: number,
+    @Args({ name: 'status', type: () => ProfileStatus, nullable: true }) status: ProfileStatus,
+  ) {
+    return this._service.updateProfileStatus(profileId, status)
   }
 
   @UseGuards(GqlAuthGuard, RolesGuard)
