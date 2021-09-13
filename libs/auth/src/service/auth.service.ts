@@ -27,7 +27,7 @@ export class AuthService {
     private readonly _emailService: EmailService,
   ) {}
 
-  async createUser(payload: SignupInput): Promise<Token> {
+  async createUser(payload: SignupInput) {
     const hashedPassword = await this._passwordService.hashPassword(payload.password)
 
     const confirmToken = this._jwtService.sign(
@@ -60,10 +60,6 @@ export class AuthService {
       })
 
       this._emailService.verifyRequest(user, confirmToken)
-
-      return this.generateTokens({
-        userId: user.id,
-      })
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2002') {
         throw new ConflictException(`Email ${payload.email} already used.`)
@@ -71,6 +67,8 @@ export class AuthService {
         throw new Error(e)
       }
     }
+
+    return true
   }
 
   async login(email: string, password: string, loginAsManager = false): Promise<Token> {
@@ -151,7 +149,6 @@ export class AuthService {
         id: user.id,
       },
     })
-    console.log(user)
 
     return this.generateTokens({
       userId: user.id,

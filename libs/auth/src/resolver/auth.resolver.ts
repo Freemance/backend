@@ -12,14 +12,10 @@ import { resetPasswordInput } from '../dto/reset-password.input'
 export class AuthResolver {
   constructor(private readonly _authService: AuthService) {}
 
-  @Mutation(() => Auth)
-  async signup(@Args('data') data: SignupInput) {
+  @Mutation(() => Boolean)
+  signup(@Args('data') data: SignupInput) {
     data.email = data.email.toLowerCase()
-    const { accessToken, refreshToken } = await this._authService.createUser(data)
-    return {
-      accessToken,
-      refreshToken,
-    }
+    return this._authService.createUser(data)
   }
 
   @Mutation(() => Auth)
