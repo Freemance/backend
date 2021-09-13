@@ -72,7 +72,7 @@ export class UserResolver {
 
   @UseGuards(RolesGuard)
   @Roles(Role.ADMIN)
-  @Mutation(() => User, { nullable: true })
+  @Mutation(() => Boolean, { nullable: true })
   deleteUser(@Args('id', { type: () => Int }) id: number) {
     return this._userService.deleteUser(id)
   }

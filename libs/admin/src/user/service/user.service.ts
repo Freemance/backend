@@ -1,14 +1,18 @@
 import { Prisma } from '@prisma/client'
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common'
 import { DataService } from '@feature/core'
-import { PasswordService, Role } from '@feature/auth'
+import { EmailService, PasswordService, Role } from '@feature/auth'
 import { ChangePasswordInput } from '../dto/change-password.input'
 import { findManyCursorConnection } from '@feature/core/data/common/pagination/cursor-conecction'
 import { CreateManagerInput } from '../dto/create-manager.input'
 
 @Injectable()
 export class UserService {
-  constructor(private readonly _service: DataService, private _passwordService: PasswordService) {}
+  constructor(
+    private readonly _service: DataService,
+    private _passwordService: PasswordService,
+    private _emailService: EmailService,
+  ) {}
 
   private readonly includes = { profile: true }
 
@@ -39,10 +43,6 @@ export class UserService {
       },
       where: { id: userId },
     })
-  }
-
-  async getAllUser() {
-    return this._service.user.findMany({ orderBy: { id: 'asc' }, include: this.includes })
   }
 
   async filter(after, before, first, last, query, orderBy) {
@@ -125,12 +125,71 @@ export class UserService {
 
   async deleteUser(id: number) {
     const found = await this.getUserById(id)
-    const deleted = await this._service.user.delete({
-      where: {
-        id: found.id,
-      },
-    })
-    return !!deleted
+    if (found.role === Role.ADMIN) {
+      throw new BadRequestException('Invalid user')
+    }
+    const transactions = []
+    if (found.role === Role.USER) {
+      transactions.push(
+        this._service.multimedia.deleteMany({
+          where: {
+            createdBy: found.id,
+          },
+        }),
+      )
+      transactions.push(
+        this._service.job.deleteMany({
+          where: {
+            profileId: found.profile.id,
+          },
+        }),
+      )
+      transactions.push(
+        this._service.socialLink.deleteMany({
+          where: {
+            profileId: found.profile.id,
+          },
+        }),
+      )
+      transactions.push(
+        this._service.language.deleteMany({
+          where: {
+            profileId: found.profile.id,
+          },
+        }),
+      )
+      transactions.push(
+        this._service.course.deleteMany({
+          where: {
+            profileId: found.profile.id,
+          },
+        }),
+      )
+      transactions.push(
+        this._service.portfolio.deleteMany({
+          where: {
+            profileId: found.profile.id,
+          },
+        }),
+      )
+      transactions.push(
+        this._service.profile.deleteMany({
+          where: {
+            userId: found.id,
+          },
+        }),
+      )
+    }
+    transactions.push(
+      this._service.user.delete({
+        where: {
+          id: found.id,
+        },
+      }),
+    )
+
+    const transaction = await this._service.$transaction(transactions)
+    return !!transaction
   }
 
   async getStatistics() {
