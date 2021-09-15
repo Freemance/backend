@@ -16,6 +16,20 @@ export class UserService {
 
   private readonly includes = { profile: true }
 
+  private includeAll = {
+    profile: {
+      include: {
+        tag: true,
+        skills: true,
+        socialLinks: true,
+        employmentHistory: true,
+        courses: true,
+        portfolioItem: true,
+        languages: true,
+      },
+    },
+  }
+
   async approveUser(userId: number) {
     const found = await this.getUserById(userId)
     return this._service.user.update({
@@ -115,8 +129,8 @@ export class UserService {
     }
   }
 
-  async getUserById(id: number) {
-    const found = await this._service.user.findUnique({ where: { id }, include: this.includes })
+  async getUserById(id: number, all = false) {
+    const found = await this._service.user.findUnique({ where: { id }, include: all ? this.includeAll : this.includes })
     if (!found) {
       throw new NotFoundException(`User with id: ${id} not found`)
     }

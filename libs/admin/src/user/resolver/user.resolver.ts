@@ -4,7 +4,6 @@ import { GqlAuthGuard, Role, User, UserEntity } from '@feature/auth'
 import { RolesGuard } from '@feature/auth/guards/roles.guard'
 import { Roles } from '@feature/auth/decorators/roles.decorator'
 import { UserService } from '../service/user.service'
-import { UpdateUserInput } from '../dto/update-user.input'
 import { UserConnection } from '../entities/user-connection.model'
 import { ChangePasswordInput } from '../dto/change-password.input'
 import { UserOrder } from '../dto/user-order.input'
@@ -18,8 +17,8 @@ export class UserResolver {
   constructor(private readonly _userService: UserService) {}
 
   @Query(() => User, { nullable: true })
-  async me(@UserEntity() user: User): Promise<User> {
-    return user
+  async me(@UserEntity() user: User) {
+    return this._userService.getUserById(user.id, true)
   }
 
   @UseGuards(RolesGuard)
