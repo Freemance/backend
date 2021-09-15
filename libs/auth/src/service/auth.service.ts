@@ -27,6 +27,20 @@ export class AuthService {
     private readonly _emailService: EmailService,
   ) {}
 
+  private includeAll = {
+    profile: {
+      include: {
+        tag: true,
+        skills: true,
+        socialLinks: true,
+        employmentHistory: true,
+        courses: true,
+        portfolioItem: true,
+        languages: true,
+      },
+    },
+  }
+
   async createUser(payload: SignupInput) {
     const hashedPassword = await this._passwordService.hashPassword(payload.password)
 
@@ -98,7 +112,7 @@ export class AuthService {
 
   getUserFromToken(token: string): Promise<User> {
     const id = this._jwtService.decode(token)['userId']
-    return this._service.user.findUnique({ where: { id }, include: { profile: true } })
+    return this._service.user.findUnique({ where: { id }, include: this.includeAll })
   }
 
   generateTokens(payload: { userId: number }): Token {
