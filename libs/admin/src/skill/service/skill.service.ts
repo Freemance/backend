@@ -57,7 +57,11 @@ export class SkillService {
       return skill
     } catch (e) {
       if (icon !== '') {
-        await this._multimediaService.deleteMultimediaByUser(createBy, icon)
+        try {
+          await this._multimediaService.deleteMultimediaByUser(createBy, icon)
+        } catch (em) {
+          console.log(em)
+        }
       }
       if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2002') {
         throw new ConflictException(`Skill ${input.name} already used.`)
@@ -75,7 +79,11 @@ export class SkillService {
       const { filename } = await this._multimediaService.saveMultimedia(createBy, file, ['image/svg+xml'])
       icon = filename
       if (found.icon !== null) {
-        await this._multimediaService.deleteMultimediaByUser(createBy, found.icon)
+        try {
+          await this._multimediaService.deleteMultimediaByUser(createBy, found.icon)
+        } catch (em) {
+          console.log(em)
+        }
       }
     }
 
