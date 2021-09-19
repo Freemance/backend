@@ -8,8 +8,8 @@ export class Skill extends BaseModel {
   @Field({ description: 'Skill name' })
   name: string
 
-  @Field({ description: 'Skill icon', nullable: true })
-  icon?: string
+  @Field(() => [String], { description: 'Skill icon paths', nullable: true })
+  icon: [string]
 
   @HideField()
   @Field(() => [Profile], { description: 'Profiles asociated to Skill', nullable: true })

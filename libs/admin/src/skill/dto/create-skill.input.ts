@@ -1,5 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql'
-import { IsNotEmpty, IsString } from 'class-validator'
+import { IsArray, IsNotEmpty, IsString } from 'class-validator'
 
 @InputType()
 export class CreateSkillInput {
@@ -7,4 +7,7 @@ export class CreateSkillInput {
   @IsNotEmpty()
   @IsString()
   name: string
+
+  @Field(() => [String], { description: 'Skill icon paths', nullable: true })
+  icon: [string]
 }
