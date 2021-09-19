@@ -1,11 +1,10 @@
 import { DataModule } from '@feature/core'
 import { Module } from '@nestjs/common'
 import { SkillResolver, SkillService } from '.'
-import { MultimediaService } from '@feature/client/multimedia'
 
 @Module({
   imports: [DataModule],
-  providers: [SkillService, SkillResolver, MultimediaService],
+  providers: [SkillService, SkillResolver],
   exports: [],
 })
 export class SkillModule {}
