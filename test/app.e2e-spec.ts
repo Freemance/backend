@@ -2,6 +2,9 @@ import { Test, TestingModule } from '@nestjs/testing'
 import { INestApplication } from '@nestjs/common'
 import * as request from 'supertest'
 import { AppModule } from './../src/app.module'
+import initialData from './util/initialData'
+
+const gql = '/graphql'
 
 describe('AppController (e2e)', () => {
   let app: INestApplication
@@ -15,7 +18,35 @@ describe('AppController (e2e)', () => {
     await app.init()
   })
 
-  it('/ (GET)', () => {
-    return request(app.getHttpServer()).get('/').expect(200).expect('Hello World!')
+  describe(gql, () => {
+    describe('filterTags', () => {
+      it('should get the tags connection', () => {
+        return request(app.getHttpServer())
+          .post(gql)
+          .send({
+            query:
+              '{filterTags(orderBy: { direction: asc, field: id }) {' +
+              '    edges {' +
+              '      cursor' +
+              '      node {' +
+              '        id' +
+              '        name' +
+              '      }' +
+              '    }' +
+              '    pageInfo {' +
+              '      endCursor' +
+              '      hasNextPage' +
+              '      hasPreviousPage' +
+              '      startCursor' +
+              '    }' +
+              '   totalCount' +
+              '}}',
+          })
+          .expect(200)
+          .expect((res) => {
+            expect(res.body.data.filterTags).toEqual(initialData().tagConnection)
+          })
+      })
+    })
   })
 })
