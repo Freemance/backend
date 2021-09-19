@@ -66,6 +66,11 @@ export class AuthResolver {
     return this._authService.recoveryPassword(email.toLowerCase())
   }
 
+  @Mutation(() => Boolean, { nullable: true })
+  resentEmailConfirmation(@Args({ name: 'email', type: () => String }) email: string) {
+    return this._authService.resentEmailConfirmation(email.toLowerCase())
+  }
+
   @ResolveField('user')
   async user(@Parent() auth: Auth) {
     return await this._authService.getUserFromToken(auth.accessToken)

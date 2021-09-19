@@ -207,6 +207,29 @@ export class AuthService {
     return true
   }
 
+  async resentEmailConfirmation(email: string) {
+    const foundUser = await this._service.user.findFirst({ where: { email: email, active: false } })
+    if (!foundUser) throw new NotFoundException(`No user found for email: ${email}`)
+    const confirmToken = this._jwtService.sign(
+      { email: email },
+      {
+        secret: this._configService.get('JWT_CONFIRM_SECRET'),
+        expiresIn: '15m',
+      },
+    )
+
+    const user = await this._service.user.update({
+      data: {
+        token: confirmToken,
+      },
+      where: {
+        id: foundUser.id,
+      },
+    })
+    await this._emailService.resetPassword(foundUser, confirmToken)
+    return true
+  }
+
   async createPasswordResetToken(email: string): Promise<PasswordResets> {
     let passwordReset = await this._service.passwordResets.findUnique({ where: { email: email } })
     if (passwordReset && (new Date().getTime() - passwordReset.timestamp.getTime()) / 60000 < 2) {
