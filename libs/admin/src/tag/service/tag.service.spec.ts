@@ -4,21 +4,21 @@ import { DataService } from '@feature/core'
 import { ConflictException, NotFoundException } from '@nestjs/common'
 import { Prisma } from '@prisma/client'
 
-const tagName = 'Java'
+const tagName = 'Java Developer'
 const tagId = 1
 
 const tagArray = [
   { id: tagId, name: tagName },
-  { id: 2, name: 'C++' },
-  { id: 3, name: 'Nestjs' },
+  { id: 2, name: 'Full Stack Developer' },
+  { id: 3, name: 'Front-end Developer' },
 ]
 const tagArrayConnection = {
   edges: [
     { cursor: tagId, node: { id: tagId, name: tagName } },
-    { cursor: 2, node: { id: 2, name: 'C++' } },
-    { cursor: 3, node: { id: 3, name: 'Nestjs' } },
+    { cursor: 2, node: { id: 2, name: 'Full Stack Developer' } },
+    { cursor: 3, node: { id: 3, name: 'Front-end Developer' } },
   ],
-  pageInfo: { endCursor: 3, hasNextPage: false, hasPreviousPage: false, startCursor: 1 },
+  pageInfo: { endCursor: 3, hasNextPage: false, hasPreviousPage: false, startCursor: tagId },
   totalCount: 3,
 }
 
@@ -124,7 +124,7 @@ describe('TagService', () => {
       expect(service.deleteTag(tagId)).resolves.toEqual(true)
     })
 
-    it('should return {deleted: false, message: err.message}', () => {
+    it('should return Error', () => {
       const dbSpy = jest.spyOn(prisma.tag, 'delete').mockRejectedValueOnce(new Error('Bad Delete Method.'))
       expect(service.deleteTag(tagId)).rejects.toEqual(Error('Bad Delete Method.'))
     })
