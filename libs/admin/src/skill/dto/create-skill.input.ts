@@ -7,4 +7,9 @@ export class CreateSkillInput {
   @IsNotEmpty()
   @IsString()
   name: string
+
+  @Field()
+  @IsNotEmpty()
+  @IsString()
+  icon: string
 }

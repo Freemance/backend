@@ -38,13 +38,8 @@ export class SkillResolver {
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   @Mutation(() => Skill, { nullable: true })
-  createSkill(
-    @UserEntity() user: User,
-    @Args('input') input: CreateSkillInput,
-    @Args({ name: 'file', type: () => GraphQLUpload, nullable: true })
-    file: FileUpload,
-  ) {
-    return this._service.createSkill(user.id, input, file)
+  createSkill(@UserEntity() user: User, @Args('input') input: CreateSkillInput) {
+    return this._service.createSkill(user.id, input)
   }
 
   @UseGuards(GqlAuthGuard, RolesGuard)
@@ -54,10 +49,8 @@ export class SkillResolver {
     @UserEntity() user: User,
     @Args('id', { type: () => Int }) id: number,
     @Args('input') input: UpdateSkillInput,
-    @Args({ name: 'file', type: () => GraphQLUpload, nullable: true })
-    file: FileUpload,
   ) {
-    return this._service.updateSkill(user.id, id, input, file)
+    return this._service.updateSkill(user.id, id, input)
   }
 
   @UseGuards(GqlAuthGuard, RolesGuard)
