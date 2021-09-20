@@ -5,10 +5,10 @@ import { Tag } from '../entities/tag.entity'
 import { CreateTagInput } from '../dto/create-tag.input'
 import { UpdateTagInput } from '../dto/update-tag.input'
 import { TagOrder } from '../dto/tag-order.input'
-import { SkillConnection } from '@feature/admin/skill/entities/skill-connection.model'
 import { PaginationArgs } from '@feature/core'
 import { UseGuards } from '@nestjs/common'
 import { GqlAuthGuard, Role, Roles, RolesGuard } from '@feature/auth'
+import { TagConnection } from '../entities/tag-connection.model'
 
 @Resolver(() => Tag)
 export class TagResolver {
@@ -21,7 +21,7 @@ export class TagResolver {
     return this._service.createTag(createTagInput)
   }
 
-  @Query(() => SkillConnection)
+  @Query(() => TagConnection)
   async filterTags(
     @Args() { after, before, first, last }: PaginationArgs,
     @Args({ name: 'query', type: () => String, nullable: true })
