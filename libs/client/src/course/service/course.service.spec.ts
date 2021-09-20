@@ -74,7 +74,7 @@ describe('CourseService', () => {
   })
   describe('GetProfileCourseById', () => {
     it('should return a ProfileCourse', async () => {
-      expect(service.getProfileCourseById(courseId, profileId)).resolves.toEqual(courseArray)
+      await expect(service.getProfileCourseById(courseId, profileId)).resolves.toEqual(oneCourse)
     })
 
     it('should return NotFoundException', () => {
