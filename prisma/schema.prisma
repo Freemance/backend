@@ -99,7 +99,7 @@ model Skill {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   name      String   @unique
-  icon      String?
+  icon      String[]
 
   profiles   Profile[]
   portfolios Portfolio[]

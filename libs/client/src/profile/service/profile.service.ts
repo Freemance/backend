@@ -158,7 +158,11 @@ export class ProfileService {
       const { filename } = await this._multimediaService.saveMultimedia(profileId, file)
       newAvatar = filename
       if (found.avatar !== null) {
-        await this._multimediaService.deleteMultimediaByUser(profileId, found.avatar)
+        try {
+          await this._multimediaService.deleteMultimediaByUser(profileId, found.avatar)
+        } catch (e) {
+          console.log(e)
+        }
       }
     }
     return this._service.profile.update({

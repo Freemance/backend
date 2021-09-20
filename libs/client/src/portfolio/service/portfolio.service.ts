@@ -73,7 +73,11 @@ export class PortfolioService {
     const { id: foundId, screenshts } = await this.getProfilePortfolioById(id, profileId)
     if (screenshts.includes(filename)) {
       const { filename: foundFilename, extension } = await this._multimediaService.getMultimediaByFilename(filename)
-      await this._multimediaService.deleteFilesInServer(foundFilename, extension)
+      try {
+        await this._multimediaService.deleteFilesInServer(foundFilename, extension)
+      } catch (e) {
+        console.log(e)
+      }
       screenshts.splice(screenshts.indexOf(filename), 1)
       return this._service.portfolio.update({ where: { id: foundId }, data: { screenshts } })
     } else {
