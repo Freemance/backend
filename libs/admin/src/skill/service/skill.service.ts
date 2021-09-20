@@ -40,7 +40,7 @@ export class SkillService {
     return found
   }
 
-  public async createSkill(createBy: number, input: CreateSkillInput) {
+  public async createSkill(input: CreateSkillInput) {
     try {
       const skill = await this._service.skill.create({
         data: {
@@ -57,12 +57,12 @@ export class SkillService {
     }
   }
 
-  public async updateSkill(createBy: number, id: number, input: UpdateSkillInput) {
+  public async updateSkill(id: number, input: UpdateSkillInput) {
     const found = await this.getSkillById(id)
     return this._service.skill.update({ where: { id: found.id }, data: { ...input } })
   }
 
-  public async deleteSkill(createBy: number, id: number) {
+  public async deleteSkill(id: number) {
     const found = await this.getSkillById(id)
     const deleted = await this._service.skill.delete({
       where: {

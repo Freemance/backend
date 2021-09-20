@@ -38,25 +38,21 @@ export class SkillResolver {
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   @Mutation(() => Skill, { nullable: true })
-  createSkill(@UserEntity() user: User, @Args('input') input: CreateSkillInput) {
-    return this._service.createSkill(user.id, input)
+  createSkill(@Args('input') input: CreateSkillInput) {
+    return this._service.createSkill(input)
   }
 
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   @Mutation(() => Skill, { nullable: true })
-  updateSkill(
-    @UserEntity() user: User,
-    @Args('id', { type: () => Int }) id: number,
-    @Args('input') input: UpdateSkillInput,
-  ) {
-    return this._service.updateSkill(user.id, id, input)
+  updateSkill(@Args('id', { type: () => Int }) id: number, @Args('input') input: UpdateSkillInput) {
+    return this._service.updateSkill(id, input)
   }
 
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   @Mutation(() => Boolean, { nullable: true })
-  deleteSkill(@UserEntity() user: User, @Args('id', { type: () => Int }) id: number) {
-    return this._service.deleteSkill(user.id, id)
+  deleteSkill(@Args('id', { type: () => Int }) id: number) {
+    return this._service.deleteSkill(id)
   }
 }
