@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { SocialLinksService } from './socialLinks.service'
 import { DataService } from '@feature/core'
+import { NotFoundException } from '@nestjs/common'
 
 const testTwitter1 = 'https://twitter.com/test1'
 const testFacebook1 = 'https://facebook.com/test1'
@@ -69,7 +70,7 @@ const db = {
 
 describe('SocialLinksService', () => {
   let service: SocialLinksService
-  let data: DataService
+  let prisma: DataService
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -83,7 +84,7 @@ describe('SocialLinksService', () => {
     }).compile()
 
     service = module.get<SocialLinksService>(SocialLinksService)
-    data = module.get<DataService>(DataService)
+    prisma = module.get<DataService>(DataService)
   })
 
   it('should be defined', () => {
@@ -91,29 +92,31 @@ describe('SocialLinksService', () => {
   })
 
   describe('getProfileSLinkById', () => {
-    it('should get one SocialLink', async () => {
+    it('should get a single socialLink', async () => {
       expect(service.getProfileSLinkById(profileId)).resolves.toEqual(oneSLink)
+    })
+
+    it('should return NotFoundException', () => {
+      jest.spyOn(prisma.socialLink, 'findFirst').mockReturnValue(undefined)
+      expect(service.getProfileSLinkById(5)).rejects.toThrow(NotFoundException)
     })
   })
 
-  // describe('updateProfileSLink', () => {
-  //   it('should call the update method', async () => {
-  //     const sLink = await service.updateProfileSLink(profileId, {
-  //       twitter: testTwitter1,
-  //       instagram: null,
-  //       linkedin: null,
-  //       facebook: testFacebook1,
-  //       telegram: null,
-  //       whatsapp: null,
-  //       googlePlus: null,
-  //       slack: null,
-  //       github: null,
-  //       youtube: testYouTube1,
-  //       behance: null,
-  //       dribbble: null,
-  //     })
-  //     expect(service.getProfileSLinkById(profileId)).toHaveBeenCalledTimes(1)
-  //     // expect(sLink).toEqual(oneSLink)
-  //   })
-  // })
+  describe('update socialLink', () => {
+    it('it should call the update method', async () => {
+      jest.spyOn(prisma.socialLink, 'findFirst').mockResolvedValue({ ...oneSLink, createdAt: null, updatedAt: null })
+      const slink = await service.updateProfileSLink(profileId, {
+        facebook: testFacebook1,
+        youtube: testYouTube1,
+      })
+      expect(slink).toEqual(oneSLink)
+    })
+
+    it('should return NotFoundException', async () => {
+      jest.spyOn(prisma.socialLink, 'findFirst').mockResolvedValue(undefined)
+      await expect(
+        service.updateProfileSLink(profileId, { facebook: testFacebook1, youtube: testYouTube1 }),
+      ).rejects.toThrow(NotFoundException)
+    })
+  })
 })
