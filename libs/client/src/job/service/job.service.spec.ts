@@ -42,6 +42,18 @@ const jobArray = [
   },
 ]
 
+const secondJob = jobArray[1]
+
+const db = {
+  language: {
+    findUnique: jest.fn().mockResolvedValue(secondJob),
+    findMany: jest.fn().mockResolvedValue(jobArray),
+    update: jest.fn().mockResolvedValue(secondJob),
+    create: jest.fn().mockResolvedValue(secondJob),
+    delete: jest.fn().mockResolvedValue(secondJob),
+  },
+}
+
 describe('JobService', () => {
   let service: JobService
   let prisma: DataService
