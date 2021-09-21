@@ -95,7 +95,7 @@ describe('JobService', () => {
     })
 
     it('should return UnauthorizedException', () => {
-      jest.spyOn(prisma.job, 'findUnique').mockResolvedValue({ ...secondJob, profileId: 2 })
+      jest.spyOn(prisma.job, 'findUnique').mockResolvedValue({ ...secondJob, profileId: 1 })
       expect(service.getProfileJobById(jobId, profileId)).rejects.toThrow(UnauthorizedException)
     })
   })
