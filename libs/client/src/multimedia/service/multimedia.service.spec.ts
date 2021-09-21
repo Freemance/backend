@@ -1,3 +1,4 @@
+import { DataService } from '@feature/core'
 import { Test, TestingModule } from '@nestjs/testing'
 import { MultimediaService } from './multimedia.service'
 
@@ -42,6 +43,7 @@ const multimedia = [
 
 describe('MultimediaService', () => {
   let service: MultimediaService
+  let prisma: DataService
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -49,6 +51,7 @@ describe('MultimediaService', () => {
     }).compile()
 
     service = module.get<MultimediaService>(MultimediaService)
+    prisma = module.get<DataService>(DataService)
   })
 
   it('should be defined', () => {
