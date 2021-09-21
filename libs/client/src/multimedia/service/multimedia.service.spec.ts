@@ -1,4 +1,5 @@
 import { DataService } from '@feature/core'
+import { NotFoundException } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
 import { MultimediaService } from './multimedia.service'
 
@@ -43,8 +44,8 @@ const multimediaArray = [
 
 const secondMultimedia = multimediaArray[1]
 
-const profileId = 1
 const multimediaId = 1
+const profileId = 1
 
 const db = {
   multimedia: {
@@ -82,7 +83,40 @@ describe('MultimediaService', () => {
     })
   })
 
-  it('should be defined', () => {
-    expect(service).toBeDefined()
+  describe('getMultimediaById', () => {
+    it('should get a multimedia', () => {
+      expect(service.getMultimediaById(multimediaId)).resolves.toEqual(secondMultimedia)
+    })
+
+    it('should return NotFoundException', () => {
+      jest.spyOn(prisma.multimedia, 'findUnique').mockResolvedValue(undefined)
+      expect(service.getMultimediaById(8)).rejects.toThrow(NotFoundException)
+    })
+  })
+
+  describe('getMultimediaByFilename', () => {
+    it('should get a multimedia', () => {
+      expect(service.getMultimediaByFilename('My photo 2')).resolves.toEqual(secondMultimedia)
+    })
+
+    it('should return NotFoundException', () => {
+      jest.spyOn(prisma.multimedia, 'findUnique').mockResolvedValue(undefined)
+      expect(service.getMultimediaByFilename('My photo 8')).rejects.toThrow(NotFoundException)
+    })
+  })
+
+  describe('CreateProfileMultimedia', () => {
+    it('should successfully insert a multimedia', () => {
+      expect(service.createMultimedia(profileId, { ...secondMultimedia })).resolves.toEqual(secondMultimedia)
+    })
+  })
+
+  describe('DeleteProfileMultimedia', () => {
+    it('should return true', () => {
+      jest
+        .spyOn(prisma.multimedia, 'findUnique')
+        .mockResolvedValue({ ...secondMultimedia, createdAt: null, updatedAt: null })
+      expect(service.deleteMultimediaByUser(profileId, 'My photo 1')).resolves.toEqual(true)
+    })
   })
 })
