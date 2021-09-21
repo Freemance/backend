@@ -79,8 +79,8 @@ describe('JobService', () => {
     expect(service).toBeDefined()
   })
 
-  describe('GetAllProfileLangs', () => {
-    it('should return a languages array ', async () => {
+  describe('getAllProfileJobs', () => {
+    it('should return a jobs array ', async () => {
       const jobs = await service.getAllProfileJobs(profileId)
       expect(jobs).toEqual(jobArray)
     })
