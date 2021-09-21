@@ -2,10 +2,10 @@ import { Skill } from '.prisma/client'
 import { Test, TestingModule } from '@nestjs/testing'
 import { PortfolioService } from './portfolio.service'
 
-const skills: Skill = [
+const skills = [
   { id: 1, createdAt: new Date(), updatedAt: new Date(), name: 'Programming', icon: ['1', '2'] },
-  { id: 1, createdAt: new Date(), updatedAt: new Date(), name: 'Writing', icon: ['1', '2'] },
-  { id: 1, createdAt: new Date(), updatedAt: new Date(), name: 'Speaking', icon: ['1', '2'] },
+  { id: 2, createdAt: new Date(), updatedAt: new Date(), name: 'Writing', icon: ['1', '2'] },
+  { id: 3, createdAt: new Date(), updatedAt: new Date(), name: 'Speaking', icon: ['1', '2'] },
 ]
 
 const portfolioArray = [
@@ -55,6 +55,21 @@ const portfolioArray = [
     profileId: 1,
   },
 ]
+
+const secondPortfolio = portfolioArray[1]
+
+const profileId = 1
+const portfolioId = 1
+
+const db = {
+  portfolio: {
+    findUnique: jest.fn().mockResolvedValue(secondPortfolio),
+    findMany: jest.fn().mockResolvedValue(portfolioArray),
+    update: jest.fn().mockResolvedValue(secondPortfolio),
+    create: jest.fn().mockResolvedValue(secondPortfolio),
+    delete: jest.fn().mockResolvedValue(secondPortfolio),
+  },
+}
 
 describe('PortfolioService', () => {
   let service: PortfolioService
