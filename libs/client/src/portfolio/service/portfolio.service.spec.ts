@@ -88,4 +88,11 @@ describe('PortfolioService', () => {
   it('should be defined', () => {
     expect(service).toBeDefined()
   })
+
+  describe('getProfilePortfolioItems', () => {
+    it('should return a jobs array ', async () => {
+      const portfolios = await service.getProfilePortfolioItems(profileId)
+      expect(portfolios).toEqual(portfolioArray)
+    })
+  })
 })
