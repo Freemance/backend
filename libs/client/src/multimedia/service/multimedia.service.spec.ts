@@ -75,6 +75,13 @@ describe('MultimediaService', () => {
     prisma = module.get<DataService>(DataService)
   })
 
+  describe('getAllMultimedias', () => {
+    it('should return a multimedias array ', async () => {
+      const multimedia = await service.getAllMultimedias()
+      expect(multimedia).toEqual(multimediaArray)
+    })
+  })
+
   it('should be defined', () => {
     expect(service).toBeDefined()
   })
