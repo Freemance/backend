@@ -77,10 +77,6 @@ describe('JobService', () => {
     prisma = module.get<DataService>(DataService)
   })
 
-  it('should be defined', () => {
-    expect(service).toBeDefined()
-  })
-
   describe('getAllProfileJobs', () => {
     it('should return a jobs array ', async () => {
       const jobs = await service.getAllProfileJobs(profileId)
@@ -92,10 +88,12 @@ describe('JobService', () => {
     it('should get a job', () => {
       expect(service.getProfileJobById(jobId, profileId)).resolves.toEqual(secondJob)
     })
+
     it('should return NotFoundException', () => {
       jest.spyOn(prisma.job, 'findUnique').mockResolvedValue(undefined)
       expect(service.getProfileJobById(8, profileId)).rejects.toThrow(NotFoundException)
     })
+
     it('should return UnauthorizedException', () => {
       jest.spyOn(prisma.job, 'findUnique').mockResolvedValue({ ...secondJob, profileId: 2 })
       expect(service.getProfileJobById(jobId, profileId)).rejects.toThrow(UnauthorizedException)
@@ -112,6 +110,7 @@ describe('JobService', () => {
       const job = await service.updateProfileJob(jobId, profileId, { ...secondJob })
       expect(job).toEqual(secondJob)
     })
+
     it('should return NotFoundException', async () => {
       jest.spyOn(prisma.job, 'findUnique').mockResolvedValue(undefined)
       await expect(service.updateProfileJob(jobId, profileId, { ...secondJob })).rejects.toThrow(NotFoundException)
