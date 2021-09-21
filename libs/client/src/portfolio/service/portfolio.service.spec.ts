@@ -1,4 +1,5 @@
 import { Skill } from '.prisma/client'
+import { DataService } from '@feature/core'
 import { Test, TestingModule } from '@nestjs/testing'
 import { PortfolioService } from './portfolio.service'
 
@@ -73,6 +74,7 @@ const db = {
 
 describe('PortfolioService', () => {
   let service: PortfolioService
+  let prisma: DataService
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -80,6 +82,7 @@ describe('PortfolioService', () => {
     }).compile()
 
     service = module.get<PortfolioService>(PortfolioService)
+    prisma = module.get<DataService>(DataService)
   })
 
   it('should be defined', () => {
