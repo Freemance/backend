@@ -62,7 +62,13 @@ describe('MultimediaService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [MultimediaService],
+      providers: [
+        MultimediaService,
+        {
+          provide: DataService,
+          useValue: db,
+        },
+      ],
     }).compile()
 
     service = module.get<MultimediaService>(MultimediaService)
