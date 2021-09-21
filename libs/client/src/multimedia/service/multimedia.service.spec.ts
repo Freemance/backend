@@ -2,7 +2,7 @@ import { DataService } from '@feature/core'
 import { Test, TestingModule } from '@nestjs/testing'
 import { MultimediaService } from './multimedia.service'
 
-const multimedia = [
+const multimediaArray = [
   {
     id: 1,
     createdAt: new Date(),
@@ -40,6 +40,21 @@ const multimedia = [
     status: true,
   },
 ]
+
+const secondMultimedia = multimediaArray[1]
+
+const profileId = 1
+const multimediaId = 1
+
+const db = {
+  multimedia: {
+    findUnique: jest.fn().mockResolvedValue(secondMultimedia),
+    findMany: jest.fn().mockResolvedValue(multimediaArray),
+    update: jest.fn().mockResolvedValue(secondMultimedia),
+    create: jest.fn().mockResolvedValue(secondMultimedia),
+    delete: jest.fn().mockResolvedValue(secondMultimedia),
+  },
+}
 
 describe('MultimediaService', () => {
   let service: MultimediaService
