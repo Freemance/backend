@@ -44,6 +44,8 @@ const jobArray = [
 
 const secondJob = jobArray[1]
 
+const profileId = 1
+
 const db = {
   language: {
     findUnique: jest.fn().mockResolvedValue(secondJob),
@@ -75,5 +77,12 @@ describe('JobService', () => {
 
   it('should be defined', () => {
     expect(service).toBeDefined()
+  })
+
+  describe('GetAllProfileLangs', () => {
+    it('should return a languages array ', async () => {
+      const jobs = await service.getAllProfileJobs(profileId)
+      expect(jobs).toEqual(jobArray)
+    })
   })
 })
