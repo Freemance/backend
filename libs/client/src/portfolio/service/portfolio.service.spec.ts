@@ -1,6 +1,7 @@
 import { DataService } from '@feature/core'
 import { NotFoundException, UnauthorizedException } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
+import { FileUpload } from 'graphql-upload'
 import { PortfolioService } from './portfolio.service'
 
 const skills = [
@@ -8,6 +9,8 @@ const skills = [
   { id: 2, createdAt: new Date(), updatedAt: new Date(), name: 'Writing', icon: ['1', '2'] },
   { id: 3, createdAt: new Date(), updatedAt: new Date(), name: 'Speaking', icon: ['1', '2'] },
 ]
+
+let files: [FileUpload]
 
 const portfolioArray = [
   {
@@ -116,7 +119,7 @@ describe('PortfolioService', () => {
 
   describe('CreateProfilePortfolio', () => {
     it('should successfully insert a portfolio', () => {
-      expect(service.createProfilePortfolio(profileId, { ...secondPortfolio })).resolves.toEqual(secondPortfolio)
+      expect(service.createProfilePortfolio(profileId, { ...secondPortfolio }, files)).resolves.toEqual(secondPortfolio)
     })
   })
 
@@ -125,15 +128,15 @@ describe('PortfolioService', () => {
       jest
         .spyOn(prisma.portfolio, 'findUnique')
         .mockResolvedValue({ ...secondPortfolio, createdAt: null, updatedAt: null })
-      const portfolio = await service.updateProfilePortfolio(portfolioId, profileId, { ...secondPortfolio })
+      const portfolio = await service.updateProfilePortfolio(portfolioId, profileId, { ...secondPortfolio }, files)
       expect(portfolio).toEqual(secondPortfolio)
     })
 
     it('should return NotFoundException', async () => {
       jest.spyOn(prisma.portfolio, 'findUnique').mockResolvedValue(undefined)
-      await expect(service.updateProfilePortfolio(portfolioId, profileId, { ...secondPortfolio })).rejects.toThrow(
-        NotFoundException,
-      )
+      await expect(
+        service.updateProfilePortfolio(portfolioId, profileId, { ...secondPortfolio }, files),
+      ).rejects.toThrow(NotFoundException)
     })
   })
 
