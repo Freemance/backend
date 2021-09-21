@@ -70,6 +70,7 @@ describe('JobService', () => {
     }).compile()
 
     service = module.get<JobService>(JobService)
+    prisma = module.get<DataService>(DataService)
   })
 
   it('should be defined', () => {
