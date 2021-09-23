@@ -1,12 +1,67 @@
 import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common'
 
-import { DataService } from '@feature/core'
+import { DataService, findManyCursorConnection } from '@feature/core'
 import { CreateCourseInput } from '../dto/create-course.input'
 import { UpdateCourseInput } from '../dto/update-course.input'
 
 @Injectable()
 export class CourseService {
   constructor(private readonly _service: DataService) {}
+
+  async filter(profileId, after, before, first, last, query, orderBy) {
+    const conditions: any = {
+      OR: [
+        {
+          course: {
+            contains: query || '',
+            mode: 'insensitive',
+          },
+        },
+        {
+          institution: {
+            contains: query || '',
+            mode: 'insensitive',
+          },
+        },
+        {
+          startDate: {
+            contains: query || '',
+            mode: 'insensitive',
+          },
+        },
+        {
+          endDate: {
+            contains: query || '',
+            mode: 'insensitive',
+          },
+        },
+      ],
+      AND: [
+        {
+          profile: {
+            every: {
+              id: { equals: profileId },
+            },
+          },
+        },
+      ],
+    }
+
+    const a = await findManyCursorConnection(
+      (args) =>
+        this._service.course.findMany({
+          where: conditions,
+          orderBy: orderBy ? { [orderBy.field]: orderBy.direction } : null,
+          ...args,
+        }),
+      () =>
+        this._service.course.count({
+          where: conditions,
+        }),
+      { first, last, before, after },
+    )
+    return a
+  }
 
   async getAllProfileCourses(profileId: number) {
     return this._service.course.findMany({ where: { profileId }, orderBy: { id: 'asc' } })
