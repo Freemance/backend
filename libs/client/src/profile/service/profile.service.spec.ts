@@ -4,6 +4,7 @@ import { MultimediaService } from '@feature/client/multimedia'
 import { DataService } from '@feature/core'
 import { NotFoundException } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
+import { FileUpload } from 'graphql-upload'
 import { ProfileService } from './profile.service'
 
 const profileArray = [
@@ -65,6 +66,8 @@ const profileArray = [
     phone: '593216523',
   },
 ]
+
+let files: [FileUpload]
 
 const secondProfile = profileArray[1]
 
