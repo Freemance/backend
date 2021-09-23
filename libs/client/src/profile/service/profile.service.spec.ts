@@ -1,4 +1,5 @@
 import { ProfileStatus } from '.prisma/client'
+import { DataService } from '@feature/core'
 import { Test, TestingModule } from '@nestjs/testing'
 import { ProfileService } from './profile.service'
 
@@ -62,15 +63,37 @@ const profileArray = [
   },
 ]
 
+const secondProfile = profileArray[1]
+
+const profileId = 1
+
+const db = {
+  profile: {
+    findUnique: jest.fn().mockResolvedValue(secondProfile),
+    findMany: jest.fn().mockResolvedValue(profileArray),
+    update: jest.fn().mockResolvedValue(secondProfile),
+    create: jest.fn().mockResolvedValue(secondProfile),
+    delete: jest.fn().mockResolvedValue(secondProfile),
+  },
+}
+
 describe('ProfileService', () => {
   let service: ProfileService
+  let prisma: DataService
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [ProfileService],
+      providers: [
+        ProfileService,
+        {
+          provide: DataService,
+          useValue: db,
+        },
+      ],
     }).compile()
 
     service = module.get<ProfileService>(ProfileService)
+    prisma = module.get<DataService>(DataService)
   })
 
   it('should be defined', () => {
