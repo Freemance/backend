@@ -2,6 +2,7 @@ import { ProfileStatus } from '.prisma/client'
 import { EmailService } from '@feature/auth'
 import { MultimediaService } from '@feature/client/multimedia'
 import { DataService } from '@feature/core'
+import { NotFoundException } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
 import { ProfileService } from './profile.service'
 
@@ -100,7 +101,14 @@ describe('ProfileService', () => {
     prisma = module.get<DataService>(DataService)
   })
 
-  it('should be defined', () => {
-    expect(service).toBeDefined()
+  describe('getProfileById', () => {
+    it('should get a profile', () => {
+      expect(service.getProfileById(profileId)).resolves.toEqual(secondProfile)
+    })
+
+    it('should return NotFoundException', () => {
+      jest.spyOn(prisma.profile, 'findUnique').mockResolvedValue(undefined)
+      expect(service.getProfileById(8)).rejects.toThrow(NotFoundException)
+    })
   })
 })
