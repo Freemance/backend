@@ -4,7 +4,6 @@ import { DataService, findManyCursorConnection } from '@feature/core'
 import { CreateSkillInput } from '../dto/create-skill.input'
 import { UpdateSkillInput } from '../dto/update-skill.input'
 import { Prisma } from '@prisma/client'
-import { FileUpload } from 'graphql-upload'
 
 @Injectable()
 export class SkillService {

@@ -1,6 +1,5 @@
 import { ObjectType, Field } from '@nestjs/graphql'
 import { BaseModel } from '@feature/core'
-import { Profile } from '@feature/client'
 
 @ObjectType()
 export class Course extends BaseModel {
