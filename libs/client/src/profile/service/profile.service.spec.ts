@@ -1,4 +1,6 @@
 import { ProfileStatus } from '.prisma/client'
+import { EmailService } from '@feature/auth'
+import { MultimediaService } from '@feature/client/multimedia'
 import { DataService } from '@feature/core'
 import { Test, TestingModule } from '@nestjs/testing'
 import { ProfileService } from './profile.service'
@@ -80,6 +82,8 @@ const db = {
 describe('ProfileService', () => {
   let service: ProfileService
   let prisma: DataService
+  let multimedia: MultimediaService
+  let email: EmailService
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
