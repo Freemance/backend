@@ -3,7 +3,7 @@ import { DataService, findManyCursorConnection } from '@feature/core'
 import { UpdateBasicProfileInput } from '../dto/update-basicProfile.input'
 import { MultimediaService } from '@feature/client/multimedia'
 import { FileUpload } from 'graphql-upload'
-import { ProfileStatus } from '@feature/client/profile'
+import { ProfileStatus, ProfileStatusArg } from '@feature/client/profile'
 import { EmailService } from '@feature/auth'
 
 @Injectable()
@@ -33,6 +33,7 @@ export class ProfileService {
     orderBy,
     skills: [number],
     tag: number,
+    profileStatus: string,
   ) {
     const conditions: any = {
       OR: [
@@ -111,14 +112,15 @@ export class ProfileService {
             },
           },
         },
-        {
-          profileStatus: {
-            equals: ProfileStatus.APPROVED,
-          },
-        },
       ],
     }
-
+    if (profileStatus !== ProfileStatusArg.ALL) {
+      conditions.AND.push({
+        profileStatus: {
+          equals: ProfileStatus.APPROVED,
+        },
+      })
+    }
     if (tag) {
       conditions.AND.push({ tagId: { equals: tag } })
     }

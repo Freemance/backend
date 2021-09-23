@@ -12,3 +12,12 @@ registerEnumType(ProfileStatus, {
   name: 'ProfileStatus',
   description: 'Profile Status',
 })
+
+export enum ProfileStatusArg {
+  APPROVED = 'APPROVED',
+  ALL = 'ALL',
+}
+registerEnumType(ProfileStatusArg, {
+  name: 'ProfileStatusArg',
+  description: 'Profile Status Argument for filter query',
+})

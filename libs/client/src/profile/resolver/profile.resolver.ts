@@ -9,7 +9,7 @@ import { ProfileConnection } from '../entities/profile-connection.model'
 import { ProfileService } from '../service/profile.service'
 import { UpdateBasicProfileInput } from '../dto/update-basicProfile.input'
 import { FileUpload, GraphQLUpload } from 'graphql-upload'
-import { ProfileStatus } from '@feature/client/profile'
+import { ProfileStatus, ProfileStatusArg } from '@feature/client/profile'
 
 @Resolver(() => Profile)
 export class ProfileResolver {
@@ -24,6 +24,8 @@ export class ProfileResolver {
     skills: [number],
     @Args({ name: 'tag', type: () => Int, nullable: true })
     tag: number,
+    @Args({ name: 'profileStatus', description: 'Default its aproved', type: () => ProfileStatusArg, nullable: true })
+    profileStatus: ProfileStatusArg,
     @Args({
       name: 'orderBy',
       type: () => ProfileOrder,
@@ -31,7 +33,7 @@ export class ProfileResolver {
     })
     orderBy: ProfileOrder,
   ) {
-    return this._service.filter(after, before, first, last, query, orderBy, skills, tag)
+    return this._service.filter(after, before, first, last, query, orderBy, skills, tag, profileStatus)
   }
 
   @Query(() => Profile, { name: 'profileById', nullable: true })
