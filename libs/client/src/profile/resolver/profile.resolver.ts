@@ -62,6 +62,11 @@ export class ProfileResolver {
     return this._service.getProfileById(id)
   }
 
+  @Query(() => Profile, { name: 'profileByUsername', nullable: true })
+  async getProfileByUsername(@Args('username', { type: () => String }) username: string) {
+    return this._service.getProfileByUsername(username)
+  }
+
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles(Role.USER)
   @Mutation(() => Profile, { name: 'profileUpdateBasicInfo', nullable: true })

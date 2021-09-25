@@ -153,6 +153,23 @@ export class ProfileService {
     return found
   }
 
+  async getProfileByUsername(username: string) {
+    const found = await this._service.profile.findFirst({
+      include: this.includes,
+      where: {
+        user: {
+          username: {
+            equals: username,
+          },
+        },
+      },
+    })
+    if (!found) {
+      throw new NotFoundException(`Profile with username: ${username} not found`)
+    }
+    return found
+  }
+
   async updateProfileBasicInfo(profileId: number, input: UpdateBasicProfileInput, file: FileUpload) {
     const found = await this.getProfileById(profileId)
     let newAvatar: string = found.avatar
