@@ -259,4 +259,19 @@ export class ProfileService {
       },
     })
   }
+
+  async removeProfileAvatar(profileId: number, filename: string) {
+    const found = await this.getProfileById(profileId)
+    if (found.avatar === filename) {
+      try {
+        const { filename: foundFilename, extension } = await this._multimediaService.getMultimediaByFilename(filename)
+        await this._multimediaService.deleteFilesInServer(foundFilename, extension)
+      } catch (e) {
+        console.log(e)
+      }
+      return this._service.profile.update({ where: { id: profileId }, data: { avatar: '' } })
+    } else {
+      throw new NotFoundException(`profile: ${profileId} not has avatar with filename:${filename}`)
+    }
+  }
 }
