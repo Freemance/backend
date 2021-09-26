@@ -11,15 +11,17 @@ import { UpdateBasicProfileInput } from '../dto/update-basicProfile.input'
 import { FileUpload, GraphQLUpload } from 'graphql-upload'
 import { ProfileStatus } from '@feature/client/profile'
 import { PubSub } from 'graphql-subscriptions'
-const pubSub = new PubSub()
 
 @Resolver(() => Profile)
 export class ProfileResolver {
-  constructor(private readonly _service: ProfileService) {}
+  private pubSub: PubSub
+  constructor(private readonly _service: ProfileService) {
+    this.pubSub = new PubSub()
+  }
 
   @Subscription(() => Profile)
   ProfileUpdated() {
-    return pubSub.asyncIterator('data')
+    return this.pubSub.asyncIterator('ProfileUpdated')
   }
 
   @Query(() => ProfileConnection, { name: 'profileFilter', nullable: true })
@@ -83,8 +85,8 @@ export class ProfileResolver {
     @Args({ name: 'file', type: () => GraphQLUpload, nullable: true })
     file: FileUpload,
   ) {
-    const profile = await this._service.updateProfileBasicInfo(user.profile.id, input, file)
-    await pubSub.publish('ProfileUpdated', { data: profile })
+    const profile = this._service.updateProfileBasicInfo(user.profile.id, input, file)
+    this.pubSub.publish('ProfileUpdated', { ProfileUpdated: profile })
     return profile
   }
 
