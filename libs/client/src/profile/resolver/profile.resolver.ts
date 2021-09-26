@@ -10,7 +10,7 @@ import { ProfileService } from '../service/profile.service'
 import { UpdateBasicProfileInput } from '../dto/update-basicProfile.input'
 import { FileUpload, GraphQLUpload } from 'graphql-upload'
 import { ProfileStatus } from '@feature/client/profile'
-import { PubSub } from 'apollo-server-express'
+import { PubSub } from 'graphql-subscriptions'
 const pubSub = new PubSub()
 
 @Resolver(() => Profile)
