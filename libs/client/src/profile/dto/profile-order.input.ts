@@ -16,6 +16,7 @@ export enum ProfileOrderField {
   postalCode = 'postalCode',
   placeOfBirth = 'placeOfBirth',
   phone = 'phone',
+  profileStatus = 'profileStatus',
 }
 
 registerEnumType(ProfileOrderField, {
