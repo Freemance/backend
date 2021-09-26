@@ -1,5 +1,5 @@
 import { UseGuards } from '@nestjs/common'
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql'
+import { Resolver, Query, Mutation, Args, Int, Subscription } from '@nestjs/graphql'
 
 import { PaginationArgs } from '@feature/core'
 import { GqlAuthGuard, Role, Roles, RolesGuard, User, UserEntity } from '@feature/auth'
@@ -10,10 +10,17 @@ import { ProfileService } from '../service/profile.service'
 import { UpdateBasicProfileInput } from '../dto/update-basicProfile.input'
 import { FileUpload, GraphQLUpload } from 'graphql-upload'
 import { ProfileStatus } from '@feature/client/profile'
+import { PubSub } from 'apollo-server-express'
+const pubSub = new PubSub()
 
 @Resolver(() => Profile)
 export class ProfileResolver {
   constructor(private readonly _service: ProfileService) {}
+
+  @Subscription(() => Profile)
+  ProfileUpdated() {
+    return pubSub.asyncIterator('data')
+  }
 
   @Query(() => ProfileConnection, { name: 'profileFilter', nullable: true })
   async filter(
@@ -76,7 +83,9 @@ export class ProfileResolver {
     @Args({ name: 'file', type: () => GraphQLUpload, nullable: true })
     file: FileUpload,
   ) {
-    return this._service.updateProfileBasicInfo(user.profile.id, input, file)
+    const profile = await this._service.updateProfileBasicInfo(user.profile.id, input, file)
+    await pubSub.publish('ProfileUpdated', { data: profile })
+    return profile
   }
 
   @UseGuards(GqlAuthGuard, RolesGuard)
