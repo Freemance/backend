@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
+import { Prisma } from '.prisma/client'
 import { DataService, findManyCursorConnection } from '@feature/core'
 import { UpdateBasicProfileInput } from '../dto/update-basicProfile.input'
 import { MultimediaService } from '@feature/client/multimedia'
@@ -14,13 +15,13 @@ export class ProfileService {
     private readonly _emailService: EmailService,
   ) {}
 
-  private includes = {
+  private includes: Prisma.ProfileInclude = {
     tag: true,
     skills: true,
     socialLinks: true,
-    employmentHistory: true,
-    courses: true,
-    portfolioItem: true,
+    employmentHistory: { orderBy: { startDate: 'desc' } },
+    courses: { orderBy: { startDate: 'desc' } },
+    portfolioItem: { orderBy: { startDate: 'desc' } },
     languages: true,
   }
 

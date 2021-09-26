@@ -27,15 +27,15 @@ export class AuthService {
     private readonly _emailService: EmailService,
   ) {}
 
-  private includeAll = {
+  private includeAll: Prisma.UserInclude = {
     profile: {
       include: {
         tag: true,
         skills: true,
         socialLinks: true,
-        employmentHistory: true,
-        courses: true,
-        portfolioItem: true,
+        employmentHistory: { orderBy: { startDate: 'desc' } },
+        courses: { orderBy: { startDate: 'desc' } },
+        portfolioItem: { orderBy: { startDate: 'desc' } },
         languages: true,
       },
     },
