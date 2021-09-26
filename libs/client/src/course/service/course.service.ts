@@ -64,7 +64,7 @@ export class CourseService {
   }
 
   async getAllProfileCourses(profileId: number) {
-    return this._service.course.findMany({ where: { profileId }, orderBy: { id: 'asc' } })
+    return this._service.course.findMany({ where: { profileId }, orderBy: { startDate: 'desc' } })
   }
 
   async getProfileCourseById(id: number, profileId: number) {
