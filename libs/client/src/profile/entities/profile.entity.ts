@@ -53,8 +53,8 @@ export class Profile extends BaseModel {
   @Field(() => User, { description: 'User associated  to the profile' })
   user: User
 
-  @Field(() => Tag, { description: 'Tag associated  to the profile' })
-  tag: Tag
+  @Field(() => Tag, { description: 'Tag associated  to the profile', nullable: true })
+  tag?: Tag
 
   @Field(() => [Skill], { description: 'Skills associated  to the profile' })
   skills: [Skill]
