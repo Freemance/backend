@@ -11,7 +11,7 @@ export class PortfolioService {
   constructor(private readonly _service: DataService, private readonly _multimediaService: MultimediaService) {}
 
   async getProfilePortfolioItems(profileId: number) {
-    return this._service.portfolio.findMany({ where: { profileId }, orderBy: { id: 'asc' } })
+    return this._service.portfolio.findMany({ where: { profileId }, orderBy: { startDate: 'desc' } })
   }
 
   async getProfilePortfolioById(id: number, profileId: number) {
