@@ -9,7 +9,7 @@ export class EmailService {
     this._mailerService
       .sendMail({
         to: user.email, // List of receivers email address
-        from: '"Verification request" <no-replay@example.com>', // Senders email address
+        from: '"Verification request" <noreply@freemance.com>', // Senders email address
         subject: 'Verification request ✔', // Subject line
         template: './verify-email', // The `.pug` or `.hbs` extension is appended automatically.
         context: {
@@ -27,7 +27,7 @@ export class EmailService {
     this._mailerService
       .sendMail({
         to: user.email, // List of receivers email address
-        from: '"Reset Password" <no-replay@example.com>', // Senders email address
+        from: '"Reset Password" <noreply@freemance.com>', // Senders email address
         subject: 'Reset Password ✔', // Subject line
         template: './reset-password', // The `.pug` or `.hbs` extension is appended automatically.
         context: {
@@ -45,7 +45,7 @@ export class EmailService {
     this._mailerService
       .sendMail({
         to: user.email, // List of receivers email address
-        from: '"Profile Approved" <no-replay@example.com>', // Senders email address
+        from: '"Profile Approved" <noreply@freemance.com>', // Senders email address
         subject: 'Profile Approved ✔', // Subject line
         template: './profile-approved', // The `.pug` or `.hbs` extension is appended automatically.
         context: {
@@ -63,7 +63,7 @@ export class EmailService {
     this._mailerService
       .sendMail({
         to: user.email, // List of receivers email address
-        from: '"Profile Update" <no-replay@example.com>', // Senders email address
+        from: '"Profile Update" <noreply@freemance.com>', // Senders email address
         subject: 'Profile Update ✔', // Subject line
         template: './profile-pending', // The `.pug` or `.hbs` extension is appended automatically.
         context: {
