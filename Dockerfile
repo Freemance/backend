@@ -7,6 +7,10 @@ COPY prisma ./prisma/
 
 RUN yarn install --frozen-lockfile
 
+# RUN npx prisma generate
+
+# RUN npx prisma migrate dev --name base-setup init
+
 COPY . .
 
 RUN yarn build
