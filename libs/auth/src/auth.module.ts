@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common'
+import { Logger, Module } from '@nestjs/common'
 import { JwtModule } from '@nestjs/jwt'
 import { PassportModule } from '@nestjs/passport'
 import { ConfigService } from '@nestjs/config'
@@ -23,7 +23,7 @@ import { RolesGuard, AuthResolver, AuthService, JwtStrategy, GqlAuthGuard, Passw
     }),
     DataModule,
   ],
-  providers: [AuthService, AuthResolver, JwtStrategy, GqlAuthGuard, PasswordService, RolesGuard, EmailService],
+  providers: [AuthService, AuthResolver, JwtStrategy, GqlAuthGuard, PasswordService, RolesGuard, EmailService, Logger],
   exports: [GqlAuthGuard, RolesGuard],
 })
 export class AuthModule {}

@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 import { MailerService } from '@nestjs-modules/mailer'
 
 @Injectable()
 export class EmailService {
-  constructor(private readonly _mailerService: MailerService) {}
+  constructor(private readonly _mailerService: MailerService, private logger: Logger) {}
 
   verifyRequest(user: any, token): void {
     this._mailerService
@@ -19,7 +19,7 @@ export class EmailService {
         },
       })
       .catch((err) => {
-        console.log(err)
+        this.logger.error(err)
       })
   }
 
@@ -37,7 +37,7 @@ export class EmailService {
         },
       })
       .catch((err) => {
-        console.log(err)
+        this.logger.error(err)
       })
   }
 
@@ -55,7 +55,7 @@ export class EmailService {
         },
       })
       .catch((err) => {
-        console.log(err)
+        this.logger.error(err)
       })
   }
 
@@ -73,7 +73,7 @@ export class EmailService {
         },
       })
       .catch((err) => {
-        console.log(err)
+        this.logger.error(err)
       })
   }
 }

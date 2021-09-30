@@ -6,6 +6,7 @@ import { CorsConfig, NestConfig } from '@feature/core/core/config/config.interfa
 import { graphqlUploadExpress } from 'graphql-upload'
 import { NestExpressApplication } from '@nestjs/platform-express'
 import { join } from 'path'
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston'
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule)
@@ -13,6 +14,8 @@ async function bootstrap() {
   app.useStaticAssets(join(__dirname, '..', 'uploads'), {
     prefix: '/uploads/',
   })
+  // logger
+  app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER))
   // Validation
   app.useGlobalPipes(new ValidationPipe())
 

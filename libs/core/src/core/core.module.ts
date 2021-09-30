@@ -8,6 +8,9 @@ import config from '@feature/core/core/config/config'
 import { GraphqlConfig } from '@feature/core/core/config/config.interface'
 import { MailerModule } from '@nestjs-modules/mailer'
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter'
+import { utilities as nestWinstonModuleUtilities, WinstonModule } from 'nest-winston'
+import 'winston-daily-rotate-file'
+import * as winston from 'winston'
 
 @Module({
   imports: [
@@ -15,6 +18,33 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
       isGlobal: true,
       load: [config],
       validationSchema,
+    }),
+    WinstonModule.forRoot({
+      format: winston.format.json(),
+      transports: [
+        new winston.transports.Console({
+          format: winston.format.combine(
+            winston.format.timestamp(),
+            winston.format.ms(),
+            nestWinstonModuleUtilities.format.nestLike(),
+          ),
+        }),
+        new winston.transports.DailyRotateFile({
+          filename: 'logs/errors-%DATE%.log',
+          datePattern: 'YYYY-MM-DD-HH',
+          zippedArchive: true,
+          level: 'error',
+          maxSize: '20m',
+          maxFiles: '14d',
+        }),
+        new winston.transports.DailyRotateFile({
+          filename: 'logs/application-%DATE%.log',
+          datePattern: 'YYYY-MM-DD-HH',
+          zippedArchive: true,
+          maxSize: '20m',
+          maxFiles: '14d',
+        }),
+      ],
     }),
     MailerModule.forRootAsync({
       useFactory: () => ({
