@@ -1,9 +1,13 @@
-import { Injectable, Logger } from '@nestjs/common'
+import { Inject, Injectable, LoggerService } from '@nestjs/common'
 import { MailerService } from '@nestjs-modules/mailer'
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston'
 
 @Injectable()
 export class EmailService {
-  constructor(private readonly _mailerService: MailerService, private logger: Logger) {}
+  constructor(
+    private readonly _mailerService: MailerService,
+    @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService,
+  ) {}
 
   verifyRequest(user: any, token): void {
     this._mailerService
