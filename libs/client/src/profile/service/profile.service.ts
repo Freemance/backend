@@ -171,7 +171,7 @@ export class ProfileService {
     return found
   }
 
-  async updateProfileBasicInfo(profileId: number, input: UpdateBasicProfileInput, file: FileUpload) {
+  async updateProfileBasicInfo(profileId: number, input: UpdateBasicProfileInput, tag?: number, file?: FileUpload) {
     const found = await this.getProfileById(profileId)
     let newAvatar: string = found.avatar
     if (file) {
@@ -184,6 +184,9 @@ export class ProfileService {
           console.log(e)
         }
       }
+    }
+    if (tag) {
+      await this.updateProfileTag(profileId, tag)
     }
     return this._service.profile.update({
       include: this.includes,
@@ -243,15 +246,13 @@ export class ProfileService {
   }
 
   async updateProfileTag(profileId: number, tagId: number) {
-    console.log(profileId)
     const found = await this.getProfileById(profileId)
 
     const foundTag = await this._service.tag.findUnique({ where: { id: tagId } })
     if (!foundTag) {
       throw new NotFoundException(`Tag with id: ${tagId} not found`)
     }
-    return this._service.profile.update({
-      include: this.includes,
+    await this._service.profile.update({
       where: { id: found.id },
       data: {
         tag: {

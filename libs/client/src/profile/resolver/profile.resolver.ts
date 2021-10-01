@@ -82,10 +82,11 @@ export class ProfileResolver {
   async updateProfileBasicInfo(
     @UserEntity() user: User,
     @Args('input') input: UpdateBasicProfileInput,
+    @Args({ name: 'tagId', type: () => Int, nullable: true }) tagId: number,
     @Args({ name: 'file', type: () => GraphQLUpload, nullable: true })
     file: FileUpload,
   ) {
-    const profile = this._service.updateProfileBasicInfo(user.profile.id, input, file)
+    const profile = this._service.updateProfileBasicInfo(user.profile.id, input, tagId, file)
     this.pubSub.publish('ProfileUpdated', { ProfileUpdated: profile })
     return profile
   }
@@ -119,12 +120,5 @@ export class ProfileResolver {
     @Args({ name: 'status', type: () => ProfileStatus, nullable: true }) status: ProfileStatus,
   ) {
     return this._service.updateProfileStatus(profileId, status)
-  }
-
-  @UseGuards(GqlAuthGuard, RolesGuard)
-  @Roles(Role.USER)
-  @Mutation(() => Profile, { name: 'profileUpdateTag', nullable: true })
-  async updateProfileTag(@UserEntity() user: User, @Args('tagId', { type: () => Int }) tagId: number) {
-    return this._service.updateProfileTag(user.profile.id, tagId)
   }
 }
