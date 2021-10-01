@@ -40,6 +40,12 @@
     }
   },
   "compilerOptions": {
+    "assets": [
+      {
+        "include": "../templates/**/*",
+        "outDir": "dist/templates"
+      }
+    ],
     "webpack": true
   }
 }

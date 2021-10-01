@@ -11,6 +11,7 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
 import { utilities as nestWinstonModuleUtilities, WinstonModule } from 'nest-winston'
 import 'winston-daily-rotate-file'
 import * as winston from 'winston'
+import { join } from 'path'
 
 @Module({
   imports: [
@@ -61,7 +62,7 @@ import * as winston from 'winston'
           from: '"nest-modules" <modules@nestjs.com>',
         },
         template: {
-          dir: process.cwd() + '/templates/',
+          dir: join(__dirname, 'templates'),
           adapter: new HandlebarsAdapter(),
           options: {
             strict: false,
