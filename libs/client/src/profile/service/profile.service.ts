@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common'
 import { Prisma } from '.prisma/client'
 import { DataService, findManyCursorConnection } from '@feature/core'
 import { UpdateBasicProfileInput } from '../dto/update-basicProfile.input'
@@ -167,6 +167,9 @@ export class ProfileService {
     })
     if (!found) {
       throw new NotFoundException(`Profile with username: ${username} not found`)
+    }
+    if (found.profileStatus != ProfileStatus.APPROVED) {
+      throw new UnauthorizedException(`Profile with username: ${username} not found`)
     }
     return found
   }

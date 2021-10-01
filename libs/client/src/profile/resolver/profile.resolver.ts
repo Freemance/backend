@@ -1,5 +1,5 @@
 import { UseGuards } from '@nestjs/common'
-import { Resolver, Query, Mutation, Args, Int, Subscription } from '@nestjs/graphql'
+import { Args, Int, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql'
 
 import { PaginationArgs } from '@feature/core'
 import { GqlAuthGuard, Role, Roles, RolesGuard, User, UserEntity } from '@feature/auth'
@@ -65,7 +65,8 @@ export class ProfileResolver {
   ) {
     return this._service.filter(after, before, first, last, query, orderBy, skills, tag, profileStatus)
   }
-
+  @UseGuards(GqlAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN, Role.MANAGER)
   @Query(() => Profile, { name: 'profileById', nullable: true })
   async getProfileById(@Args('id', { type: () => Int }) id: number) {
     return this._service.getProfileById(id)
