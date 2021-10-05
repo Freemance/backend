@@ -23,6 +23,7 @@ export class ProfileService {
     courses: { orderBy: { startDate: 'desc' } },
     portfolioItem: { orderBy: { startDate: 'desc' } },
     languages: true,
+    user: true,
   }
 
   async filter(
