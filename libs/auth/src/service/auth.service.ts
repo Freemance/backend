@@ -76,7 +76,7 @@ export class AuthService {
       this._emailService.verifyRequest(user, confirmToken)
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2002') {
-        throw new ConflictException(`Email ${payload.email} already used.`)
+        throw new ConflictException(`Email ${payload.email} or slykUser ${payload.username} already used.`)
       } else {
         throw new Error(e)
       }
