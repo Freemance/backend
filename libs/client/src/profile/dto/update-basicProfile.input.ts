@@ -67,4 +67,10 @@ export class UpdateBasicProfileInput {
   @MaxLength(50)
   @IsOptional()
   phone?: string
+
+  @Field({ description: 'Slyk url', nullable: true })
+  @IsString()
+  @MaxLength(350)
+  @IsOptional()
+  slykUser?: string
 }
