@@ -178,6 +178,9 @@ export class ProfileService {
   async updateProfileBasicInfo(profileId: number, input: UpdateBasicProfileInput, tag?: number, file?: FileUpload) {
     const found = await this.getProfileById(profileId)
     let newAvatar: string = found.avatar
+    if (input.slykUser && found.profileStatus === ProfileStatus.APPROVED) {
+      throw new UnauthorizedException(`Profile with id: ${profileId} is already approved so it can't update slykUser`)
+    }
     if (file) {
       const { filename } = await this._multimediaService.saveMultimedia(profileId, file)
       newAvatar = filename
