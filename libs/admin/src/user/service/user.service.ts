@@ -42,6 +42,17 @@ export class UserService {
     })
   }
 
+  async updateActiveStatus(userId: number, active: boolean) {
+    return this._service.user.update({
+      data: {
+        active,
+      },
+      where: {
+        id: userId,
+      },
+    })
+  }
+
   async changePassword(userId: number, userPassword: string, changePassword: ChangePasswordInput) {
     const passwordValid = await this._passwordService.validatePassword(changePassword.oldPassword, userPassword)
 
