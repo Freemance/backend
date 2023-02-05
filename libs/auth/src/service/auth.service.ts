@@ -97,7 +97,7 @@ export class AuthService {
     if (!passwordValid) {
       throw new BadRequestException('Invalid password')
     }
-    if ((loginAsManager && user.role === Role.USER) || (!loginAsManager && user.role !== Role.USER) || !user.active) {
+    if ((loginAsManager && user.role === Role.USER) || (!loginAsManager && user.role !== Role.USER)) {
       throw new UnauthorizedException('Unauthorized')
     }
 

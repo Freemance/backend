@@ -64,6 +64,13 @@ export class UserResolver {
 
   @UseGuards(RolesGuard)
   @Roles(Role.ADMIN)
+  @Mutation(() => User, { name: 'updateActiveStatus', nullable: true })
+  updateActiveStatus(@Args('id', { type: () => Int }) id: number, @Args('active') active: boolean) {
+    return this._userService.updateActiveStatus(id, active)
+  }
+
+  @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
   @Mutation(() => User, { nullable: true })
   createManager(@Args('input') input: CreateManagerInput) {
     return this._userService.createManager(input)

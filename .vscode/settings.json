@@ -1,0 +1,12 @@
+{
+  "workbench.colorCustomizations": {
+    "titleBar.activeBackground": "#05dd6a",
+    "titleBar.activeForeground": "#000000",
+    "titleBar.inactiveBackground": "#2ddd0599",
+    "titleBar.inactiveForeground": "#e7e7e799"
+  },
+  "cSpell.words": [
+    "Freemance",
+    "freemancer"
+  ]
+}
