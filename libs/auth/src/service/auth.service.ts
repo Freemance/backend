@@ -16,7 +16,7 @@ import { Token } from '../entities/token.model'
 import { Role } from '../entities/user.entity'
 import { PasswordResets } from '../entities/passwordResets.entity'
 import { EmailService } from './email.service'
-import { verifySlykUrl } from '../utils/verifySlykUrl'
+import { verifySlykUrl } from '../../../utils/verifySlykUrl'
 
 @Injectable()
 export class AuthService {
