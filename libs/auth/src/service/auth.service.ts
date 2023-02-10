@@ -16,6 +16,7 @@ import { Token } from '../entities/token.model'
 import { Role } from '../entities/user.entity'
 import { PasswordResets } from '../entities/passwordResets.entity'
 import { EmailService } from './email.service'
+import { verifySlykUrl } from '../../../utils/verifySlykUrl'
 
 @Injectable()
 export class AuthService {
@@ -42,6 +43,12 @@ export class AuthService {
   }
 
   async createUser(payload: SignupInput) {
+    const slykExists = await verifySlykUrl(payload.slykUser)
+
+    if (!slykExists) {
+      throw new ConflictException('Slyk user does not exist')
+    }
+
     const hashedPassword = await this._passwordService.hashPassword(payload.password)
 
     const confirmToken = this._jwtService.sign(
@@ -76,7 +83,7 @@ export class AuthService {
       this._emailService.verifyRequest(user, confirmToken)
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2002') {
-        throw new ConflictException(`Email ${payload.email} or slykUser ${payload.username} already used.`)
+        throw new ConflictException(`Email ${payload.email} or Slyk user ${payload.username} already used.`)
       } else {
         throw new Error(e)
       }

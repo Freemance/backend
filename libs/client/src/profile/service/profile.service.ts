@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common'
+import { ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common'
 import { Prisma } from '.prisma/client'
 import { DataService, findManyCursorConnection } from '@feature/core'
 import { UpdateBasicProfileInput } from '../dto/update-basicProfile.input'
@@ -6,6 +6,7 @@ import { MultimediaService } from '@feature/client/multimedia'
 import { FileUpload } from 'graphql-upload'
 import { ProfileStatus } from '@feature/client/profile'
 import { EmailService } from '@feature/auth'
+import { verifySlykUrl } from 'libs/utils/verifySlykUrl'
 
 @Injectable()
 export class ProfileService {
@@ -181,6 +182,25 @@ export class ProfileService {
     if (input.slykUser && found.profileStatus === ProfileStatus.APPROVED) {
       throw new UnauthorizedException(`Profile with id: ${profileId} is already approved so it can't update slykUser`)
     }
+    if (input.slykUser) {
+      const slykExists = await verifySlykUrl(input.slykUser)
+
+      if (!slykExists) {
+        throw new ConflictException('Slyk user does not exist')
+      }
+
+      const slykUser = await this._service.profile.findFirst({
+        where: {
+          slykUser: {
+            equals: input.slykUser,
+          },
+        },
+      })
+      if (slykUser && slykUser.id !== profileId) {
+        throw new ConflictException('Slyk user already in use')
+      }
+    }
+
     if (file) {
       const { filename } = await this._multimediaService.saveMultimedia(profileId, file)
       newAvatar = filename
