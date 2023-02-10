@@ -188,6 +188,17 @@ export class ProfileService {
       if (!slykExists) {
         throw new ConflictException('Slyk user does not exist')
       }
+
+      const slykUser = await this._service.profile.findFirst({
+        where: {
+          slykUser: {
+            equals: input.slykUser,
+          },
+        },
+      })
+      if (slykUser && slykUser.id !== profileId) {
+        throw new ConflictException('Slyk user already in use')
+      }
     }
 
     if (file) {
